@@ -21,8 +21,9 @@ class CreateElevesTable extends Migration
             
             $table->unsignedInteger('parent_id');
             $table->foreign('parent_id')
-                    ->referencs('id')
-                    ->on('parents');
+                    ->references('id')
+                    ->on('parents')
+                    ->onDelete('cascade');
                     
             $table->timestamps();
         });

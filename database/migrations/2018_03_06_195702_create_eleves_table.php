@@ -18,6 +18,12 @@ class CreateElevesTable extends Migration
             $table->string('nom', 255);
             $table->string('prenoms', 255);
             $table->date('date_naissance');
+            
+            $table->unsignedInteger('parent_id');
+            $table->foreign('parent_id')
+                    ->referencs('id')
+                    ->on('parents');
+                    
             $table->timestamps();
         });
     }

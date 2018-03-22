@@ -12,7 +12,13 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('public.home');
 });
 
 Route::resource('inscriptions', 'InscriptionController');
+
+Route::prefix('dashboard')->group(function () {
+    Route::get('/', 'DashboardController@Home');
+    Route::resource('etablissements', 'EtablissementController');
+    
+});

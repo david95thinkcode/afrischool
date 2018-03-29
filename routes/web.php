@@ -21,5 +21,5 @@ Route::prefix('dashboard')->group(function () {
     Route::get('/', 'DashboardController@Home');
     Route::resource('etablissements', 'EtablissementController');
     Route::resource('classe', 'ClasseController');
-    
+    //Route::resource('Noe')
 });

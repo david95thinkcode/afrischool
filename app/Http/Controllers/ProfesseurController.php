@@ -14,7 +14,8 @@ class ProfesseurController extends Controller
      */
     public function index()
     {
-        //
+        $professeurs = Professeur::all();
+        return view('dashboard.professeurs.index', compact('professeurs'));
     }
 
     /**
@@ -24,7 +25,7 @@ class ProfesseurController extends Controller
      */
     public function create()
     {
-        //
+        return view('dashboard.professeurs.create');
     }
 
     /**

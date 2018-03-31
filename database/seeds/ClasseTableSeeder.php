@@ -16,12 +16,15 @@ class ClasseTableSeeder extends Seeder
         DB::table('classes')->insert([
             [
                 'intitule' => '3e D',
+                'professeur_id' => '2',
             ],
             [
                 'intitule' => '2nd G2',
+                'professeur_id' => '1',
             ],
             [
                 'intitule' => 'Terminale SE',
+                'professeur_id' => '3',
             ]
         ]);
     }

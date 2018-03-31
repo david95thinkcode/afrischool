@@ -11,6 +11,14 @@ class Classe extends Model
     public $timestamps = true;
 
     /**
+     * une classe a un professeur principal
+     */
+    public function professeur()
+    {
+        return $this->belongsTo('App\Models\Professeur');
+    }
+
+    /**
      * Pour une classe, il y a plusieurs inscription
      */
     public function inscriptions()

@@ -21,7 +21,9 @@
                         <td>{{ $m->intitule }}</td>
                         <td> TODO:</td>
                         <td> TODO: </td>
-                        <td><a href="{{ route('matieres.edit', ['id' => $m->id]) }}" class="btn btn-sm btn-primary">Modifier</a></td>
+                        <td>
+                            <a href="{{ route('matieres.edit', ['id' => $m->id]) }}" class="btn btn-sm btn-primary disabled">Modifier</a>
+                        </td>
                     </tr>
                 @endforeach
                 </tbody>

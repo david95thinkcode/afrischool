@@ -3,10 +3,10 @@
 @section('content')
 <div class='row'>
     <div class="col">
-        <h3>Etablissements</h3> <hr>
-    </div>
+        <h3>Etablissements</h3> 
+        <br>
 
-    <div>
+      <div class="table-responsive">
         <table class="table table-striped">
                       <thead>
                         <th class="text-center">#</th>
@@ -14,7 +14,7 @@
                         <th class="text-center">Nom</th>
                         <th class="text-center">Directeur</th>
                         <th class="text-center">Email</th>
-                        <th class="text-center">Tel</th>
+                        <th class="text-center">Téléphone</th>
                         <th class="text-center">Pays</th>
                       </thead>
                       <tbody>
@@ -30,7 +30,8 @@
                         </tr>
                         @endforeach
                       </tbody>
-                    </table>
+        </table>
+      </div>
     </div>
 </div>
 @endsection

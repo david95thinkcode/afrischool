@@ -14,7 +14,12 @@
 
     <body>
         <div class="row">
-            <main class="offset-sm-2 col-sm-8">
+            <div class="col-sm-2">
+                <a href="{{ route('dashboard.home') }}" class="btn btn-success">
+                    GO TO DASHBOARD
+                </a>
+            </div>
+            <main class="col-sm-8">
                 @include('partials.session-messages')
                 @yield('content')
             </main>

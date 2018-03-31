@@ -26,9 +26,13 @@
                         <td>{{ $ens->matiere->intitule }}</td>
                         <td>{{ $ens->classe->intitule }}</td>
                         <td>{{ $ens->coefficient }}</td>
-                        <td>{{ $ens->professeur->prenoms }} {{ $ens->professeur->nom }} </td>
                         <td>
-                            <a href="{{ route('enseigner.edit', ['id' => $ens->id]) }}" class="btn btn-sm btn-primary">
+                            @if($ens->professeur_id != null)
+                            {{ $ens->professeur->prenoms }} {{ $ens->professeur->nom }}
+                            @endif
+                        </td>
+                        <td>
+                            <a href="{{ route('enseigner.edit', ['id' => $ens->id]) }}" class="btn btn-sm btn-primary disabled">
                                 Modifier
                             </a>
                         </td>

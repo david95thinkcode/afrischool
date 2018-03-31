@@ -18,14 +18,20 @@ Route::get('/', function () {
 Route::resource('inscriptions', 'InscriptionController');
 
 Route::prefix('dashboard')->group(function () {
-    Route::get('/', 'DashboardController@Home');
+    Route::get('/', 'DashboardController@Home')->name('dashboard.home');
     Route::resource('etablissements', 'EtablissementController');
     Route::resource('professeurs', 'ProfesseurController');
     Route::resource('classe', 'ClasseController');
     Route::resource('matieres', 'MatiereController');
     
+    /**
+     * Matiere
+     */
     Route::prefix('matiere')->group(function() {
 
+        /**
+         * Classes
+         */
         Route::prefix('classes')->group(function() {
 
             Route::get('/', 'MatiereController@showAllWithClasse')
@@ -42,10 +48,6 @@ Route::prefix('dashboard')->group(function () {
     });
 
     Route::resource('enseigner', 'EnseignerController');
-
-    Route::prefix('matiere-enseigne')->group(function() {
-        Route::get('attribuer/', 'EnseignerController@create')->name('matiere.attribuer');
-    });
 
     //Route::resource('Noe')
 });

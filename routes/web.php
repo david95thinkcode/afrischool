@@ -24,9 +24,27 @@ Route::prefix('dashboard')->group(function () {
     Route::resource('classe', 'ClasseController');
     Route::resource('matieres', 'MatiereController');
     
-    Route::prefix('matieres')->group(function() {
-        Route::get('parclasse', 'EnseignerController@index')->name('enseigner.index');
-        Route::get('attribuer', 'EnseignerController@create')->name('enseigner.create');
+    Route::prefix('matiere')->group(function() {
+
+        Route::prefix('classes')->group(function() {
+
+            Route::get('/', 'MatiereController@showAllWithClasse')
+                ->name('matiere.show.classes');
+
+            Route::get('/{classe}', 'MatiereController@showForSpecificClasse')
+                ->where('classe', '[0-9]+')
+                ->name('matiere.show.classe');
+
+            Route::post('/', 'MatiereController@searchForClasse')
+                ->where('classe', '[0-9]+');
+        });
+        
+    });
+
+    Route::resource('enseigner', 'EnseignerController');
+
+    Route::prefix('matiere-enseigne')->group(function() {
+        Route::get('attribuer/', 'EnseignerController@create')->name('matiere.attribuer');
     });
 
     //Route::resource('Noe')

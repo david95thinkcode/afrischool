@@ -4,8 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Matiere;
+use App\Models\Classe;
+use App\Models\Enseigner;
 use App\Http\Requests\StoreMatiereRequest;
 use Illuminate\Support\Facades\Redirect;
+use App\Models\Professeur;
+use App\Http\Requests\SearchEnseignerClasseRequest;
 
 class MatiereController extends Controller
 {
@@ -56,6 +60,46 @@ class MatiereController extends Controller
     public function show($id)
     {
         //
+    }
+
+    /**
+     * Retourne la liste des matières pour une classe spécifiée
+     * 
+     * @param int $classe_id
+     */
+    public function showForSpecificClasse($classe_id)
+    {
+        $enseigner = Enseigner::where('classe_id', $classe_id)->get();
+        
+        if ($enseigner != null) {
+            $classes = Classe::all();
+            
+            return view('dashboard.enseigner.show', compact('enseigner', 'classes'));
+        }
+        else {
+            // TODO: vérifier si la syntaxe de la ligne ci-dessous est correcte
+            return abort(404);
+        }
+
+    }
+
+    /**
+     * POST
+     */
+    public function searchForClasse(SearchEnseignerClasseRequest $req)
+    {
+        return Redirect::route('matiere.show.classe', ['classe' => $req->classe]);
+    }
+    
+    /**
+     * Affiche toutes les matière avec classes
+     */
+    public function showAllWithClasse()
+    {
+        $enseigner = Enseigner::all();
+        $classes = Classe::all();
+
+        return view('dashboard.enseigner.index', compact('enseigner', 'classes'));
     }
 
     /**

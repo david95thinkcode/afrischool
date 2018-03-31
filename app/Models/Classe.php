@@ -15,7 +15,15 @@ class Classe extends Model
      */
     public function professeur()
     {
-        return $this->belongsTo('App\Models\Professeur');
+        return $this->belongsTo('App\Models\Professeur'); //professeur_id
+    }
+
+    /**
+     * Plusieurs matières sont enseignées dans une classe
+     */
+    public function enseigner()
+    {
+        return $this->hasMany('App\Models\Enseigner');
     }
 
     /**

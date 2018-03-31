@@ -20,6 +20,14 @@ Route::resource('inscriptions', 'InscriptionController');
 Route::prefix('dashboard')->group(function () {
     Route::get('/', 'DashboardController@Home');
     Route::resource('etablissements', 'EtablissementController');
+    Route::resource('professeurs', 'ProfesseurController');
     Route::resource('classe', 'ClasseController');
+    Route::resource('matieres', 'MatiereController');
+    
+    Route::prefix('matieres')->group(function() {
+        Route::get('parclasse', 'EnseignerController@index')->name('enseigner.index');
+        Route::get('attribuer', 'EnseignerController@create')->name('enseigner.create');
+    });
+
     //Route::resource('Noe')
 });

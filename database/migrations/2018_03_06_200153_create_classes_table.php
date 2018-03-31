@@ -17,7 +17,7 @@ class CreateClassesTable extends Migration
             $table->increments('id');
             $table->string('intitule');
             
-            $table->unsignedInteger('professeur_id');
+            $table->unsignedInteger('professeur_id')->nullable();
             $table->foreign('professeur_id')
                     ->references('id')
                     ->on('professeurs')

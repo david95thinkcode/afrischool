@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Classe;
+use App\Models\Professeur;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Requests\StoreClasseRequest;
@@ -28,7 +29,8 @@ class ClasseController extends Controller
      */
     public function create()
     {
-        return view('dashboard.classes.create');
+        $profs = Professeur::all();
+        return view('dashboard.classes.create', compact('profs'));
     }
 
     /**
@@ -41,6 +43,10 @@ class ClasseController extends Controller
     {
         $classe = new Classe();
         $classe->intitule = $request->intitule;
+        if ($request->professeur_principal) {
+            $classe->professeur_id = $request->professeur_principal;
+        }
+
         $classe->save();
 
         return Redirect::route('classe.index')->with('status', $classe->intitule . ' enregistré !');
@@ -66,8 +72,9 @@ class ClasseController extends Controller
      */
     public function edit($id)
     {
-        $c = Classe::findorFail($id);        
-        return view('dashboard.classes.edit', compact('c'));
+        $c = Classe::findorFail($id);   
+        $profs = Professeur::all();     
+        return view('dashboard.classes.edit', compact('c', 'profs'));
     }
 
     /**
@@ -81,6 +88,11 @@ class ClasseController extends Controller
     {
         $c = Classe::find($id);
         $c->intitule = $request->intitule;
+        
+        if ($request->professeur_principal) {
+            $c->professeur_id = $request->professeur_principal;
+        }
+
         $c->save();
 
         return Redirect::route('classe.index')->with('status', 'Modifié avec succès !');
@@ -94,9 +106,9 @@ class ClasseController extends Controller
      */
     public function destroy($id)
     {
-        $c = Classe::find($id);
-        $c->delete();
+        Classe::find($id)->delete();
 
-        return response()->json('Deleted successfully !', 200);
+        return Redirect::route('classe.index')
+                ->with('status', 'Une classe a été supprimé avec succès !');
     }
 }

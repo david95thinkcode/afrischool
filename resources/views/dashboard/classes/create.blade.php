@@ -10,8 +10,17 @@
             
             {!! Form::open(['action' => ['ClasseController@store'], 'method' => 'POST']) !!}
                 <div class="form-group">
-                    {!! Form::label('intitule', 'Nom du cours : ') !!} 
+                    {!! Form::label('intitule', 'Nom de la classe ') !!} 
                     {!! Form::text('intitule', old('intitule'), ['class' => 'form-control', 'required' => '']) !!}
+                </div> 
+                <div class="form-group">
+                    {!! Form::label('professeur_principal', 'Professeur principal') !!}
+                    <select class="form-control" name="professeur_principal" id='professeur_principal' value="{{ old('professeur_principal') }}">
+                        <option value="">-- Sélectionner --</option>
+                    @foreach ($profs as $p)
+                        <option value="{!! $p->id !!}">{!! $p->prenoms !!} {!! $p->nom !!}</option>
+                    @endforeach
+                    </select>
                 </div> <br>
                 <div class='form-group text-center'>
                     {{ Form::submit("Enregistrer", array('class' => 'btn btn-primary ')) }}

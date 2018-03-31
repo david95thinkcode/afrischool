@@ -24,7 +24,8 @@ class StoreClasseRequest extends FormRequest
     public function rules()
     {
         return [
-            'intitule' => 'required|string'
+            'intitule' => 'required|string',
+            'professeur_principal' => '',
         ];
     }
 }

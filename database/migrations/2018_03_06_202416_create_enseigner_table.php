@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCoefficierTable extends Migration
+class CreateEnseignerTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class CreateCoefficierTable extends Migration
      */
     public function up()
     {
-        Schema::create('coefficier', function (Blueprint $table) {
+        Schema::create('enseigner', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('coefficier');
+            $table->integer('coefficient');
             
             $table->unsignedInteger('classe_id');
             $table->foreign('classe_id')
@@ -27,6 +27,12 @@ class CreateCoefficierTable extends Migration
             $table->foreign('matiere_id')
                     ->references('id')
                     ->on('matieres')
+                    ->onDelete('cascade');
+            
+            $table->unsignedInteger('professeur_id')->nullable();
+            $table->foreign('professeur_id')
+                    ->references('id')
+                    ->on('professeurs')
                     ->onDelete('cascade');
                     
             $table->timestamps();
@@ -40,6 +46,6 @@ class CreateCoefficierTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('coefficier');
+        Schema::dropIfExists('enseigner');
     }
 }

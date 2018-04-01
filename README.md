@@ -13,7 +13,7 @@ Réprésente les catégories d'établissement
 ~~~~
 Propriété|Type
 ----------|----
-id|id
+id|char
 libelle|string
 description|string
 
@@ -25,11 +25,12 @@ Propriété|Type
 ----------|----
 id|int
 raison_sociale|string
+sigle|string
 directeur|string
 tel|string
 email|string
 site_web|string
-categorie_id|int
+categorie_id|char
 adresse_id|int
 
 - ### Adresses 
@@ -40,6 +41,44 @@ id|int
 pays|string
 ville|string
 quartier|string
+
+- ### Professeur 
+
+Propriété|Type
+----------|----
+id|int
+nom|string
+prenoms|string
+tel|string
+email|string
+
+- ### Matieres
+
+Propriété|Type
+----------|----
+id|int
+intitule|string
+
+- ### Classes
+
+Propriété|Type
+----------|----
+id|int
+intitule|int
+classe_id|int
+matiere_id|int
+professeur_id|int
+
+- ### Enseigner
+
+Propriété|Type
+----------|----
+id|int
+coefficient|int
+classe_id|int
+matiere_id|int
+professeur_id|int
+
 
 # Vues
 ### Repertoires

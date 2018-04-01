@@ -15,7 +15,7 @@ class Etablissement extends Model
      */
     public function categorie()
     {
-        return $this->belongsTo("App\Models\CategorieEts");
+        return $this->belongsTo("App\Models\CategorieEts", 'categorie_ets_id');
     }
 
     /**

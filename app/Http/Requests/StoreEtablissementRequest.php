@@ -25,6 +25,7 @@ class StoreEtablissementRequest extends FormRequest
     {
         return [
             'raison_sociale' => 'required|string',
+            'sigle' => '',
             'directeur' => '',
             'tel' => '',
             'email' => '',
@@ -34,7 +35,7 @@ class StoreEtablissementRequest extends FormRequest
             'ville' => 'required|string',
             'quartier' => '',
             
-            'categorie_ets' => 'required|integer',
+            'categorie_ets' => 'required',
         ];
     }
 }

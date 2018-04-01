@@ -10,7 +10,7 @@
         <table class="table table-striped">
                       <thead>
                         <th class="text-center">#</th>
-                        <th class='text-center'>Catégorie</th>
+                        <th class='text-center'>Type</th>
                         <th class="text-center">Nom</th>
                         <th class="text-center">Directeur</th>
                         <th class="text-center">Email</th>
@@ -22,11 +22,14 @@
                         <tr>
                           <td>{{    $s->id  }}</td>
                           <td>{{    $s->categorie_ets_id  }}</td>
-                          <td>{{    $s->raison_sociale  }}</td>
+                          <td>{{    $s->sigle  }}</td>
                           <td>{{    $s->directeur   }}</td>
                           <td>{{    $s->email   }}</td>
                           <td>{{    $s->tel }}</td>
                           <td>{{    $s->adresse->pays   }}</td>
+                          <th>
+                            <a href="{{ route('etablissements.edit', ['id' => $s->id]) }}" class="btn btn-sm btn-primary">Modifier</a>
+                          </th>
                         </tr>
                         @endforeach
                       </tbody>

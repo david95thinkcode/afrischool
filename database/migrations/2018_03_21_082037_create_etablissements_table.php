@@ -16,6 +16,7 @@ class CreateEtablissementsTable extends Migration
         Schema::create('etablissements', function (Blueprint $table) {
             $table->increments('id');
             $table->string('raison_sociale');
+            $table->string('sigle')->nullable();
             $table->string('directeur')->nullabe();
             $table->string('tel', 20);
             $table->string('email')->nullable();

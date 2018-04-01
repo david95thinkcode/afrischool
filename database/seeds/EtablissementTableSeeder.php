@@ -15,7 +15,8 @@ class EtablissementTableSeeder extends Seeder
 
         DB::table('etablissements')->insert([
             [
-                'raison_sociale' => 'CERCO',
+                'raison_sociale' => 'Institut CERCO',
+                'sigle' => 'CERCO',
                 'directeur' => 'KOUTOUMA Sawal',
                 'tel' => '+229 558 6321 78',
                 'email' => 'koutoumat@sawal.com',
@@ -24,7 +25,8 @@ class EtablissementTableSeeder extends Seeder
                 'adresse_id' => '2'
             ],
             [
-                'raison_sociale' => 'ESGIS',
+                'raison_sociale' => 'Ecole Supérieure de Gestion d\'Informatique et des Sciences',
+                'sigle' => 'ESGIS',
                 'directeur' => 'AKAKPO Matthieu',
                 'tel'=> '00 32 52 14 888 90',
                 'email' => 'www.esgis.bj',

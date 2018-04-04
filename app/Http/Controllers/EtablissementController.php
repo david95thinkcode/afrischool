@@ -8,6 +8,7 @@ use App\Models\Etablissement;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreEtablissementRequest;
+use App\Http\Requests\UpdateEtablissementRequest;
 
 class EtablissementController extends Controller
 {
@@ -46,6 +47,7 @@ class EtablissementController extends Controller
         $ets = new Etablissement();
         
         $ets->raison_sociale = $request->raison_sociale;
+        $ets->sigle = $request->sigle;
         $ets->directeur = $request->directeur;
         $ets->tel = $request->tel;
         $ets->email = $request->email;
@@ -53,7 +55,7 @@ class EtablissementController extends Controller
         $ets->categorie_ets_id = $request->categorie_ets;
         $ets->adresse_id = $this->storeAdresse($request->pays, $request->ville, $request->quartier)->id;
         $ets->save();
-
+        
         return Redirect::route('etablissements.index')->with('status', 'Enregistré !');
     }
 
@@ -71,12 +73,15 @@ class EtablissementController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Etablissement  $etablissement
+     * @param  int  $etablissement_id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Etablissement $etablissement)
+    public function edit($id)
     {
-        //
+        $ets = Etablissement::findorFail($id);
+        $categories = CategorieEts::all();
+        
+        return view('dashboard.etablissements.edit', compact('ets', 'categories'));
     }
 
     /**
@@ -86,9 +91,21 @@ class EtablissementController extends Controller
      * @param  \App\Etablissement  $etablissement
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Etablissement $etablissement)
+    public function update(UpdateEtablissementRequest $request, $id)
     {
-        //
+        $ets = Etablissement::findorFail($id);
+        
+        $ets->raison_sociale = $request->raison_sociale;
+        $ets->sigle = $request->sigle;
+        $ets->directeur = $request->directeur;
+        $ets->tel = $request->tel;
+        $ets->email = $request->email;
+        $ets->site_web = $request->site_web;
+        $ets->categorie_ets_id = $request->categorie_ets;
+        $ets->adresse_id = $this->storeAdresse($request->pays, $request->ville, $request->quartier)->id;
+        $ets->save();
+
+        return Redirect::route('etablissements.index')->with('status', 'Mofications enregistrées !');
     }
 
     /**
@@ -97,9 +114,11 @@ class EtablissementController extends Controller
      * @param  \App\Etablissement  $etablissement
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Etablissement $etablissement)
+    public function destroy($id)
     {
-        //
+        (Etablissement::find($id))->delete();
+        
+        return Redirect::route('etablissements.index')->with('status', 'Supprimé !');
     }
 
     /**

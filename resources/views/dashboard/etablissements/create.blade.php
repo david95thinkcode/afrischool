@@ -25,7 +25,7 @@
                     <select class="form-control" name="categorie_ets" id="categorie_ets" value="{{ old('categorie_ets') }}" required>
                         <option value="">Sélectionnez une catégorie</option>
                         @foreach($categories as $c)
-                            <option value="{!! $c->id !!}">{!! $c !!}</option>
+                            <option value="{{ $c->id }}">{{ $c->libelle }}</option>
                         @endforeach
                     </select>                    
                 </div>

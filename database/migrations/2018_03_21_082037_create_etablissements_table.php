@@ -28,7 +28,7 @@ class CreateEtablissementsTable extends Migration
                     ->on('adresses')
                     ->onDelete('cascade');
             
-            $table->char('categorie_ets_id', 10);
+            $table->unsignedInteger('categorie_ets_id');
             $table->foreign('categorie_ets_id')
                     ->references('id')
                     ->on('categorie_ets')

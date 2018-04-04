@@ -21,7 +21,7 @@ class EtablissementTableSeeder extends Seeder
                 'tel' => '+229 558 6321 78',
                 'email' => 'koutoumat@sawal.com',
                 'site_web' => 'www.afrischool.com',
-                'categorie_ets_id' => 'PR',
+                'categorie_ets_id' => '1',
                 'adresse_id' => '2'
             ],
             [
@@ -31,7 +31,7 @@ class EtablissementTableSeeder extends Seeder
                 'tel'=> '00 32 52 14 888 90',
                 'email' => 'www.esgis.bj',
                 'site_web' => 'www.afrischool.com',
-                'categorie_ets_id' => 'IN',
+                'categorie_ets_id' => '2',
                 'adresse_id' => '1'
             ],
         ]);

@@ -14,7 +14,7 @@ class CreateCategorieEtsTable extends Migration
     public function up()
     {
         Schema::create('categorie_ets', function (Blueprint $table) {
-            $table->char('id', 10)->primary()->unique();
+            $table->increments('id');
             $table->string('libelle');
             $table->string('description')->nullable();
             $table->timestamps();

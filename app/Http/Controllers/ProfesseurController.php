@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Professeur;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreProfesseurRequest;
+use Illuminate\Support\Facades\Redirect;
 
 class ProfesseurController extends Controller
 {
@@ -34,9 +36,18 @@ class ProfesseurController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreProfesseurRequest $request)
     {
-        //
+        $prof = new Professeur();
+        $prof->nom = $request->nom;
+        $prof->prenoms = $request->prenoms;
+        $prof->tel = $request->tel;
+        $prof->email = $request->email;
+
+        $prof->save();
+        
+        return Redirect::route('professeurs.index')
+                ->with('status', 'Enregistré !');
     }
 
     /**
@@ -56,9 +67,11 @@ class ProfesseurController extends Controller
      * @param  \App\Professeur  $professeur
      * @return \Illuminate\Http\Response
      */
-    public function edit(Professeur $professeur)
+    public function edit($id)
     {
-        //
+        $prof = Professeur::find($id);
+
+        return view('dashboard.professeurs.edit', compact('prof'));
     }
 
     /**
@@ -68,9 +81,18 @@ class ProfesseurController extends Controller
      * @param  \App\Professeur  $professeur
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Professeur $professeur)
-    {
-        //
+    public function update(StoreProfesseurRequest $request, $id)
+    {   
+        $prof = Professeur::findorFail($id);
+        $prof->nom = $request->nom;
+        $prof->prenoms = $request->prenoms;
+        $prof->tel = $request->tel;
+        $prof->email = $request->email;
+
+        $prof->save();
+        
+        return Redirect::route('professeurs.index')
+                ->with('status', 'Modifié avec succès !');
     }
 
     /**
@@ -79,8 +101,12 @@ class ProfesseurController extends Controller
      * @param  \App\Professeur  $professeur
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Professeur $professeur)
+    public function destroy($id)
     {
-        //
+        (Professeur::findorFail($id))->delete();
+        
+        return Redirect::route('professeurs.index')
+                ->with('status', 'Supprimé avec succès !');
+
     }
 }

@@ -6,10 +6,10 @@
         
         <div class="jumbotron">
             <div>
-                <h3 class='text-center'>Inscrire un professeur</h3>
+                <h3 class='text-center'>Modifier {{ $prof->nom }} {{ $prof->prenoms }} </h3>
             </div> <hr>
             
-            {!! Form::open(['action' => ['ProfesseurController@store'], 'method' => 'POST']) !!}
+            {!! Form::model($prof, ['action' => ['ProfesseurController@update', $prof->id], 'method' => 'PUT']) !!}
                 <div class="form-group">
                      <div class='row'>
                         <div class="col">
@@ -20,8 +20,8 @@
                         </div>
                         <div class="col">
                             <div class="form-group">
-                                {!! Form::label('prenom', "Prénom(s) du professeur") !!}
-                                {!! Form::text('prenom', old('prenom'), ['class' => 'form-control', 'required' => '']) !!}
+                                {!! Form::label('prenoms', "Prénom(s) du professeur") !!}
+                                {!! Form::text('prenoms', old('prenoms'), ['class' => 'form-control', 'required' => '']) !!}
                             </div>
                         </div>
                      </div>
@@ -35,7 +35,7 @@
                     {!! Form::email('email', old('email'), ['class' => 'form-control', 'required' => '']) !!}
                 </div> <br>
                 <div class='form-group text-center'>
-                    {{ Form::submit("Enregistrer", array('class' => 'btn btn-primary ')) }}
+                    {{ Form::submit("Enregistrer les modifications", array('class' => 'btn btn-success ')) }}
                 </div>                   
             {!! Form::close() !!}
             

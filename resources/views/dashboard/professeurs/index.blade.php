@@ -6,21 +6,21 @@
         <h3>Les Professeurs</h3>
         
         <div class="table-responsive">
-            <table class="table  table-striped">
+            <table class="table table-sm table-striped">
                 <thead>
-                    <th>#</th>
-                    <th>Nom & Prénoms</th>
+                    <!-- <th>#</th> -->
+                    <th>Nom</th>
                     <th>Tel</th>
                     <th>Email</th>
-                    <th>Matières enseignées </th>
-                    <th>Classes tenues</th>
+                    <th>Enseigne </th>
+                    <th>Classes</th>
                     <th>PP en</th>
                     <th>Actions</th>
                 </thead>
                 <tbody>
                 @foreach ($professeurs as $p)
                     <tr>
-                        <td>{{ $p->id }}</td>
+                        <!-- <td>{{ $p->id }}</td> -->
                         <td>{{ $p->nom }} {{ $p->prenoms }}</td>
                         <td>{{ $p->tel }}</td>
                         <td>{{ $p->email }}</td>
@@ -40,9 +40,14 @@
                             @endforeach
                         </td>                        
                         <td> 
-                            <a href="{{ route('professeurs.edit', ['id' => $p->id]) }}" class="btn btn-sm btn-primary disabled">
+                            <a href="{{ route('professeurs.edit', ['id' => $p->id] ) }}" class="btn btn-sm btn-primary">
                             Modifier
                             </a> 
+                            <form action="{{ route('professeurs.destroy', $p->id) }}" method="POST">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                              {!! Form::submit('Supprimer', array('class' => 'btn btn-sm btn-danger')) !!}
+                            </form>
                         </td>
                     </tr>
                 @endforeach

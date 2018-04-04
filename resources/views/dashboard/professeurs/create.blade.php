@@ -20,8 +20,8 @@
                         </div>
                         <div class="col">
                             <div class="form-group">
-                                {!! Form::label('prenom', "Prénom(s) du professeur") !!}
-                                {!! Form::text('prenom', old('prenom'), ['class' => 'form-control', 'required' => '']) !!}
+                                {!! Form::label('prenoms', "Prénom(s) du professeur") !!}
+                                {!! Form::text('prenoms', old('prenoms'), ['class' => 'form-control', 'required' => '']) !!}
                             </div>
                         </div>
                      </div>

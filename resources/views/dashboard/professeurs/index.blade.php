@@ -4,7 +4,7 @@
 <div class='row'>
     <div class="col-sm-12">
         <h3>Les Professeurs</h3>
-        
+        <br>
         <div class="table-responsive">
             <table class="table table-sm table-striped">
                 <thead>

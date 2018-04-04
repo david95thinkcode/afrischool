@@ -76,7 +76,7 @@
 
                 <br>
 
-                <div class='form-group text-center'>
+                <div class='form-group'>
                     {{ Form::submit("Enregistrer", array('class' => 'btn btn-primary ')) }}
                 </div>                   
             {!! Form::close() !!}

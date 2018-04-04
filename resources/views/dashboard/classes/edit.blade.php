@@ -18,9 +18,10 @@
                     <select class="form-control" name="professeur_principal" id='professeur_principal' value="{{ old('professeur_principal') }}">
                         <option value="">-- Sélectionner --</option>
                     @foreach ($profs as $p)
-                        <option value="{!! $p->id !!}">{!! $p->prenoms !!} {!! $p->nom !!}</option>
                         @if ($p->id == $c->professeur_id)
                         <option value="{!! $p->id !!}" selected>{!! $p->prenoms !!} {!! $p->nom !!}</option>
+                        @else
+                        <option value="{!! $p->id !!}">{!! $p->prenoms !!} {!! $p->nom !!}</option>
                         @endif
                     @endforeach
                     </select>

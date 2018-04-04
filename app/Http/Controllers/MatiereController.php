@@ -71,14 +71,15 @@ class MatiereController extends Controller
     {
         $enseigner = Enseigner::where('classe_id', $classe_id)->get();
         
-        if ($enseigner != null) {
+        if ($enseigner->count() != null) {
             $classes = Classe::all();
             
             return view('dashboard.enseigner.show', compact('enseigner', 'classes'));
         }
         else {
-            // TODO: vérifier si la syntaxe de la ligne ci-dessous est correcte
-            return abort(404);
+            $classe = Classe::find($classe_id);
+
+            return view('dashboard.enseigner.show-empty', compact('classe'));
         }
 
     }

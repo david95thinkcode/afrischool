@@ -11,9 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-    return view('public.home');
-});
+Route::get('/', 'PublicPagesController@index');
 
 Route::resource('inscriptions', 'InscriptionController');
 
@@ -49,5 +47,11 @@ Route::prefix('dashboard')->group(function () {
 
     Route::resource('enseigner', 'EnseignerController');
 
-    //Route::resource('Noe')
 });
+
+    /*
+    * Utilisée par les requêtes ajax 
+    */
+    Route::prefix('ajax')->group(function () {
+        Route::get('pays', 'PublicResourcesController@getPays');
+    });

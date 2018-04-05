@@ -6,7 +6,7 @@
         <h3>Accueil Dashboard</h3>
         <hr>
         <div class="">
-            <ol>
+            <ol> Pour nous
                 <li>Etablissements
                     <ul>
                         <li><a href="{{ route('etablissements.create') }}">Ajouter </a></li>
@@ -33,11 +33,20 @@
                         <li><a href="{{ route('professeurs.index') }}">Liste </a></li>
                     </ul>
                 </li>
-
-                <li><a href="#">Ajouter une note</a></li>
-                <li></li>
             </ol>
         </div>
+
+        <div>
+            <ul>Utilisable par les écoles
+                <li>
+                    <a href="{{ route('inscriptions.create') }}">Inscrire un élève </a>
+                </li>
+                <li>
+                    <a href="#">Enregistrer une note </a>
+                </li>
+            </ul>
+        </div>
+
     </div>
 
 </div>

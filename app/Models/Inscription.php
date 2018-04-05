@@ -15,7 +15,7 @@ class Inscription extends Model
      */
     public function eleve()
     {
-        // return $this->belongsTo('App\Models\Eleve', 'eleve_id');
+        return $this->belongsTo('App\Models\Eleve', 'eleve_id');
     }
 
     /**
@@ -23,7 +23,7 @@ class Inscription extends Model
      */
     public function classe()
     {
-        // return $this->belongsTo('App\Models\Classe', 'classe_id');
+        return $this->belongsTo('App\Models\Classe', 'classe_id');
     }
 
     /**

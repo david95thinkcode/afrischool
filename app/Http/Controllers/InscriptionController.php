@@ -3,6 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Classe;
+use App\Http\Requests\StoreInscriptionRequest;
+use App\Models\ParentEleve;
+use App\Models\Eleve;
+use App\Models\Inscription;
+use Illuminate\Support\Facades\Redirect;
+use App\Http\Requests\SearchInscriptionRequest;
 
 class InscriptionController extends Controller
 {
@@ -13,7 +20,10 @@ class InscriptionController extends Controller
      */
     public function index()
     {
-        return view('inscriptions.index');
+        $inscriptions = Inscription::all();
+        $classes = Classe::all();
+
+        return view('inscriptions.index', compact('inscriptions', 'classes'));
     }
 
     /**
@@ -23,7 +33,9 @@ class InscriptionController extends Controller
      */
     public function create()
     {
-        return view('inscriptions.create');
+        $classes = Classe::all(); 
+        
+        return view('inscriptions.create', compact('classes'));
     }
 
     /**
@@ -32,11 +44,41 @@ class InscriptionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreInscriptionRequest $req)
     {
-        //
+        $parent = $this->storeParent($req->nom_parent, $req->prenoms_parent, $req->sexe_parent, $req->tel_parent, $req->mail_parent);
+        $eleve = $this->storeEleve($parent->id, $req->nom, $req->prenoms, $req->sexe, $req->date_naissance, $req->ancien, $req->redoublant, $req->ecole_provenance, $req->person_a_contacter_nom, $req->person_a_contacter_tel, $req->person_a_contacter_lien);
+
+        $inscription = new Inscription();
+        $inscription->eleve_id = $eleve->id;
+        $inscription->classe_id = $req->classe;
+        
+        $inscription->save();
+
+        return Redirect::route('inscriptions.index')->with('status', 'Elève inscrit avec succès !');
     }
 
+    public function searchForClasse(SearchInscriptionRequest $req)
+    {
+        return Redirect::route('inscriptions.show.classe', ['classe' => $req->classe]);
+    }
+
+    public function showForClasse($classe_id)
+    {
+        $inscriptions = Inscriptions::where('classe_id', $classe_id)->get();
+        
+        if ($inscriptions->count() != null) {
+            $classes = Classe::all();
+            
+            return view('dashboard.inscriptions.show', compact('inscriptions', 'classes'));
+        }
+        else {
+            $classe = Classe::find($classe_id);
+
+            return view('dashboard.inscriptions.show-empty', compact('classe'));
+        }
+    }
+    
     /**
      * Display the specified resource.
      *
@@ -80,5 +122,56 @@ class InscriptionController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     * 
+     */
+    public function storeEleve($parent_id, $nom, $prenom, $sexe, $date, $ancien, $redoublant, $ecole, $pac_nom, $pac_tel, $pac_lien) {
+        
+        $eleve = new Eleve();
+
+        if ($ancien == 1) {
+            $eleve->ancien = true;            
+        } else {
+            $eleve->ancien == false;
+            $eleve->ecole_provenance = $ecole;
+        }
+
+        if ($redoublant == 1) {
+            $eleve->redoublant = true;
+        } else {
+            $eleve->redoublant = false;
+        }
+
+        $eleve->nom = $nom;
+        $eleve->prenoms = $prenom;
+        $eleve->sexe = $sexe;
+        $eleve->date_naissance = $date;
+        $eleve->person_a_contacter_nom = $pac_nom;
+        $eleve->person_a_contacter_tel = $pac_tel;
+        $eleve->person_a_contacter_lien = $pac_lien;
+        $eleve->parent_id = $parent_id;
+        
+        $eleve->save();
+
+        return $eleve;
+    }
+
+    /**
+     * 
+     */
+    public function storeParent($nom, $prenom, $sexe, $tel, $email)
+    {
+        $parent = new ParentEleve();
+        $parent->nom = $nom;
+        $parent->prenoms = $prenom;
+        $parent->sexe = $sexe;
+        $parent->tel = $tel;
+        $parent->email = $email;
+        
+        $parent->save();
+        
+        return $parent;
     }
 }

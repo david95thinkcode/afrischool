@@ -15,8 +15,7 @@ class CreateInscriptionsTable extends Migration
     {
         Schema::create('inscriptions', function (Blueprint $table) {
             $table->increments('id');
-            $table->date('date_inscription');
-
+            
             $table->unsignedInteger('eleve_id');
             $table->foreign('eleve_id')
                     ->references('id')

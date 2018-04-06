@@ -20,10 +20,10 @@ class InscriptionController extends Controller
      */
     public function index()
     {
-        $inscriptions = Inscription::all();
-        $classes = Classe::all();
+      $inscriptions = Inscription::all();
+      $classes = Classe::all();
 
-        return view('inscriptions.index', compact('inscriptions', 'classes'));
+      return view('inscriptions.index', compact('inscriptions', 'classes'));
     }
 
     /**
@@ -33,8 +33,8 @@ class InscriptionController extends Controller
      */
     public function create()
     {
-        $classes = Classe::all(); 
-        
+        $classes = Classe::all();
+
         return view('inscriptions.create', compact('classes'));
     }
 
@@ -52,33 +52,39 @@ class InscriptionController extends Controller
         $inscription = new Inscription();
         $inscription->eleve_id = $eleve->id;
         $inscription->classe_id = $req->classe;
-        
+
         $inscription->save();
 
         return Redirect::route('inscriptions.index')->with('status', 'Elève inscrit avec succès !');
     }
 
+    /**
+     * Reçoit une classe en paramètre et retourne la vue correspondante
+     */
     public function searchForClasse(SearchInscriptionRequest $req)
     {
-        return Redirect::route('inscriptions.show.classe', ['classe' => $req->classe]);
+        return Redirect::route('inscriptions.classe.show', ['classe' => $req->classe]);
     }
 
+    /**
+     * Retourne sur une collection d'inscription pour une classe donnée
+     */
     public function showForClasse($classe_id)
     {
-        $inscriptions = Inscriptions::where('classe_id', $classe_id)->get();
-        
-        if ($inscriptions->count() != null) {
+        $inscriptions = Inscription::where('classe_id', $classe_id)->get();
+
+        if ($inscriptions->count() != 0) {
             $classes = Classe::all();
-            
-            return view('dashboard.inscriptions.show', compact('inscriptions', 'classes'));
+
+            return view('inscriptions.show', compact('inscriptions', 'classes'));
         }
         else {
             $classe = Classe::find($classe_id);
 
-            return view('dashboard.inscriptions.show-empty', compact('classe'));
+            return view('inscriptions.show-empty', compact('classe'));
         }
     }
-    
+
     /**
      * Display the specified resource.
      *
@@ -125,14 +131,14 @@ class InscriptionController extends Controller
     }
 
     /**
-     * 
+     *
      */
     public function storeEleve($parent_id, $nom, $prenom, $sexe, $date, $ancien, $redoublant, $ecole, $pac_nom, $pac_tel, $pac_lien) {
-        
+
         $eleve = new Eleve();
 
         if ($ancien == 1) {
-            $eleve->ancien = true;            
+            $eleve->ancien = true;
         } else {
             $eleve->ancien == false;
             $eleve->ecole_provenance = $ecole;
@@ -152,14 +158,14 @@ class InscriptionController extends Controller
         $eleve->person_a_contacter_tel = $pac_tel;
         $eleve->person_a_contacter_lien = $pac_lien;
         $eleve->parent_id = $parent_id;
-        
+
         $eleve->save();
 
         return $eleve;
     }
 
     /**
-     * 
+     *
      */
     public function storeParent($nom, $prenom, $sexe, $tel, $email)
     {
@@ -169,9 +175,9 @@ class InscriptionController extends Controller
         $parent->sexe = $sexe;
         $parent->tel = $tel;
         $parent->email = $email;
-        
+
         $parent->save();
-        
+
         return $parent;
     }
 }

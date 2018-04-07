@@ -27,7 +27,10 @@ class StoreProfesseurRequest extends FormRequest
             'nom' => 'required|string',
             'prenoms' => 'required|string',
             'tel' => 'required|string',
-            'email' => ''
+            'email' => '',
+            'sexe' => 'required',
+            'date_naissance' => '',
+            'nationalite' => '',
         ];
     }
 }

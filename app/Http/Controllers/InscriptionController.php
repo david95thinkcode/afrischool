@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use DB;
 use App\Models\Classe;
 use App\Http\Requests\StoreInscriptionRequest;
 use App\Models\ParentEleve;
@@ -91,7 +92,14 @@ class InscriptionController extends Controller
      */
     public function show($id)
     {
-        //
+      $ins = DB::table('inscriptions')
+            ->where('inscriptions.id', '=', $id)
+            ->join('classes', 'inscriptions.classe_id', '=', 'classes.id')
+            ->join('eleves', 'inscriptions.eleve_id', '=', 'eleves.id')
+            ->join('parents', 'eleves.id', '=', 'parents.id')
+            ->get();
+
+        dd($ins);
     }
 
     /**
@@ -168,11 +176,11 @@ class InscriptionController extends Controller
     public function storeParent($nom, $prenom, $sexe, $tel, $email)
     {
         $parent = new ParentEleve();
-        $parent->nom = $nom;
-        $parent->prenoms = $prenom;
-        $parent->sexe = $sexe;
-        $parent->tel = $tel;
-        $parent->email = $email;
+        $parent->par_nom = $nom;
+        $parent->par_prenoms = $prenom;
+        $parent->par_sexe = $sexe;
+        $parent->par_tel = $tel;
+        $parent->par_email = $email;
 
         $parent->save();
 

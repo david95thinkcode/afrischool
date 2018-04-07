@@ -5,7 +5,7 @@
     <div class="col-sm-12">
         <h3 class='text-center'>Les matières de {{ $enseigner->first()->classe->intitule }}</h3>
         <br>
-        
+
         <div class="text-center">
             <a href="{{ route('matiere.show.classes') }}" class="btn btn-primary">Retour</a>
         </div> <br>
@@ -16,7 +16,7 @@
                     <th>Titre</th>
                     <th>Classe</th>
                     <th>Coef </th>
-                    <th>Enseigné par</th> 
+                    <th>Enseigné par</th>
                     <th>Actions</th>
                 </thead>
                 <tbody>
@@ -28,7 +28,7 @@
                         <td>{{ $ens->coefficient }}</td>
                         <td>
                             @if($ens->professeur_id != null)
-                            {{ $ens->professeur->prenoms }} {{ $ens->professeur->nom }}
+                            {{ $ens->professeur->prof_prenoms }} {{ $ens->professeur->prof_nom }}
                             @endif
                         </td>
                         <td>

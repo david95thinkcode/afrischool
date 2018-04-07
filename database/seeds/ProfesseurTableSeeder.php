@@ -16,24 +16,34 @@ class ProfesseurTableSeeder extends Seeder
         DB::table('professeurs')->insert([
             [
                 'id' => 1,
-                'nom' => 'AMOUSSOE',
-                'prenoms' => 'Paul',
-                'tel' => '0000025525578',
-                'email' => 'test@mail.io'
+                'prof_nom' => 'AMOUSSOE',
+                'prof_prenoms' => 'Paul',
+                'prof_sexe' => 'Masculin',
+                'prof_tel' => '0000025525578',
+                'prof_email' => 'POlo@mail.io',
+                'prof_date_naissance' => '1968-03-29',
+                'prof_nationalite' => 'Congo'
+
             ],
             [
                 'id' => 2,
-                'nom' => 'CALEY',
-                'prenoms' => 'Franck',
-                'tel' => '0000025525578',
-                'email' => 'test@mail.io'
+                'prof_nom' => 'CALEY',
+                'prof_prenoms' => 'Francine',
+                'prof_sexe' => "Féminin",
+                'prof_tel' => '0000025525578',
+                'prof_email' => 'test@mail.io',
+                'prof_date_naissance' => '1950-09-09',
+                'prof_nationalite' => 'Burkina-Faso'
             ],
             [
                 'id' => 3,
-                'nom' => 'KOUASSI',
-                'prenoms' => 'Guy',
-                'tel' => '0000025525578',
-                'email' => 'test@mail.io'
+                'prof_nom' => 'KOUASSI',
+                'prof_prenoms' => 'Guy',
+                'prof_sexe' => "Masculin",
+                'prof_tel' => '0000025525578',
+                'prof_email' => 'test@mail.io',
+                'prof_date_naissance' => '1990-02-19',
+                'prof_nationalite' => 'Bénin'
             ]
         ]);
     }

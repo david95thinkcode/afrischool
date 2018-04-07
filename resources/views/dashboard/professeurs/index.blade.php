@@ -14,16 +14,15 @@
                     <th>Email</th>
                     <th>Enseigne </th>
                     <th>Classes</th>
-                    <th>PP en</th>
                     <th>Actions</th>
                 </thead>
                 <tbody>
                 @foreach ($professeurs as $p)
                     <tr>
                         <!-- <td>{{ $p->id }}</td> -->
-                        <td>{{ $p->nom }} {{ $p->prenoms }}</td>
-                        <td>{{ $p->tel }}</td>
-                        <td>{{ $p->email }}</td>
+                        <td>{{ $p->prof_nom }} {{ $p->prof_prenoms }}</td>
+                        <td>{{ $p->prof_tel }}</td>
+                        <td>{{ $p->prof_email }}</td>
                         <td>
                             @foreach($p->enseigner as $ens)
                             {{ $ens->matiere->intitule }},
@@ -34,15 +33,10 @@
                             {{ $c->classe->intitule }},
                             @endforeach
                         </td>
-                        <td> 
-                            @foreach ($p->classes as $c)
-                                {{ $c->intitule }},
-                            @endforeach
-                        </td>                        
-                        <td> 
+                        <td>
                             <a href="{{ route('professeurs.edit', ['id' => $p->id] ) }}" class="btn btn-sm btn-primary">
                             Modifier
-                            </a> 
+                            </a>
                             <form action="{{ route('professeurs.destroy', $p->id) }}" method="POST">
                                 <input type="hidden" name="_method" value="DELETE">
                                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
@@ -52,7 +46,7 @@
                     </tr>
                 @endforeach
                 </tbody>
-            </table>            
+            </table>
         </div>
     </div>
 </div>

@@ -39,13 +39,15 @@ class ProfesseurController extends Controller
     public function store(StoreProfesseurRequest $request)
     {
         $prof = new Professeur();
-        $prof->nom = $request->nom;
-        $prof->prenoms = $request->prenoms;
-        $prof->tel = $request->tel;
-        $prof->email = $request->email;
-
+        $prof->prof_nom = $request->nom;
+        $prof->prof_prenoms = $request->prenoms;
+        $prof->prof_tel = $request->tel;
+        $prof->prof_email = $request->email;
+        $prof->prof_sexe = $request->sexe;
+        $prof->prof_date_naissance = $request->date_naissance;
+        $prof->prof_nationalite = $request->nationalite;
         $prof->save();
-        
+
         return Redirect::route('professeurs.index')
                 ->with('status', 'Enregistré !');
     }
@@ -82,7 +84,7 @@ class ProfesseurController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(StoreProfesseurRequest $request, $id)
-    {   
+    {
         $prof = Professeur::findorFail($id);
         $prof->nom = $request->nom;
         $prof->prenoms = $request->prenoms;
@@ -90,7 +92,7 @@ class ProfesseurController extends Controller
         $prof->email = $request->email;
 
         $prof->save();
-        
+
         return Redirect::route('professeurs.index')
                 ->with('status', 'Modifié avec succès !');
     }
@@ -104,7 +106,7 @@ class ProfesseurController extends Controller
     public function destroy($id)
     {
         (Professeur::findorFail($id))->delete();
-        
+
         return Redirect::route('professeurs.index')
                 ->with('status', 'Supprimé avec succès !');
 

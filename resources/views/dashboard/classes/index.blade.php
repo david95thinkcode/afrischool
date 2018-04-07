@@ -4,7 +4,7 @@
 <div class='row'>
     <div class="col-sm-12">
         <h3>Les classes</h3>
-        
+
         <div class="table-responsive">
             <table class="table table-striped">
                 <thead>
@@ -20,7 +20,7 @@
                         <td>{{ $c->intitule }}</td>
                         <td>
                         @if ($c->professeur_id)
-                            {{ $c->professeur->prenoms }} {{ $c->professeur->nom }}
+                            {{ $c->professeur->prof_prenoms }} {{ $c->professeur->prof_nom }}
                         @endif
                         </td>
                         <td>
@@ -34,7 +34,7 @@
                     </tr>
                 @endforeach
                 </tbody>
-            </table>            
+            </table>
         </div>
     </div>
 </div>

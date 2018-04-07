@@ -15,10 +15,13 @@ class CreateProfesseursTable extends Migration
     {
         Schema::create('professeurs', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('nom');
-            $table->string('prenoms');
-            $table->string('tel');
-            $table->string('email')->nullable();
+            $table->string('prof_nom');
+            $table->string('prof_prenoms');
+            $table->string('prof_sexe');
+            $table->string('prof_tel');
+            $table->string('prof_email')->nullable();
+            $table->date('prof_date_naissance')->nullable();
+            $table->string('prof_nationalite')->nullable();
             $table->timestamps();
         });
     }

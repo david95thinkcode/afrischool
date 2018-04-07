@@ -21,6 +21,7 @@ class CreateEtablissementsTable extends Migration
             $table->string('tel', 20);
             $table->string('email')->nullable();
             $table->string('site_web')->nullable();
+            $table->boolean('activer')->default(false);
             
             $table->unsignedInteger('adresse_id')->nullable();
             $table->foreign('adresse_id')

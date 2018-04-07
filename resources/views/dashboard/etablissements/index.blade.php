@@ -14,16 +14,27 @@
                         <th class="">Nom</th>
                         <th class="">Téléphone</th>
                         <th class="">Pays</th>
+                        <th>Infos.</th>
                         <th class="">Actions</th>
                       </thead>
                       <tbody>
                         @foreach($schools as $s)
                         <tr>
-                          <td>{{    $s->id  }}</td>
-                          <td>{{    $s->sigle  }}</td>
-                          <td>{{    $s->tel }}</td>
-                          <td>{{    $s->adresse->pays   }}</td>
+                          <td>{{ $s->id  }}</td>
+                          <td>{{ $s->sigle  }}</td>
+                          <td>{{ $s->tel }}</td>
+                          <td>{{ $s->adresse->pays   }}</td>
                           <td>
+                            @if ($s->activer)
+                            <span class="badge badge-success">Activé</span>
+                            @else
+                            <span class="badge badge-warning">En attente d'activation</span>
+                            @endif
+                          </td>
+                          <td>
+                            @if (!$s->activer)
+                            <a href="{{ route('etablissements.activate', ['id' => $s->id]) }}" class="btn btn-sm btn-outline-primary">Activer</a>
+                            @endif
                             <a href="{{ route('etablissements.show', ['id' => $s->id]) }}" class="btn btn-sm btn-info">Afficher</a>
                             <a href="{{ route('etablissements.edit', ['id' => $s->id]) }}" class="btn btn-sm btn-warning">Modifier</a>
                             <form action="{{ route('etablissements.destroy', $s->id) }}" method="POST" class='table-del-btn'>

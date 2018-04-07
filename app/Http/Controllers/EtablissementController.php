@@ -71,6 +71,7 @@ class EtablissementController extends Controller
         $ecole = DB::table('etablissements')
                 ->where('etablissements.id', '=', $id)
                 ->join('categorie_ets', 'etablissements.categorie_ets_id', '=', 'categorie_ets.id')
+                ->join('adresses', 'etablissements.adresse_id', '=', 'adresses.id')
                 ->get()
                 ->first();
 
@@ -126,6 +127,19 @@ class EtablissementController extends Controller
         (Etablissement::find($id))->delete();
 
         return Redirect::route('etablissements.index')->with('status', 'Supprimé !');
+    }
+
+    /**
+     * Active un établissement
+     */
+    public function activate($id)
+    {
+        $ets = Etablissement::findorFail($id);
+        $ets->activer = true;
+        $ets->save();
+
+        return Redirect::route('etablissements.index')
+            ->with('status', $ets->raison_sociale . ' vient d\'être activé');
     }
 
     /**

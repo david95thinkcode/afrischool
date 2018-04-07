@@ -42,7 +42,6 @@ Route::prefix('dashboard')->group(function () {
 
     });
 
-
     Route::prefix('inscription-eleve')->group(function() {
       Route::get('/{type}', 'EleveController@create')->name('eleves.create');
     });
@@ -54,7 +53,13 @@ Route::prefix('dashboard')->group(function () {
 
         Route::post('/', 'InscriptionController@searchForClasse');
     });
-
+    
+    // Activation
+    Route::prefix('activate')->group(function() {
+        Route::get('etablissement/{etablissement}', 'EtablissementController@activate')
+                ->where('etablissement', '[0-9]+')
+                ->name('etablissements.activate');
+    });
 });
 
     /*

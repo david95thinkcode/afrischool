@@ -17,6 +17,12 @@ class CreateClassesTable extends Migration
             $table->increments('id');
             $table->string('cla_intitule');
             
+            $table->unsignedInteger('niveau_id')->nullable();
+            $table->foreign('niveau_id')
+                    ->references('id')
+                    ->on('niveaux')
+                    ->onDelete('cascade');
+
             $table->unsignedInteger('professeur_id')->nullable();
             $table->foreign('professeur_id')
                     ->references('id')

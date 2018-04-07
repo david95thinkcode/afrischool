@@ -58,9 +58,11 @@ class ProfesseurController extends Controller
      * @param  \App\Professeur  $professeur
      * @return \Illuminate\Http\Response
      */
-    public function show(Professeur $professeur)
+    public function show($id)
     {
-        //
+        $p = Professeur::findorFail($id);
+
+        return view('dashboard.professeurs.show', compact('p'));
     }
 
     /**

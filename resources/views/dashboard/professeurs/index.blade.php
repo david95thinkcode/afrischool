@@ -6,9 +6,9 @@
         <h3>Les Professeurs</h3>
         <br>
         <div class="table-responsive">
-            <table class="table table-sm table-striped">
+            <table class="table table-sm    table-striped">
                 <thead>
-                    <!-- <th>#</th> -->
+                    <th>#</th>
                     <th>Nom</th>
                     <th>Tel</th>
                     <th>Email</th>
@@ -19,7 +19,7 @@
                 <tbody>
                 @foreach ($professeurs as $p)
                     <tr>
-                        <!-- <td>{{ $p->id }}</td> -->
+                        <td>{{ $p->id }}</td>
                         <td>{{ $p->prof_nom }} {{ $p->prof_prenoms }}</td>
                         <td>{{ $p->prof_tel }}</td>
                         <td>{{ $p->prof_email }}</td>
@@ -34,13 +34,16 @@
                             @endforeach
                         </td>
                         <td>
-                            <a href="{{ route('professeurs.edit', ['id' => $p->id] ) }}" class="btn btn-sm btn-primary">
+                            <a href="{{ route('professeurs.show', ['id' => $p->id] ) }}" class="btn btn-sm btn-info">
+                            Afficher
+                            </a>
+                            <a href="{{ route('professeurs.edit', ['id' => $p->id] ) }}" class="btn btn-sm btn-warning">
                             Modifier
                             </a>
-                            <form action="{{ route('professeurs.destroy', $p->id) }}" method="POST">
+                            <form action="{{ route('professeurs.destroy', $p->id) }}" method="POST" class='table-del-btn'>
                                 <input type="hidden" name="_method" value="DELETE">
                                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                              {!! Form::submit('Supprimer', array('class' => 'btn btn-sm btn-danger')) !!}
+                              {!! Form::submit('Del', array('class' => 'btn btn-sm btn-danger')) !!}
                             </form>
                         </td>
                     </tr>
@@ -50,12 +53,4 @@
         </div>
     </div>
 </div>
-@endsection
-
-@section('custom-css')
-<style>
-    form {
-        display: inline-block;
-    }
-</style>
 @endsection

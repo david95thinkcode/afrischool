@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Enseigner extends Model
 {
     protected $table = 'enseigner';
-    
+
     public $timestamps = true;
 
     /**
@@ -28,6 +28,6 @@ class Enseigner extends Model
      */
     public function professeur()
     {
-        return $this->belongsTo('App\Models\Professeur', 'professeur_id');
+        return $this->belongsTo('App\Models\Professeur');
     }
 }

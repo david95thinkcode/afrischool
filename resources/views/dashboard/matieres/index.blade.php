@@ -4,14 +4,14 @@
 <div class='row'>
     <div class="col-sm-12">
         <h3>Les matières</h3>
-        
+
         <div class="table-responsive">
             <table class="table table-striped">
                 <thead>
                     <th>#</th>
                     <th>Titre</th>
                     <th>Enseigné en </th>
-                    <th>Enseigné par</th> 
+                    <th>Enseigné par</th>
                     <th>Actions</th>
                 </thead>
                 <tbody>
@@ -22,21 +22,15 @@
                         <td> TODO:</td>
                         <td> TODO: </td>
                         <td>
-                            <a href="{{ route('matieres.edit', ['id' => $m->id]) }}" class="btn btn-sm btn-primary disabled">Modifier</a>
+                            <a href="{{ route('matieres.show', ['id' => $m->id]) }}" class="btn btn-sm btn-info">Afficher</a>
+                            <a href="{{ route('matieres.edit', ['id' => $m->id]) }}" class="btn btn-sm btn-warning">Modifier</a>
+
                         </td>
                     </tr>
                 @endforeach
                 </tbody>
-            </table>            
+            </table>
         </div>
     </div>
 </div>
-@endsection
-
-@section('custom-css')
-<style>
-    form {
-        display: inline-block;
-    }
-</style>
 @endsection

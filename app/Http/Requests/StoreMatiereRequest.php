@@ -24,7 +24,7 @@ class StoreMatiereRequest extends FormRequest
     public function rules()
     {
         return [
-            'titre' => 'required|string',
+            'intitule' => 'required|string',
         ];
     }
 }

@@ -44,7 +44,7 @@ class MatiereController extends Controller
     public function store(StoreMatiereRequest $request)
     {
         $m = new Matiere();
-        $m->intitule = $request->titre;
+        $m->intitule = $request->intitule;
         $m->save();
 
         return Redirect::route('matieres.index')
@@ -59,21 +59,24 @@ class MatiereController extends Controller
      */
     public function show($id)
     {
-        //
+        $mat = Matiere::findorFail($id);
+        $ens = $mat->enseigner;
+
+        return view('dashboard.matieres.show', compact('mat', 'ens'));
     }
 
     /**
      * Retourne la liste des matières pour une classe spécifiée
-     * 
+     *
      * @param int $classe_id
      */
     public function showForSpecificClasse($classe_id)
     {
         $enseigner = Enseigner::where('classe_id', $classe_id)->get();
-        
+
         if ($enseigner->count() != null) {
             $classes = Classe::all();
-            
+
             return view('dashboard.enseigner.show', compact('enseigner', 'classes'));
         }
         else {
@@ -91,7 +94,7 @@ class MatiereController extends Controller
     {
         return Redirect::route('matiere.show.classe', ['classe' => $req->classe]);
     }
-    
+
     /**
      * Affiche toutes les matière avec classes
      */
@@ -111,7 +114,9 @@ class MatiereController extends Controller
      */
     public function edit($id)
     {
-        //
+        $m = Matiere::findorFail($id);
+
+        return view('dashboard.matieres.edit', compact('m'));
     }
 
     /**
@@ -121,9 +126,15 @@ class MatiereController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StoreMatiereRequest $request, $id)
     {
-        //
+        $m = Matiere::findorFail($id);
+        $m->intitule = $request->intitule;
+        $m->save();
+
+        return Redirect::route('matieres.edit', compact('m'))
+                ->with('id', $m->id)
+                ->with('status', 'Enregistré avec succès !');
     }
 
     /**

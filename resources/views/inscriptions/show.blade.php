@@ -16,6 +16,7 @@
                         <th>Elève</th>
                         <th>Classe</th>
                         <th>Inscrit le</th>
+                        <th>Actions</th>
                     </thead>
                     <tbody>
                         @foreach ($inscriptions as $i)
@@ -31,6 +32,10 @@
                                 </td>
                                 <td>
                                   {!! $i->created_at !!}
+                                </td>
+                                <td>
+                                  <a href="{{ route('inscriptions.show', ['id' => $i->id]) }}" class="btn btn-sm btn-info sm-mg-2">Afficher</a>
+                                  <a href="{{ route('inscriptions.edit', ['id' => $i->id]) }}" class="btn btn-sm btn-warning">Modifier</a>
                                 </td>
                             </tr>
                         @endforeach

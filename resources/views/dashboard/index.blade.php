@@ -42,6 +42,9 @@
                     <a href="{{ route('inscriptions.create') }}">Inscrire un élève </a>
                 </li>
                 <li>
+                    <a href="{{ route('inscriptions.index') }}">Les inscrits </a>
+                </li>
+                <li>
                     <a href="#">Enregistrer une note </a>
                 </li>
             </ul>

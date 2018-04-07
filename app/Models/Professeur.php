@@ -25,4 +25,12 @@ class Professeur extends Model
     {
         return $this->hasMany('App\Models\Enseigner');
     }
+
+    /*
+    * Un professeur a des diplomes
+    */
+    public function diplomes()
+    {
+        return $this->hasMany('App\Models\Diplome', 'professeur_id');
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\DB;
 use App\Models\Adresse;
 use App\Models\CategorieEts;
 use App\Models\Etablissement;
@@ -20,7 +21,7 @@ class EtablissementController extends Controller
     public function index()
     {
         $schools = Etablissement::all();
-        
+
         return view('dashboard.etablissements.index', compact('schools'));
     }
 
@@ -45,7 +46,7 @@ class EtablissementController extends Controller
     public function store(StoreEtablissementRequest $request)
     {
         $ets = new Etablissement();
-        
+
         $ets->raison_sociale = $request->raison_sociale;
         $ets->sigle = $request->sigle;
         $ets->directeur = $request->directeur;
@@ -55,7 +56,7 @@ class EtablissementController extends Controller
         $ets->categorie_ets_id = $request->categorie_ets;
         $ets->adresse_id = $this->storeAdresse($request->pays, $request->ville, $request->quartier)->id;
         $ets->save();
-        
+
         return Redirect::route('etablissements.index')->with('status', 'Enregistré !');
     }
 
@@ -65,9 +66,15 @@ class EtablissementController extends Controller
      * @param  \App\Etablissement  $etablissement
      * @return \Illuminate\Http\Response
      */
-    public function show(Etablissement $etablissement)
+    public function show($id)
     {
-        //
+        $ecole = DB::table('etablissements')
+                ->where('etablissements.id', '=', $id)
+                ->join('categorie_ets', 'etablissements.categorie_ets_id', '=', 'categorie_ets.id')
+                ->get()
+                ->first();
+
+        return view('dashboard.etablissements.show', compact('ecole'));
     }
 
     /**
@@ -80,7 +87,7 @@ class EtablissementController extends Controller
     {
         $ets = Etablissement::findorFail($id);
         $categories = CategorieEts::all();
-        
+
         return view('dashboard.etablissements.edit', compact('ets', 'categories'));
     }
 
@@ -94,7 +101,7 @@ class EtablissementController extends Controller
     public function update(UpdateEtablissementRequest $request, $id)
     {
         $ets = Etablissement::findorFail($id);
-        
+
         $ets->raison_sociale = $request->raison_sociale;
         $ets->sigle = $request->sigle;
         $ets->directeur = $request->directeur;
@@ -117,7 +124,7 @@ class EtablissementController extends Controller
     public function destroy($id)
     {
         (Etablissement::find($id))->delete();
-        
+
         return Redirect::route('etablissements.index')->with('status', 'Supprimé !');
     }
 

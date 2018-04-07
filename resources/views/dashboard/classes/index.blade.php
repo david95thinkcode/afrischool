@@ -25,7 +25,7 @@
                         </td>
                         <td>
                             <a href="{{ route('classe.edit', ['id' => $c->id]) }}" class="btn btn-sm btn-primary">Modifier</a>
-                           <form action="{{ route('classe.destroy', $c->id) }}" method="POST">
+                           <form action="{{ route('classe.destroy', $c->id) }}" method="POST" class='table-del-btn'>
                                 <input type="hidden" name="_method" value="DELETE">
                                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                               {!! Form::submit('Supprimer', array('class' => 'btn btn-sm btn-danger')) !!}
@@ -38,12 +38,4 @@
         </div>
     </div>
 </div>
-@endsection
-
-@section('custom-css')
-<style>
-    form {
-        display: inline-block;
-    }
-</style>
 @endsection

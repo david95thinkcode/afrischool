@@ -97,7 +97,8 @@ class InscriptionController extends Controller
             ->join('classes', 'inscriptions.classe_id', '=', 'classes.id')
             ->join('eleves', 'inscriptions.eleve_id', '=', 'eleves.id')
             ->join('parents', 'eleves.id', '=', 'parents.id')
-            ->get();
+            ->get()
+            ->first();
 
         dd($ins);
     }

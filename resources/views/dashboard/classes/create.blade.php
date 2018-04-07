@@ -9,19 +9,8 @@
             </div> <hr>
 
             {!! Form::open(['action' => ['ClasseController@store'], 'method' => 'POST']) !!}
-                <div class="form-group">
-                    {!! Form::label('intitule', 'Nom de la classe ') !!}
-                    {!! Form::text('intitule', old('intitule'), ['class' => 'form-control', 'required' => '']) !!}
-                </div>
-                <div class="form-group">
-                    {!! Form::label('professeur_principal', 'Professeur principal') !!}
-                    <select class="form-control" name="professeur_principal" id='professeur_principal' value="{{ old('professeur_principal') }}">
-                        <option value="">-- Sélectionner --</option>
-                    @foreach ($profs as $p)
-                        <option value="{!! $p->id !!}">{!! $p->prof_prenoms !!} {!! $p->prof_nom !!}</option>
-                    @endforeach
-                    </select>
-                </div> <br>
+                @include('dashboard.classes.partials.form-create-edit')
+                 <br>
                 <div class='form-group text-center'>
                     {{ Form::submit("Enregistrer", array('class' => 'btn btn-primary ')) }}
                 </div>

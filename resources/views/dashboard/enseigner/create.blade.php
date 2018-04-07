@@ -16,7 +16,7 @@
                             <select name="classe" id="classe" class="form-control" required>
                                 <option value="">-- Sélectionner --</option>
                                 @foreach ($classes as $classe)
-                                <option value="{{ $classe->id }}">{{ $classe->intitule }}</option>
+                                <option value="{{ $classe->id }}">{{ $classe->cla_intitule }}</option>
                                 @endforeach
                             </select>
                         </div>

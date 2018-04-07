@@ -3,7 +3,7 @@
 @section('content')
 <div class='row'>
     <div class="col-sm-12">
-        <h3 class='text-center'>Les matières de {{ $enseigner->first()->classe->intitule }}</h3>
+        <h3 class='text-center'>Les matières de {{ $enseigner->first()->classe->cla_intitule }}</h3>
         <br>
 
         <div class="text-center">
@@ -24,7 +24,7 @@
                     <tr>
                         <td>{{ $ens->id }}</td>
                         <td>{{ $ens->matiere->intitule }}</td>
-                        <td>{{ $ens->classe->intitule }}</td>
+                        <td>{{ $ens->classe->cla_intitule }}</td>
                         <td>{{ $ens->coefficient }}</td>
                         <td>
                             @if($ens->professeur_id != null)

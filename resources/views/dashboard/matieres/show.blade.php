@@ -17,7 +17,7 @@
                 @foreach ($ens as $e)
                     <tr>
                         <td> {{ $e->id }}</td>
-                        <td> {{ $e->classe->intitule }} </td>
+                        <td> {{ $e->classe->cla_intitule }} </td>
                         <td> {{ $e->professeur->prof_prenoms  }} {{ $e->professeur->prof_nom  }} </td>
                     </tr>
                 @endforeach

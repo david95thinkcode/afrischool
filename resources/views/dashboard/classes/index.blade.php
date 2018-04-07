@@ -17,7 +17,7 @@
                 @foreach ($classes as $c)
                     <tr>
                         <td>{{ $c->id }}</td>
-                        <td>{{ $c->intitule }}</td>
+                        <td>{{ $c->cla_intitule }}</td>
                         <td>
                         @if ($c->professeur_id)
                             {{ $c->professeur->prof_prenoms }} {{ $c->professeur->prof_nom }}

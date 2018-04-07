@@ -1,5 +1,5 @@
 @extends('templates.dashboard-dev')
-@section('title') {{ $c->intitule }} - Modifier @endsection
+@section('title') {{ $c->cla_intitule }} - Modifier @endsection
 @section('content')
 <div class='row'>
     <div class="col-sm-12">
@@ -10,8 +10,8 @@
 
             {!! Form::model($c, ['action' => ['ClasseController@update', $c->id], 'method' => 'PUT']) !!}
                 <div class="form-group">
-                    {!! Form::label('intitule', 'Nom du cours : ') !!}
-                    {!! Form::text('intitule', old('intitule'), ['class' => 'form-control', 'required' => '']) !!}
+                    {!! Form::label('cla_intitule', 'Nom du cours : ') !!}
+                    {!! Form::text('cla_intitule', old('cla_intitule'), ['class' => 'form-control', 'required' => '']) !!}
                 </div>
                 <div class="form-group">
                     {!! Form::label('professeur_principal', 'Professeur principal') !!}

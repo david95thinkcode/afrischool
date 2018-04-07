@@ -42,14 +42,14 @@ class ClasseController extends Controller
     public function store(StoreClasseRequest $request)
     {
         $classe = new Classe();
-        $classe->intitule = $request->intitule;
+        $classe->cla_intitule = $request->cla_intitule;
         if ($request->professeur_principal) {
             $classe->professeur_id = $request->professeur_principal;
         }
 
         $classe->save();
 
-        return Redirect::route('classe.index')->with('status', $classe->intitule . ' enregistré !');
+        return Redirect::route('classe.index')->with('status', $classe->cla_intitule . ' enregistré !');
     }
 
     /**
@@ -87,7 +87,7 @@ class ClasseController extends Controller
     public function update(StoreClasseRequest $request, $id)
     {
         $c = Classe::find($id);
-        $c->intitule = $request->intitule;
+        $c->cla_intitule = $request->cla_intitule;
         
         if ($request->professeur_principal) {
             $c->professeur_id = $request->professeur_principal;

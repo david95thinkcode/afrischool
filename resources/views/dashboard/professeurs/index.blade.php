@@ -30,7 +30,7 @@
                         </td>
                         <td>
                             @foreach( $p->enseigner as $c)
-                            {{ $c->classe->intitule }},
+                            {{ $c->classe->cla_intitule }},
                             @endforeach
                         </td>
                         <td>

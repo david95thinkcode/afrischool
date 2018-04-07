@@ -15,7 +15,7 @@ class CreateClassesTable extends Migration
     {
         Schema::create('classes', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('intitule');
+            $table->string('cla_intitule');
             
             $table->unsignedInteger('professeur_id')->nullable();
             $table->foreign('professeur_id')

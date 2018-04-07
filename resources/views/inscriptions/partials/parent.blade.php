@@ -19,7 +19,7 @@
                                             {!! Form::label('sexe_parent', "Sexe") !!}
                                         <select name="sexe_parent" id="sexe_parent" class="form-control">
                                             @include('partials.sexe-options')
-                                        </select>                                        
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="col">
@@ -27,12 +27,12 @@
                                             {!! Form::label('tel_parent', "Tel") !!}
                                             {!! Form::text('tel_parent', old('tel_parent'), ['class' => 'form-control', 'required' => '']) !!}
                                     </div>
-                                </div>                                
+                                </div>
                                 <div class="col">
                                     <div class="form-group">
                                             {!! Form::label('mail_parent', "Adresse email") !!}
-                                            {!! Form::email('mail_parent', old('mail_parent'), ['class' => 'form-control', 'required' => '']) !!}
+                                            {!! Form::email('mail_parent', old('mail_parent'), ['class' => 'form-control']) !!}
                                     </div>
                                 </div>
-                            </div>                             
-                        </div> 
+                            </div>
+                        </div>

@@ -3,7 +3,7 @@
 @section('content')
 <div class='row'>
     <div class="col-sm-12">
-        <h3 class='text-center'>Les élèves inscrits en {{ $classe->intitule }}</h3>
+        <h3 class='text-center'>Les élèves inscrits en {{ $classe->cla_intitule }}</h3>
         <br>
         
         <div class="text-center">

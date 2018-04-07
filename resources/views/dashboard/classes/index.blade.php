@@ -10,6 +10,7 @@
                 <thead>
                     <th>#</th>
                     <th>Intitulé</th>
+                    <th>Niveau</th>
                     <th>Professeur principal</th>
                     <th>Actions</th>
                 </thead>
@@ -18,6 +19,11 @@
                     <tr>
                         <td>{{ $c->id }}</td>
                         <td>{{ $c->cla_intitule }}</td>
+                        <td>
+                            @if ($c->niveau != null)
+                                {{  $c->niveau->niv_libelle }}
+                            @endif
+                        </td>
                         <td>
                         @if ($c->professeur_id)
                             {{ $c->professeur->prof_prenoms }} {{ $c->professeur->prof_nom }}

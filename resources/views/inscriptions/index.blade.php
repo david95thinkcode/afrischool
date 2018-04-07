@@ -15,7 +15,7 @@
 
                             <option value="">Veuillez sélectionner une classe</option>
                             @foreach ($classes as $c)
-                            <option value="{{ $c->id }}">{{ $c->intitule }}</option>
+                            <option value="{{ $c->id }}">{{ $c->cla_intitule }}</option>
                             @endforeach
 
                         </select>

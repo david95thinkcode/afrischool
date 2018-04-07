@@ -24,7 +24,7 @@ class StoreClasseRequest extends FormRequest
     public function rules()
     {
         return [
-            'cla_intitule' => 'required|string',
+            'cla_intitule' => 'required|unique:classes|string',
             'professeur_principal' => '',
         ];
     }

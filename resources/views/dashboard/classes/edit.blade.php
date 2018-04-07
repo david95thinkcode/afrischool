@@ -9,8 +9,8 @@
             </div> <hr>
 
             {!! Form::model($c, ['action' => ['ClasseController@update', $c->id], 'method' => 'PUT']) !!}
-                <div class="form-group">
-                    {!! Form::label('cla_intitule', 'Nom du cours : ') !!}
+                <div class="form-group">c
+                    {!! Form::label('cla_intitule', 'Nom de la classe ') !!}
                     {!! Form::text('cla_intitule', old('cla_intitule'), ['class' => 'form-control', 'required' => '']) !!}
                 </div>
                 <div class="form-group">

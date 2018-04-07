@@ -6,7 +6,7 @@ $('document').ready(function () {
         }
     });
 
-    LoadCountriesInside([$('#nationalite')]);
+    LoadCountriesInside([$('#prof_nationalite')]);
 
     /**
      *  Crée des éléments <option> à l'intérieur de chaque élément <select>

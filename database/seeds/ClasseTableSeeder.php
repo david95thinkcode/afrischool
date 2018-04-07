@@ -15,6 +15,10 @@ class ClasseTableSeeder extends Seeder
 
         DB::table('classes')->insert([
             [
+                'cla_intitule' => 'CE1',
+                'professeur_id' => '2',
+            ],
+            [
                 'cla_intitule' => '3e D',
                 'professeur_id' => '2',
             ],

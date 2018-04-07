@@ -34,7 +34,13 @@ class CreateEnseignerTable extends Migration
                     ->references('id')
                     ->on('professeurs')
                     ->onDelete('cascade');
-                    
+            
+            $table->unsignedInteger('annee_scolaire_id')->nullable();
+            $table->foreign('annee_scolaire_id')
+                    ->references('id')
+                    ->on('annees_scolaires')
+                    ->onDelete('cascade');
+
             $table->timestamps();
         });
     }

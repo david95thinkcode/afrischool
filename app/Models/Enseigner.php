@@ -30,4 +30,13 @@ class Enseigner extends Model
     {
         return $this->belongsTo('App\Models\Professeur');
     }
+
+    /**
+     * 
+     */
+    public function anneescolaire()
+    {
+        return $this->belongsTo('App\Models\AnneeScolaire', 'annee_scolaire_id');
+    }
+    
 }

@@ -32,15 +32,13 @@ Propriété|Type
 id|int
 intitule|string
 
-- ### Classes
+- ### Niveaux
 
 Propriété|Type
 ----------|----
 id|int
-cla_intitule|int
-classe_id|int
-matiere_id|int
-professeur_id|int !!!
+niv_libelle|string
+niv_description|string
 
 - ### Professeurs
 
@@ -72,6 +70,17 @@ dip_specialite|string
 dip_niveau|string
 dip_date_obtention|date
 professeur_id|int
+
+- ### Classes
+
+Propriété|Type
+----------|----
+id|int
+cla_intitule|string
+classe_id|int
+matiere_id|int
+professeur_id|int !!!
+niveau_id|int
 
 - ### Etablissements
 

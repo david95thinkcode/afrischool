@@ -24,13 +24,13 @@ class StoreProfesseurRequest extends FormRequest
     public function rules()
     {
         return [
-            'nom' => 'required|string',
-            'prenoms' => 'required|string',
-            'tel' => 'required|string',
-            'email' => '',
-            'sexe' => 'required',
-            'date_naissance' => '',
-            'nationalite' => '',
+            'prof_nom' => 'required|string',
+            'prof_prenoms' => 'required|string',
+            'prof_tel' => 'required|string',
+            'prof_email' => '',
+            'prof_sexe' => 'required',
+            'prof_date_naissance' => '',
+            'prof_nationalite' => '',
         ];
     }
 }

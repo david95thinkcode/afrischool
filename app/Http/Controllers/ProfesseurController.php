@@ -39,13 +39,13 @@ class ProfesseurController extends Controller
     public function store(StoreProfesseurRequest $request)
     {
         $prof = new Professeur();
-        $prof->prof_nom = $request->nom;
-        $prof->prof_prenoms = $request->prenoms;
-        $prof->prof_tel = $request->tel;
-        $prof->prof_email = $request->email;
-        $prof->prof_sexe = $request->sexe;
-        $prof->prof_date_naissance = $request->date_naissance;
-        $prof->prof_nationalite = $request->nationalite;
+        $prof->prof_nom = $request->prof_nom;
+        $prof->prof_prenoms = $request->prof_prenoms;
+        $prof->prof_tel = $request->prof_tel;
+        $prof->prof_email = $request->prof_email;
+        $prof->prof_sexe = $request->prof_sexe;
+        $prof->prof_date_naissance = $request->prof_date_naissance;
+        $prof->prof_nationalite = $request->prof_nationalite;
         $prof->save();
 
         return Redirect::route('professeurs.index')
@@ -88,11 +88,13 @@ class ProfesseurController extends Controller
     public function update(StoreProfesseurRequest $request, $id)
     {
         $prof = Professeur::findorFail($id);
-        $prof->nom = $request->nom;
-        $prof->prenoms = $request->prenoms;
-        $prof->tel = $request->tel;
-        $prof->email = $request->email;
-
+        $prof->prof_nom = $request->prof_nom;
+        $prof->prof_prenoms = $request->prof_prenoms;
+        $prof->prof_tel = $request->prof_tel;
+        $prof->prof_email = $request->prof_email;
+        $prof->prof_sexe = $request->prof_sexe;
+        $prof->prof_date_naissance = $request->prof_date_naissance;
+        $prof->prof_nationalite = $request->prof_nationalite;
         $prof->save();
 
         return Redirect::route('professeurs.index')

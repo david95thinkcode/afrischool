@@ -11,7 +11,7 @@
 |
 */
 
-Route::get('/', 'PublicPagesController@index');
+Route::get('/', 'PublicPagesController@index')->name('home');
 
 Route::prefix('dashboard')->group(function () {
     Route::get('/', 'DashboardController@Home')->name('dashboard.home');
@@ -40,6 +40,11 @@ Route::prefix('dashboard')->group(function () {
             Route::post('/', 'MatiereController@searchForClasse');
         });
 
+    });
+
+
+    Route::prefix('inscription-eleve')->group(function() {
+      Route::get('/{type}', 'EleveController@create')->name('eleves.create');
     });
 
     Route::prefix('inscriptions-enregistres')->group(function() {

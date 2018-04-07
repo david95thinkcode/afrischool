@@ -1,36 +1,12 @@
 @extends('templates.dashboard-dev')
-@section('title') Inscrire un élève @endsection
+@section('title') Inscriptions @endsection
 @section('content')
 <div class='row'>
-    <div class="col-sm-12">
-        
-        <div class="jumbotron">
-            <div>
-                <h3 class='text-center'>Inscrire un élève</h3>
-            </div> <hr>
-            <div>
-                {!! Form::open(['action' => ['InscriptionController@store'], 'method' => 'POST']) !!}
-                    <fieldset>
-                        <legend>Informations sur l'élève</legend>
-                        @include('inscriptions.partials.eleve')      
-                    </fieldset>
-
-                    <fieldset>
-                        <legend>Informations sur un parent</legend>
-                        @include('inscriptions.partials.parent')                                          
-                    </fieldset>
-
-                    <fieldset>
-                        <legend>Personne à contacter en cas d'urgence</legend>
-                        @include('inscriptions.partials.personne-a-contacter')     
-                    </fieldset>
-                    
-                    <br>
-                        <div class='form-group text-center'>
-                            {{ Form::submit("Enregistrer", array('class' => 'btn btn-primary ')) }}
-                        </div>
-                {!! Form::close() !!}
-            </div>
+    <div class="col-sm-12"> <br>
+        <div class="jumbotron text-center">
+          <h3 class="sm mb-5">Vous désirez inscrire ...</h3>
+          <a href="{{ route('eleves.create', ['type' => 'ancien']) }}" class="btn btn-primary sm mr-3" title='Un ancien élève de votre école'>Un ancien élève</a>
+          <a href="{{ route('eleves.create', ['type' => 'nouveau']) }}" class="btn btn-success sm ml-3" title="Un élève provenant d'une autre école">Un nouvel élève</a>
         </div>
     </div>
 

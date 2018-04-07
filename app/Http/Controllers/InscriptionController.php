@@ -33,9 +33,7 @@ class InscriptionController extends Controller
      */
     public function create()
     {
-        $classes = Classe::all();
-
-        return view('inscriptions.create', compact('classes'));
+      return view('inscriptions.create');
     }
 
     /**

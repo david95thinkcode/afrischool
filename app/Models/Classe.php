@@ -11,14 +11,6 @@ class Classe extends Model
     public $timestamps = true;
 
     /**
-     * une classe a un professeur principal
-     */
-    public function professeur()
-    {
-        return $this->belongsTo('App\Models\Professeur'); //professeur_id
-    }
-
-    /**
      * une classe a appartient à un niveau
      */
     public function niveau()
@@ -48,5 +40,13 @@ class Classe extends Model
     public function coefficients()
     {
         return $this->hasMany('App\Models\Coefficier');
+    }
+
+    /**
+     * Une classe a plusieurs "professeur principal" 
+     */
+    public function professeursprincipal()
+    {
+        return $this->hasMany('App\Models\ProfesseurPrincipal');
     }
 }

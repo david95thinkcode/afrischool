@@ -23,12 +23,6 @@ class CreateClassesTable extends Migration
                     ->on('niveaux')
                     ->onDelete('cascade');
 
-            $table->unsignedInteger('professeur_id')->nullable();
-            $table->foreign('professeur_id')
-                    ->references('id')
-                    ->on('professeurs')
-                    ->onDelete('cascade');
-
             $table->timestamps();
         });
     }

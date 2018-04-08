@@ -11,7 +11,6 @@
                     <th>#</th>
                     <th>Intitulé</th>
                     <th>Niveau</th>
-                    <th>Professeur principal</th>
                     <th>Actions</th>
                 </thead>
                 <tbody>
@@ -23,11 +22,6 @@
                             @if ($c->niveau != null)
                                 {{  $c->niveau->niv_libelle }}
                             @endif
-                        </td>
-                        <td>
-                        @if ($c->professeur_id)
-                            {{ $c->professeur->prof_prenoms }} {{ $c->professeur->prof_nom }}
-                        @endif
                         </td>
                         <td>
                             <a href="{{ route('classe.show', ['id' => $c->id]) }}" class="btn btn-sm btn-info">Afficher</a>

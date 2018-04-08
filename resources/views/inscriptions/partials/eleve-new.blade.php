@@ -17,7 +17,7 @@
         <div class="col">
             <div class="form-group">
                 {!! Form::label('date_naissance', "Date de naissance") !!}
-                {!! Form::date('date_naissance', old('date_naissance'), ['class' => 'form-control', 'required' => '']) !!}
+                {!! Form::date('date_naissance', old('date_naissance'), ['class' => 'form-control']) !!}
             </div>
         </div>
         <div class="col">
@@ -58,9 +58,9 @@
                     <option value=""></option>
                     @foreach ($classes as $classe)
                         @if ($classe->id == old('classe'))
-                            <option value="{{ $classe->id }}" selected>{{ $classe->intitule }}</option>
+                            <option value="{{ $classe->id }}" selected>{{ $classe->cla_intitule }}</option>
                         @else
-                            <option value="{{ $classe->id }}">{{ $classe->intitule }}</option>
+                            <option value="{{ $classe->id }}">{{ $classe->cla_intitule }}</option>
                         @endif
                     @endforeach
                 </select>

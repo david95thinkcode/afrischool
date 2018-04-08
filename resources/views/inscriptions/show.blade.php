@@ -6,7 +6,7 @@
 
         <div>
             <div>
-                <h3 class='text-center'>Les élèves inscrits en {{ $inscriptions[0]->classe->intitule }} </h3>
+                <h3 class='text-center'>Les élèves inscrits en {{ $inscriptions[0]->classe->cla_intitule }} </h3>
             </div> <hr>
 
             <div class="table-responsive">
@@ -15,6 +15,7 @@
                         <th>#</th>
                         <th>Elève</th>
                         <th>Classe</th>
+                        <th>Age</th>
                         <th>Inscrit le</th>
                         <th>Actions</th>
                     </thead>
@@ -28,7 +29,10 @@
                                     {!! $i->eleve->nom !!} {!! $i->eleve->prenoms !!}
                                 </td>
                                 <td>
-                                    {!! $i->classe->intitule !!}
+                                    {!! $i->classe->cla_intitule !!}
+                                </td>
+                                <td>
+                                    {!! date('Y') - date('Y', strtotime($i->eleve->date_naissance)) !!} ans
                                 </td>
                                 <td>
                                   {!! $i->created_at !!}

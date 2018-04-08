@@ -32,7 +32,7 @@ class StoreInscriptionRequest extends FormRequest
             'ancien' => 'required',
             'ecole_provenance' => '',
             'classe' => '',
-            'redoublant' => 'required',
+            'redoublant' => '',
 
             'nom_parent' => 'required|string',
             'prenoms_parent' => 'required|string',

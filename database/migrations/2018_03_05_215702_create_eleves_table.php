@@ -18,7 +18,7 @@ class CreateElevesTable extends Migration
             $table->string('nom', 255);
             $table->string('prenoms', 255);
             $table->string('sexe');
-            $table->date('date_naissance');
+            $table->date('date_naissance')->nullable();
             
             $table->boolean('ancien')->default(false)->nullable();
             $table->boolean('redoublant')->default(false)->nullable();

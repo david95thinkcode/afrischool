@@ -11,14 +11,6 @@ class Professeur extends Model
     public $timestamps = true;
 
     /**
-     * Un professeur peut être professeur principal dans plusieurs classes
-     */
-    public function classes()
-    {
-        return $this->hasMany('App\Models\Classe');
-    }
-
-    /**
      * Un professeur enseigne plusieurs matières
      */
     public function enseigner()
@@ -32,5 +24,13 @@ class Professeur extends Model
     public function diplomes()
     {
         return $this->hasMany('App\Models\Diplome', 'professeur_id');
+    }
+
+    /**
+     * Un professeur peut être désigné comme principal plusieurs fois
+     */
+    public function professeursprincipal()
+    {
+        return $this->hasMany('App\Models\ProfesseurPrincipal');
     }
 }

@@ -15,7 +15,10 @@ class CreateAnneesScolairesTable extends Migration
     {
         Schema::create('annees_scolaires', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('annee_academique', 12); // Ex: 2012-2013
+            $table->string('an_description'); // Ex: 2012-2013
+            $table->date('an_date_debut')->nullablel();
+            $table->date('an_date_fin')->nullablel();
+            $table->boolean('an_ouverte')->default(false);
             $table->timestamps();
         });
     }

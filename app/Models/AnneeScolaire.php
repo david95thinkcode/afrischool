@@ -17,4 +17,12 @@ class AnneeScolaire extends Model
     {
         return $this->hasMany('App\Models\Inscription');
     }
+
+    /**
+     * Une année compte plusieurs " professeur principal " pour une année scolaire
+     */
+    public function professeursprincipal()
+    {
+        return $this->hasMany('App\Models\ProfesseurPrincipal');
+    }
 }

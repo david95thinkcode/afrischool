@@ -5,6 +5,19 @@ L'analyse du projet a conduit à l'élaboration du mcd suivant :
 
 # Migrations simples
 
+- ### Années Scolaires
+
+~~~~
+Réprésente les annéees scolaires
+~~~~
+Propriété|Type|Descritpion|Exemple
+----------|----|-----------|-------
+id|int| |1
+an_description|string| | 2017 - 2018
+an_date_debut|date|Date possible de début d'une année scolaire|2017-09-05
+an_date_fin|date|Date possible de fin d'une année scolaire|2018-06-25
+an_ouverte|boolean|Indique si une année scolaire est en cours ou terminée|true
+
 - ### Categorie_ets
 
 ~~~~
@@ -120,5 +133,16 @@ Propriété|Type
 ----------|----
 id|int
 eleve_id|int
+classe_id|int
+annee_scolaire_id|int
+
+- ### Professeur Principal
+~~~~
+Représente un professeur princial désigné pour une année scolaire donnée dans une classe
+~~~~
+Propriété|Type
+----------|----
+id|int
+professeur_id|int
 classe_id|int
 annee_scolaire_id|int

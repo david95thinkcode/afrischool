@@ -15,7 +15,7 @@ class CreateEnseignerTable extends Migration
     {
         Schema::create('enseigner', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('coefficient');
+            $table->integer('coefficient')->nullable();
             
             $table->unsignedInteger('classe_id');
             $table->foreign('classe_id')

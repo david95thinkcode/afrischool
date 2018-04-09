@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Classe;
+use App\Models\Niveau;
 use App\Models\Professeur;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Requests\StoreClasseRequest;
+use App\Http\Requests\UpdateClasseRequest;
 
 class ClasseController extends Controller
 {
@@ -29,8 +31,9 @@ class ClasseController extends Controller
      */
     public function create()
     {
-        $profs = Professeur::all();
-        return view('dashboard.classes.create', compact('profs'));
+        $niveaux = Niveau::all();     
+
+        return view('dashboard.classes.create', compact('niveaux'));
     }
 
     /**
@@ -43,13 +46,12 @@ class ClasseController extends Controller
     {
         $classe = new Classe();
         $classe->cla_intitule = $request->cla_intitule;
-        if ($request->professeur_principal) {
-            $classe->professeur_id = $request->professeur_principal;
-        }
+        $classe->niveau_id = $request->niveau;
 
         $classe->save();
 
-        return Redirect::route('classe.index')->with('status', $classe->cla_intitule . ' enregistré !');
+        return Redirect::route('classe.index')
+                ->with('status', $classe->cla_intitule . ' enregistré !');
     }
 
     /**
@@ -72,9 +74,10 @@ class ClasseController extends Controller
      */
     public function edit($id)
     {
-        $c = Classe::findorFail($id);   
-        $profs = Professeur::all();     
-        return view('dashboard.classes.edit', compact('c', 'profs'));
+        $c = Classe::find($id);   
+        $niveaux = Niveau::all();
+    
+        return view('dashboard.classes.edit', compact('c', 'niveaux'));
     }
 
     /**
@@ -84,15 +87,11 @@ class ClasseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreClasseRequest $request, $id)
+    public function update(UpdateClasseRequest $request, $id)
     {
         $c = Classe::find($id);
-        $c->cla_intitule = $request->cla_intitule;
-        
-        if ($request->professeur_principal) {
-            $c->professeur_id = $request->professeur_principal;
-        }
-
+        $c->niveau_id = $request->niveau;
+        // // $c->cla_intitule = $request->cla_intitule;
         $c->save();
 
         return Redirect::route('classe.index')->with('status', 'Modifié avec succès !');

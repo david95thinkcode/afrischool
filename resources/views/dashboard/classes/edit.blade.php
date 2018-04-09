@@ -9,12 +9,13 @@
             </div> <hr>
 
             {!! Form::model($c, ['action' => ['ClasseController@update', $c->id], 'method' => 'PUT']) !!}
-                @include('dashboard.classes.partials.form-create-edit')
-                <br>
                 
+                @include('dashboard.classes.partials.form-create-edit')
+                <br>                
                 <div class='form-group text-center'>
                     {{ Form::submit("Enregistrer", array('class' => 'btn btn-success ')) }}
                 </div>
+
             {!! Form::close() !!}
 
         </div>

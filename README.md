@@ -8,7 +8,7 @@
 
 ## Features des établissements
 
-- Définition des années scolaires 
+- Définition des années scolaires
 - [ OK ] CRUD des classes 
 - [ OK ] CRUD des matières
 - [ OK ] CRUD des professeurs 
@@ -26,7 +26,7 @@
 ## Features pour Afrischool
 - CRUD des catégories d'établissement
 - [ OK ] CRUD des établissements
-- CRUD des niveaux
+- [ OK ] CRUD des niveaux
 
 
 Edited by 

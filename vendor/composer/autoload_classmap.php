@@ -40,6 +40,7 @@ return array(
     'App\\Http\\Requests\\StoreMatiereRequest' => $baseDir . '/app/Http/Requests/StoreMatiereRequest.php',
     'App\\Http\\Requests\\StoreNiveauRequest' => $baseDir . '/app/Http/Requests/StoreNiveauRequest.php',
     'App\\Http\\Requests\\StoreProfesseurRequest' => $baseDir . '/app/Http/Requests/StoreProfesseurRequest.php',
+    'App\\Http\\Requests\\UpdateClasseRequest' => $baseDir . '/app/Http/Requests/UpdateClasseRequest.php',
     'App\\Http\\Requests\\UpdateEtablissementRequest' => $baseDir . '/app/Http/Requests/UpdateEtablissementRequest.php',
     'App\\Http\\Requests\\UpdateNiveauRequest' => $baseDir . '/app/Http/Requests/UpdateNiveauRequest.php',
     'App\\Models\\Adresse' => $baseDir . '/app/Models/Adresse.php',

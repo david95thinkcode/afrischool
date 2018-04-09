@@ -331,6 +331,7 @@ class ComposerStaticInit6156c0f747ab86bed04a46cc77e88f7f
         'App\\Http\\Requests\\StoreMatiereRequest' => __DIR__ . '/../..' . '/app/Http/Requests/StoreMatiereRequest.php',
         'App\\Http\\Requests\\StoreNiveauRequest' => __DIR__ . '/../..' . '/app/Http/Requests/StoreNiveauRequest.php',
         'App\\Http\\Requests\\StoreProfesseurRequest' => __DIR__ . '/../..' . '/app/Http/Requests/StoreProfesseurRequest.php',
+        'App\\Http\\Requests\\UpdateClasseRequest' => __DIR__ . '/../..' . '/app/Http/Requests/UpdateClasseRequest.php',
         'App\\Http\\Requests\\UpdateEtablissementRequest' => __DIR__ . '/../..' . '/app/Http/Requests/UpdateEtablissementRequest.php',
         'App\\Http\\Requests\\UpdateNiveauRequest' => __DIR__ . '/../..' . '/app/Http/Requests/UpdateNiveauRequest.php',
         'App\\Models\\Adresse' => __DIR__ . '/../..' . '/app/Models/Adresse.php',

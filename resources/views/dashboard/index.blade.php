@@ -7,6 +7,12 @@
         <hr>
         <div class="">
             <ol> Pour nous
+                <li>Niveaux
+                    <ul>
+                        <li><a href="{{ route('niveaux.create') }}">Ajouter </a></li>
+                        <li><a href="{{ route('niveaux.index') }}">Liste </a></li>
+                    </ul>
+                </li>
                 <li>Etablissements
                     <ul>
                         <li><a href="{{ route('etablissements.create') }}">Ajouter </a></li>

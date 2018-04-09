@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Niveau;
+use Illuminate\Support\Facades\Redirect;
+use App\Http\Requests\StoreNiveauRequest;
+use App\Http\Requests\UpdateNiveauRequest;
 
 class NiveauController extends Controller
 {
@@ -13,7 +17,9 @@ class NiveauController extends Controller
      */
     public function index()
     {
-        //
+        $niveaux = Niveau::all();
+
+        return view('dashboard.niveaux.index', compact('niveaux'));
     }
 
     /**
@@ -23,7 +29,7 @@ class NiveauController extends Controller
      */
     public function create()
     {
-        //
+        return view('dashboard.niveaux.create');
     }
 
     /**
@@ -32,9 +38,15 @@ class NiveauController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreNiveauRequest $req)
     {
-        //
+        $n = new Niveau();
+        $n->niv_libelle = $req->niv_libelle;
+        $n->niv_description = $req->niv_description;
+        $n->save();
+
+        return Redirect::route('niveaux.create')
+                ->with('status', $n->niv_libelle . ' enregistré !');
     }
 
     /**
@@ -56,7 +68,9 @@ class NiveauController extends Controller
      */
     public function edit($id)
     {
-        //
+        $niveau = Niveau::findOrFail($id);
+
+        return view('dashboard.niveaux.edit', compact('niveau'));
     }
 
     /**
@@ -66,9 +80,15 @@ class NiveauController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateNiveauRequest $req, $id)
     {
-        //
+        $n = Niveau::findOrFail($id);
+        //$n->niv_libelle = $req->niv_libelle;
+        $n->niv_description = $req->niv_description;
+        $n->save();
+
+        return Redirect::route('niveaux.index')
+                ->with('status', $n->niv_libelle . ' modifié avec succès !');
     }
 
     /**
@@ -79,6 +99,9 @@ class NiveauController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Niveau::find($id)->delete();
+
+        return Redirect::route('niveaux.index')
+                ->with('status', ' Un cours a été supprimé avec succès !');
     }
 }

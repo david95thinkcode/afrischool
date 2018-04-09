@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreNiveauRequest extends FormRequest
+class UpdateNiveauRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,15 +24,8 @@ class StoreNiveauRequest extends FormRequest
     public function rules()
     {
         return [
-            'niv_libelle' => 'required|unique:niveaux',
+            'niv_libelle' => 'required',
             'niv_description' => '',
-        ];
-    }
-
-    public function messages()
-    {
-        return [
-            'niv_libelle|unique:niveaux' => 'Un niveau portant le même libellé existe déjà.',
         ];
     }
 }

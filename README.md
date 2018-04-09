@@ -13,8 +13,9 @@
 - [ OK ] CRUD des matières
 - [ OK ] CRUD des professeurs 
 - Définir un professeur principal à une classe
-- Gestion des diplômes des professeurs
+- [ OK ] Gestion des diplômes des professeurs
 - [ OK ] Ajouter des matières à une classe
+- [ OK ] Modifier les informations pour une matière d'une classe
 - [ OK ] Inscrire des élèves 
 - Enregistrer les notes des élèves
 - Authentification

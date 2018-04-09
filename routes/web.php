@@ -43,6 +43,14 @@ Route::prefix('dashboard')->group(function () {
 
     });
 
+    // Professeurs
+    Route::prefix('professeur/')->group(function() {
+        Route::resource('diplomes', 'DiplomeController');
+        Route::get('{professeur}/diplome/create', 'DiplomeController@createFromProf')
+            ->where('professeur', '[0-9]+')
+            ->name('professeur.diplome.create');
+    });
+
     Route::prefix('inscription-eleve')->group(function() {
       Route::get('/{type}', 'EleveController@create')->name('eleves.create');
     });

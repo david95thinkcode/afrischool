@@ -32,9 +32,14 @@
                             @endif
                         </td>
                         <td>
-                            <a href="{{ route('enseigner.edit', ['id' => $ens->id]) }}" class="btn btn-sm btn-primary disabled">
+                            <a href="{{ route('enseigner.edit', ['id' => $ens->id]) }}" class="btn btn-sm btn-primary">
                                 Modifier
                             </a>
+                            <form action="{{ route('enseigner.destroy', $ens->id) }}" method="POST" class='table-del-btn'>
+                                <input type="hidden" name="_method" value="DELETE">
+                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                              {!! Form::submit('Supprimer', array('class' => 'btn btn-sm btn-danger')) !!}
+                            </form>
                         </td>
                     </tr>
                 @endforeach

@@ -1,0 +1,44 @@
+// steps
+// -------------------------
+
+
+//== steps variables
+$nav-steps-active:   rgb(0, 124, 27) !default;
+$line-height-base: 1.428571429 !default;
+
+// Give the steps something to sit on
+.nav-steps {
+    border: none;
+    > li {
+      float: left;
+  
+      // Actual steps (as links)
+      > a {
+        font-size: 18px;
+        margin-right: 2px;
+        line-height: $line-height-base;
+      }
+  
+      // Active state, and its :hover to override normal :hover
+      &.active > a {
+        &,
+        &:hover,
+        &:focus {
+          color: $nav-steps-active;
+          font-weight: bold;
+          cursor: default;
+        }
+        hr.baret{
+            height: 10px;
+            border: 0;
+            box-shadow: 0 10px 10px -10px $nav-steps-active inset;
+        }
+      }
+    }
+}
+hr.baret{
+    height: 10px;
+    border: 0;
+    min-width: 100%;
+	box-shadow: 0 10px 10px -10px #8c8b8b inset;
+}

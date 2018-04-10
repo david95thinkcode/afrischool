@@ -1,0 +1,477 @@
+/* static pages styles  */
+.text-gray{
+    font-size: 18px;
+    font-weight: 400;
+    color: #6c6969;
+  }
+  .marge-top{
+    margin-top: 4%;
+  }
+  @media(max-width: 500px){
+    .text-gray{
+        font-size: 18px;
+        font-weight: 200;
+        color: #6c6969;
+    }
+    .marge-top{
+        margin-top: 4%;
+    }
+  }
+  .title-green {
+    color: #388e3c !important;
+  }
+  .title{
+    font-size: 24px;
+    font-weight:bold;
+  }
+  .subtitle{
+    margin-left:25px;
+  }
+  /* static pages ruban */
+  
+  @media(min-width: 320px) and (max-width: 365px){
+    .ruban{
+      background: #388e3c;
+      height: 85px !important;
+      width: 112% !important;
+      position: abolute;
+      margin-left:-15px;
+      margin-top: 30px;
+      float: left;
+      box-shadow: 0px 0px 4px rgba(0,0,0,0.55);
+      z-index: 100;
+    }
+    #fond{
+      position: relative;
+      margin: 0px auto;
+      width: 100%;
+      background: #fff;
+      border-radius: 5px;
+      box-shadow: 0px 0px 8px rgba(0,0,0,0.3);
+      z-index: 10;
+      height:140px !important;
+      font-weight: bold !important;
+    }
+    .ruban_gauche {
+      border-color: transparent #388e3c transparent transparent;
+      border-style:solid;
+      border-width:15px;
+      height:0px;
+      width:0px;
+      position: relative;
+      left: -30px;
+      top: 100px !important;
+      z-index: -1;
+    }
+    
+    .ruban_droit {
+      border-color: transparent transparent transparent #388e3c;
+      border-style:solid;
+      border-width:15px;
+      height:0px;
+      width:0px;
+      position: relative;
+      margin-left: 100%;
+      top:70px !important;
+      z-index: -1;
+    }
+  }
+  @media(min-width: 366px) and (max-width: 371px){
+    .ruban{
+      background: #388e3c;
+      height: 85px !important;
+      width: 111% !important;
+      position: abolute;
+      margin-left:-15px;
+      margin-top: 30px;
+      float: left;
+      box-shadow: 0px 0px 4px rgba(0,0,0,0.55);
+      z-index: 100;
+    }
+    #fond{
+      position: relative;
+      margin: 0px auto;
+      width: 100%;
+      background: #fff;
+      border-radius: 5px;
+      box-shadow: 0px 0px 8px rgba(0,0,0,0.3);
+      z-index: 10;
+      height:140px !important;
+      font-weight: bold !important;
+    }
+    .ruban_gauche {
+      border-color: transparent #388e3c transparent transparent;
+      border-style:solid;
+      border-width:15px;
+      height:0px;
+      width:0px;
+      position: relative;
+      left: -30px;
+      top: 100px !important;
+      z-index: -1;
+    }
+    
+    .ruban_droit {
+      border-color: transparent transparent transparent #388e3c;
+      border-style:solid;
+      border-width:15px;
+      height:0px;
+      width:0px;
+      position: relative;
+      margin-left: 100%;
+      top:70px !important;
+      z-index: -1;
+    }
+  }
+  @media(min-width: 372px){
+    .ruban{
+      background: #388e3c;
+      height: 50px !important;
+      width: 111% !important;
+      position: abolute;
+      margin-left:-15px;
+      margin-top: 30px;
+      float: left;
+      box-shadow: 0px 0px 4px rgba(0,0,0,0.55);
+      z-index: 100;
+    }
+  }
+  
+  @media(min-width: 390px){
+    .ruban {
+      background: #6BAD6D;
+      height: 50px;
+      width: 110.5% !important;
+      position: abolute;
+      margin-left:-15px;
+      margin-top: 30px;
+      float: left;
+      box-shadow: 0px 0px 4px rgba(0,0,0,0.55);
+      z-index: 100;
+    }
+  }
+  @media(min-width: 410px) and (max-width:448px){
+    .ruban {
+      background: #388e3c;
+      height: 50px;
+      width: 110% !important;
+      position: abolute;
+      margin-left:-15px;
+      margin-top: 30px;
+      float: left;
+      box-shadow: 0px 0px 4px rgba(0,0,0,0.55);
+      z-index: 100;
+    }
+  }
+  @media(min-width: 449px) and (max-width:500px){
+    .ruban {
+      background: #388e3c;
+      height: 50px;
+      width: 109% !important;
+      position: abolute;
+      margin-left:-15px;
+      margin-top: 30px;
+      float: left;
+      box-shadow: 0px 0px 4px rgba(0,0,0,0.55);
+      z-index: 100;
+    }
+  }
+  @media(min-width: 500px) and (max-width:550px){
+    .ruban {
+      background: #388e3c;
+      height: 50px;
+      width: 107.5% !important;
+      position: abolute;
+      margin-left:-15px;
+      margin-top: 30px;
+      float: left;
+      box-shadow: 0px 0px 4px rgba(0,0,0,0.55);
+      z-index: 100;
+    }
+  }
+  @media(min-width: 550px) and (max-width:619px){
+    .ruban {
+      background: #388e3c;
+      height: 50px;
+      width: 107.5% !important;
+      position: abolute;
+      margin-left:-15px;
+      margin-top: 30px;
+      float: left;
+      box-shadow: 0px 0px 4px rgba(0,0,0,0.55);
+      z-index: 100;
+    }
+  }
+  @media(min-width: 620px){
+    .ruban {
+      background: #388e3c;
+      height: 50px;
+      width: 107.3% !important;
+      position: abolute;
+      margin-left:-15px;
+      margin-top: 30px;
+      float: left;
+      box-shadow: 0px 0px 4px rgba(0,0,0,0.55);
+      z-index: 100;
+    }
+  }
+  @media(min-width: 768px){
+    .ruban {
+      background: #388e3c;
+      height: 50px;
+      width: 105.3% !important;
+      position: abolute;
+      margin-left:-15px;
+      margin-top: 30px;
+      float: left;
+      box-shadow: 0px 0px 4px rgba(0,0,0,0.55);
+      z-index: 100;
+    }
+  }
+  @media(min-width: 992px){
+    .ruban {
+      background: #388e3c;
+      height: 50px;
+      width: 104% !important;
+      position: abolute;
+      margin-left:-15px;
+      margin-top: 30px;
+      float: left;
+      box-shadow: 0px 0px 4px rgba(0,0,0,0.55);
+      z-index: 100;
+    }
+  }
+  @media(min-width: 1200px){
+    .ruban {
+      background: #388e3c;
+      height: 50px;
+      width: 103.3% !important;
+      position: abolute;
+      margin-left:-15px;
+      margin-top: 30px;
+      float: left;
+      box-shadow: 0px 0px 4px rgba(0,0,0,0.55);
+      z-index: 100;
+    }
+  }
+  #fond {
+    position: relative;
+    margin: 0px auto;
+    width: 100%;
+    background: #fff;
+    border-radius: 5px;
+    box-shadow: 0px 0px 8px rgba(0,0,0,0.3);
+    z-index: 10;
+    height:110px;
+    font-weight: bold !important;
+  }
+  .ruban {
+    background: #388e3c;
+    height: 50px;
+    width: 105.3%;
+    position: abolute;
+    margin-left:-15px;
+    margin-top: 30px;
+    float: left;
+    box-shadow: 0px 0px 4px rgba(0,0,0,0.55);
+    z-index: 100;
+  }
+  
+  .ruban h2 {
+    font-size: 25px;
+    color: #fff;
+    text-shadow: 1px 1px 2px #7e9202;
+    text-align: center;
+    margin:10px;
+  }
+  
+  .ruban_gauche {
+    border-color: transparent #388e3c transparent transparent;
+    border-style:solid;
+    border-width:15px;
+    height:0px;
+    width:0px;
+    position: relative;
+    left: -30px;
+    top: 65px;
+    z-index: -1;  
+  }
+  
+  .ruban_droit {
+    border-color: transparent transparent transparent #388e3c;
+    border-style:solid;
+    border-width:15px;
+    height:0px;
+    width:0px;
+    position: relative;
+    margin-left: 100%;
+    top: 35px;
+    z-index: -1;
+  }
+  
+  /* Page tutoriel tabs style */
+  #tab_nav, #tuto-tab {
+    border-bottom: 1px solid #008000 !important;
+  }
+  #tab_nav > li {
+    width: 50%;
+    text-align: center;
+    font-size: 22px;
+  }
+  
+  .nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover {
+    color: white !important;
+    background-color: #388e3c !important;
+    border: 1px solid #ddd;
+    border-bottom-color: rgb(221, 221, 221);
+    
+  }
+  .nav-tabs > li> a, .nav-tabs > li> a:focus, .nav-tabs > li> a:hover {
+    color: #388e3c !important;
+    background-color: transparent;
+    border: 1px solid #ddd;
+    border-bottom-color: rgb(221, 221, 221);
+    border-bottom-color: #388e3c;
+  }
+  .text-marge {
+    font-size: 18px;
+    font-weight: 400;
+    color: #868D9C;
+    text-align: justify;
+  }
+  
+  .btn-green{
+    border:1px solid #388e3c !important;
+    border-radius: 30px !important;
+    color: #388e3c;
+    background-color: white;
+    font-size: 18px
+  }
+  .btn-white{
+    border:1px solid white !important;
+    border-radius: 5px !important;
+    color: white !important;
+    background-color: #388e3c;
+    font-size: 28px !important;
+  }
+  .btn-green:hover{
+    border:1px solid #388e3c !important;
+    border-radius: 30px !important;
+    color: white !important;
+    background-color: #388e3c;
+    font-weight: bold;
+    font-size: 18px
+  }
+  .middlebanner{
+    /* background-image:url('/images/assets/middlebanner.png'); */
+    background-color: #388e3c;
+  }
+  .text-white{
+    color:white;
+  }
+  .card {
+    /* Add shadows to create the "card" effect */
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+    padding: 2px 16px;
+  }
+  
+  /* On mouse-over, add a deeper shadow */
+  .card:hover {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+  }
+  
+  /* Add some padding inside the card container */
+  .card-info {
+    padding: 2px 50px;
+    background-color: #E0DFDF;
+    margin-top: 50px;
+    text-align: center;
+  }
+  
+  .glyphaddon{
+    font-size:20px !important;
+  }
+  .text-info-silver{
+    color:silver;
+    font-size:14px;
+  }
+  .container {
+    margin-top: 20px;
+  }
+  
+  /* Carousel Styles */
+  
+  .carousel-inner img {
+    width: 100%;
+    max-height: 460px
+  }
+  
+  
+  /* Carousel Header Styles */
+  .header-text {
+    position: absolute;
+    top: 20%;
+    left: 1.8%;
+    right: auto;
+    width: 96.66666666666666%;
+    color: #fff;
+  }
+  
+  .header-text h2 {
+    text-align: left;
+  }
+  .header-text h3 {
+    text-align: left;
+  }
+  .header-text button {
+    text-align: left ;
+    margin-left: 10px !important; 
+  }
+  
+  .header-text h2 span {
+    padding: 10px;
+    margin-left:20px !important;
+  }
+  
+  .header-text h3 span {
+    padding: 10px;
+    margin-left:20px !important;
+  }
+  .header-text button {
+    margin-left:30px !important;
+  }
+  
+  .btn-min-block {
+    min-width: 170px;
+    line-height: 26px;
+  }
+  
+  .btn-theme {
+    color: #fff;
+    background-color: transparent;
+    border: 2px solid #fff;
+    margin-right: 15px;
+  }
+  
+  .btn-theme:hover {
+    color: #000;
+    background-color: #fff;
+    border-color: #fff;
+  }
+  
+  .carousel-control{
+    width: 3% !important;
+    background-color: none !important;
+  }
+  .carousel-control:hover{
+    background-color: none !important;
+  }
+  .chevron{
+    background-color: white !important;
+    border-radius: 50px !important;
+    border:3px solid #388e3c !important;
+    width:50px !important;
+    height:50px !important;
+    font-size:42px !important;
+  }

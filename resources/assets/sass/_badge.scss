@@ -1,0 +1,18 @@
+.badge1 {
+   position:relative;
+}
+.notify-badge {
+   content:f00c;
+   position:absolute;
+   top:-10px;
+   right:-10px;
+   font-size:18px;
+   background:#388e3c;
+   color:white;
+   width:18px;
+   height:18px;
+   text-align:center;
+   line-height:18px;
+   border-radius:50%;
+   box-shadow:0 0 1px #333;
+}

@@ -1,0 +1,33 @@
+/**************************
+****   Start Input  ****
+**************************/
+//inupts
+input[type="text"], input[type="password"], input[type="email"]{
+    border:none;
+    font-size: 14px;
+    border-bottom: 1px solid;
+    -webkit-transition: 0.2s ease;
+    -moz-transition: 0.2s ease;
+    -o-transition: 0.2s ease;
+    transition: 0.2s ease;
+  }
+  select.form-control{
+    border:none;
+    font-size: 14px;
+    border-bottom: 1px solid;
+  }
+  
+  input[type="text"]:focus,
+  input[type="password"]:focus, 
+  input[type="email"]:focus{
+    border-bottom: 2px solid;
+    font-size: 16px;
+    color: #097925;
+    -webkit-transition: 0.2s ease;
+    -moz-transition: 0.2s ease;
+    -o-transition: 0.2s ease;
+    transition: 0.2s ease;
+  }
+  /**************************
+  ******   End Input   ******
+  **************************/

@@ -19,6 +19,7 @@ class ComposerStaticInit6156c0f747ab86bed04a46cc77e88f7f
         'f0906e6318348a765ffb6eb24e0d0938' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Foundation/helpers.php',
         '58571171fd5812e6e447dce228f52f4d' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Support/helpers.php',
         'f18cc91337d49233e5754e93f3ed9ec3' => __DIR__ . '/..' . '/laravelcollective/html/src/helpers.php',
+        '974ce3986b2f81344d3ce484b96c08e6' => __DIR__ . '/..' . '/mercuryseries/flashy/src/MercurySeries/Flashy/functions.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -281,6 +282,10 @@ class ComposerStaticInit6156c0f747ab86bed04a46cc77e88f7f
             'Mockery' => 
             array (
                 0 => __DIR__ . '/..' . '/mockery/mockery/library',
+            ),
+            'MercurySeries\\Flashy' => 
+            array (
+                0 => __DIR__ . '/..' . '/mercuryseries/flashy/src',
             ),
         ),
         'J' => 
@@ -1784,6 +1789,11 @@ class ComposerStaticInit6156c0f747ab86bed04a46cc77e88f7f
         'League\\Flysystem\\Util\\MimeType' => __DIR__ . '/..' . '/league/flysystem/src/Util/MimeType.php',
         'League\\Flysystem\\Util\\StreamHasher' => __DIR__ . '/..' . '/league/flysystem/src/Util/StreamHasher.php',
         'MatiereTableSeeder' => __DIR__ . '/../..' . '/database/seeds/MatiereTableSeeder.php',
+        'MercurySeries\\Flashy\\Flashy' => __DIR__ . '/..' . '/mercuryseries/flashy/src/MercurySeries/Flashy/Flashy.php',
+        'MercurySeries\\Flashy\\FlashyNotifier' => __DIR__ . '/..' . '/mercuryseries/flashy/src/MercurySeries/Flashy/FlashyNotifier.php',
+        'MercurySeries\\Flashy\\FlashyServiceProvider' => __DIR__ . '/..' . '/mercuryseries/flashy/src/MercurySeries/Flashy/FlashyServiceProvider.php',
+        'MercurySeries\\Flashy\\LaravelSessionStore' => __DIR__ . '/..' . '/mercuryseries/flashy/src/MercurySeries/Flashy/LaravelSessionStore.php',
+        'MercurySeries\\Flashy\\SessionStore' => __DIR__ . '/..' . '/mercuryseries/flashy/src/MercurySeries/Flashy/SessionStore.php',
         'Mockery' => __DIR__ . '/..' . '/mockery/mockery/library/Mockery.php',
         'Mockery\\Adapter\\Phpunit\\MockeryPHPUnitIntegration' => __DIR__ . '/..' . '/mockery/mockery/library/Mockery/Adapter/Phpunit/MockeryPHPUnitIntegration.php',
         'Mockery\\Adapter\\Phpunit\\MockeryTestCase' => __DIR__ . '/..' . '/mockery/mockery/library/Mockery/Adapter/Phpunit/MockeryTestCase.php',

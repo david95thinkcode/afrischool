@@ -78,7 +78,7 @@ Route::prefix('dashboard')->group(function () {
         Route::get('pays', 'PublicResourcesController@getPays');
     });
 
-Route::get('/home', 'HomeController@index')->name('home');
+/*Route::get('/', 'HomeController@index')->name('home');*/
 
 // Authentication Routes...
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
@@ -86,7 +86,7 @@ Route::post('login', 'Auth\LoginController@login')->name('login.req');
 Route::post('logout', 'Auth\LoginController@logout')->name('logout');
 
 // Registration Routes...
-Route::post('register', 'Auth\RegisterController@register')->name('register.req');
+Route::post('register', 'Auth\RegisterController@create')->name('register.req');
 
 // Password Reset Routes...
 Route::get('reinitialiser-mot-de-passe', 'Auth\ResetPasswordController@index')->name('password.request');

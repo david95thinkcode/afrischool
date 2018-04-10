@@ -9,6 +9,7 @@ class PublicPagesController extends Controller
 {
     public function index()
     {
-        return Redirect::route('dashboard.home');
+        //return Redirect::route('dashboard.home');
+        return view('welcome');
     }
 }

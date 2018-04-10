@@ -77,3 +77,7 @@ Route::prefix('dashboard')->group(function () {
     Route::prefix('ajax')->group(function () {
         Route::get('pays', 'PublicResourcesController@getPays');
     });
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

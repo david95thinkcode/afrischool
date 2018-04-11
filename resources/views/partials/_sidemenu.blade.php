@@ -1,7 +1,7 @@
 <div class="col-md-3 left_col menu_fixed">
     <div class="left_col scroll-view">
         <div class="navbar nav_title mb-1" style="border: 0;">
-            <a href="index.html" class="site_title">
+            <a href="{!! route('home') !!}" class="site_title">
                 <i class="fa fa-graduation-cap"></i> 
                 <span>AfriSchool</span>
             </a>

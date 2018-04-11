@@ -16,7 +16,7 @@
     <link href="{{mix('css/app.css')}}" rel="stylesheet"> 
     <link href="{{asset('css/jquery.mCustomScrollbar.min.css')}}" rel="stylesheet"> 
     <link href="{{asset('css/custom.min.css')}}" rel="stylesheet"> 
-    @yield('css')
+    @yield('custom-css')
     <link href="{{asset('css/ie10-viewport-bug-workaround.css')}}" rel="stylesheet"> 
     <!--[if IE]>
         <link href="{{asset('css/bootstrap-ie9.css')}}" rel="stylesheet">
@@ -27,6 +27,11 @@
         <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <style>
+        .table-del-btn {
+            display: inline;
+        }
+    </style>
 </head>
 
 <body class="nav-md">
@@ -41,7 +46,21 @@
         <!-- page content -->
         <div class="right_col" role="main">
             <div class="">
-                @yield('content')
+                <div class="row">
+                    <h3>@yield('section-title')</h3> 
+                    <hr>                   
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        @include('partials.session-messages')
+                    </div>
+                </div>
+                
+                <div class="row">
+                    @yield('content')
+                </div>                
+                
             </div>
         </div>
         <!-- /page content -->
@@ -57,7 +76,7 @@
     <script src="{{asset('js/jquery.mCustomScrollbar.concat.min.js')}}"></script>
     <script src="{{asset('js/custom.min.js')}}"></script>
     @include('flashy::message')
-    @yield('js')
+    @yield('custom-js')
     <script src="{{asset('js/ie10-viewport-bug-workaround.js')}}"></script>
 </body>
 

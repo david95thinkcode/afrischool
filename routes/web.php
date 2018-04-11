@@ -86,6 +86,7 @@ Route::post('login', 'Auth\LoginController@login')->name('login.req');
 Route::post('logout', 'Auth\LoginController@logout')->name('logout');
 
 // Registration Routes...
+Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
 Route::post('register', 'Auth\RegisterController@create')->name('register.req');
 
 // Password Reset Routes...

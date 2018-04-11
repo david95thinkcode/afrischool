@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimal-ui"/>
-    <title>Connexion | Afrischool</title>
+    <title>Connexion | Afrikaschool</title>
     <link rel="icon" href="#">
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -40,7 +40,7 @@
                     {{ csrf_field() }}
                     <h1>Connexion</h1>
                     <div class="{{ $errors->has('username') ? ' has-error' : '' }}">
-                        <input type="text" name="username" class="form-control" placeholder="Username" required=""/>
+                        <input type="text" name="username" class="form-control" value="{{ old('username') }}" placeholder="Username" required=""/>
 
                         @if ($errors->has('username'))
                             <span class="help-block">
@@ -49,7 +49,7 @@
                         @endif
                     </div>
                     <div class="{{ $errors->has('password') ? ' has-error' : '' }}">
-                        <input type="password" name="password" class="form-control" placeholder="Mot de passe"
+                        <input type="password" name="password" class="form-control" value="{{ old('password') }}" placeholder="Mot de passe"
                                required=""/>
 
                         @if ($errors->has('password'))
@@ -66,85 +66,14 @@
                     <div class="clearfix"></div>
 
                     <div class="separator">
-                        <p class="change_link">Nouveau sur le site?
-                            <a href="#signup" class="to_register"> S'inscrire</a>
+                        <p class="change_link mb-2">Nouveau sur le site?
+                            <a href="{{route('register')}}" class="to_register"> S'inscrire</a>
                         </p>
-
-                        <div class="clearfix"></div>
-                        <br/>
 
                         <div>
                             <h1><i class="fa fa-graduation-cap"></i> AfriSchool!</h1>
                             <p>©2018 All Rights Reserved. AfriSchool! Gestionnaire d'école. Privacy and Terms</p>
                         </div>
-                </form>
-            </section>
-        </div>
-
-        <div id="signup" class="animate form registration_form">
-            <section class="login_content">
-                <form method="POST" action="{{ route('register.req') }}">
-                    {{ csrf_field() }}
-                    <h1>Inscription</h1>
-                    <div class="{{ $errors->has('username') ? ' has-error' : '' }}">
-                        <input type="text" name="username" class="form-control" placeholder="Username" required=""/>
-
-                        @if ($errors->has('username'))
-                            <span class="help-block">
-                                <strong>{{ $errors->first('username') }}</strong>
-                            </span>
-                        @endif
-                    </div>
-                    <div class="{{ $errors->has('name') ? ' has-error' : '' }}">
-                        <input type="text" name="name" class="form-control" placeholder="Nom et Prénom(s)" required=""/>
-
-                        @if ($errors->has('name'))
-                            <span class="help-block">
-                                <strong>{{ $errors->first('name') }}</strong>
-                            </span>
-                        @endif
-                    </div>
-                    <div class="{{ $errors->has('email') ? ' has-error' : '' }}">
-                        <input type="email" name="email" class="form-control" placeholder="Email" required=""/>
-
-                        @if ($errors->has('email'))
-                            <span class="help-block">
-                                <strong>{{ $errors->first('email') }}</strong>
-                            </span>
-                        @endif
-                    </div>
-                    <div class="{{ $errors->has('password') ? ' has-error' : '' }}">
-                        <input type="password" class="form-control" placeholder="Password" required=""/>
-
-                        @if ($errors->has('password'))
-                            <span class="help-block">
-                                <strong>{{ $errors->first('password') }}</strong>
-                            </span>
-                        @endif
-                    </div>
-                    <div>
-                        <input id="password-confirm" type="password" class="form-control"
-                               placeholder="Confirmer mot de passe" name="password_confirmation" required>
-                    </div>
-                    <div>
-                        <input type="submit" class="btn btn-default submit" value="S'inscrire">
-                    </div>
-
-                    <div class="clearfix"></div>
-
-                    <div class="separator">
-                        <p class="change_link">Déjà un compte ?
-                            <a href="#signin" class="to_register">Se connecter</a>
-                        </p>
-
-                        <div class="clearfix"></div>
-                        <br/>
-
-                        <div>
-                            <h1><i class="fa fa-graduation-cap"></i> AfriSchool!</h1>
-                            <p>©2018 All Rights Reserved. AfriSchool! Gestionnaire d'école. Privacy and Terms</p>
-                        </div>
-                    </div>
                 </form>
             </section>
         </div>
@@ -154,6 +83,7 @@
 <!-- Scripts -->
 <script src="{{mix('js/app.js')}}"></script>
 <script src="{{asset('js/custom.min.js')}}"></script>
+@include('flashy::message')
 <script src="{{asset('js/ie10-viewport-bug-workaround.js')}}"></script>
 </body>
 

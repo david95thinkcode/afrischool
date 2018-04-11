@@ -1,13 +1,11 @@
-@extends('templates.dashboard-dev')
-@section('title') Inscrire un élève @endsection
+@extends('templates.app')
+@section('title') Elèves @endsection
+@section('section-title') Inscrire un élève @endsection
 @section('content')
 <div class='row'>
     <div class="col-sm-12">
 
-        <div class="jumbotron">
-            <div>
-                <h3 class='text-center'>Inscrire un élève</h3>
-            </div> <hr>
+        <div class="">
             <div>
                 {!! Form::open(['action' => ['InscriptionController@store'], 'method' => 'POST']) !!}
                     <fieldset>

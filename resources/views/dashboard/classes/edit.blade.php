@@ -1,23 +1,15 @@
-@extends('templates.dashboard-dev')
+@extends('templates.app')
 @section('title') {{ $c->cla_intitule }} - Modifier @endsection
+@section('section-title') Modifier une classe @endsection
 @section('content')
 <div class='row'>
-    <div class="col-sm-12">
-    <div class="jumbotron">
-            <div>
-                <h3 class='text-center'>Modifier une classe</h3>
-            </div> <hr>
-
+    <div class="col-sm-6">
+        <div class="">
             {!! Form::model($c, ['action' => ['ClasseController@update', $c->id], 'method' => 'PUT']) !!}
                 
                 @include('dashboard.classes.partials.form-create-edit')
-                <br>                
-                <div class='form-group text-center'>
-                    {{ Form::submit("Enregistrer", array('class' => 'btn btn-success ')) }}
-                </div>
-
+                
             {!! Form::close() !!}
-
         </div>
     </div>
 </div>

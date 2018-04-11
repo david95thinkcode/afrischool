@@ -1,13 +1,11 @@
-@extends('templates.dashboard-dev')
-@section('title') {{ $mat->intitule }} @endsection
+@extends('templates.app')
+@section('title') Matières @endsection
+@section('section-title') {{ $mat->intitule }} @endsection
 @section('content')
 <div class='row'>
-    <div class="col-sm-12">
-        <h3 class="text-center">{{ $mat->intitule }}</h3>
-        <hr>
       @if ($ens->count() > 0)
         <div class="table-responsive">
-            <table class="table table-striped">
+            <table class="table ">
                 <thead>
                     <th>#</th>
                     <th>Enseigné en </th>

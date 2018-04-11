@@ -1,12 +1,11 @@
-@extends('templates.dashboard-dev')
+@extends('templates.app')
 @section('title') Les Professeurs @endsection
+@section('section-title') Liste des professeurs @endsection
 @section('content')
 <div class='row'>
     <div class="col-sm-12">
-        <h3>Les Professeurs</h3>
-        <br>
         <div class="table-responsive">
-            <table class="table table-sm    table-striped">
+            <table class="table table-condensed ">
                 <thead>
                     <th>#</th>
                     <th>Nom</th>

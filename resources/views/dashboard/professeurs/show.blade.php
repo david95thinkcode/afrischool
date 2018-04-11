@@ -1,14 +1,17 @@
-@extends('templates.dashboard-dev')
+@extends('templates.app')
+
 @section('title') Details sur le professeur {{ $p->prof_prenoms }} {{ $p->prof_nom }} @endsection
+
+@section('section-title') Professeur {{ $p->prof_prenoms }} {{ $p->prof_nom }} @endsection
+
 @section('content')
 <div class='row'>
-    <div class="col-sm-12">
-        
+    <div class="col-sm-12">        
         <div>
-            <h3>Dîplomes {{ $p->prof_prenoms }} {{ $p->prof_nom }} </h3>
+            <h4>Ses dîplomes</h4>
             <a href="{{ route('professeur.diplome.create', ['id' => $p->id]) }}" class="btn btn-primary">Ajouter un diplome</a>
             <div class="table-responsive">
-                <table class="table table-striped">
+                <table class="table table-bordered">
                     <thead>
                         <th>#</th>
                         <th>Intitule</th>
@@ -28,16 +31,16 @@
                             <td>{{ $d->dip_niveau }}</td>
                             <td>{{ $d->dip_date_obtention }}</td>
                             <td>
-                                <a href="{{ route('diplomes.show', ['id' => $d->id] ) }}" class="btn btn-sm btn-outline-info">
+                                <a href="{{ route('diplomes.show', ['id' => $d->id] ) }}" class="btn btn-sm btn-info">
                                 Afficher
                                 </a>
-                                <a href="{{ route('diplomes.edit', ['id' => $d->id] ) }}" class="btn btn-sm btn-outline-warning">
+                                <a href="{{ route('diplomes.edit', ['id' => $d->id] ) }}" class="btn btn-sm btn-warning">
                                 Modifier
                                 </a>
                                 <form action="{{ route('diplomes.destroy', $d->id) }}" method="POST" class='table-del-btn'>
                                     <input type="hidden" name="_method" value="DELETE">
                                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                {!! Form::submit('Retirer', array('class' => 'btn btn-sm btn-outline-danger')) !!}
+                                {!! Form::submit('Retirer', array('class' => 'btn btn-sm btn-danger')) !!}
                                 </form>
                             </td>
                         </tr>

@@ -1,22 +1,14 @@
-@extends('templates.dashboard-dev')
+@extends('templates.app')
 @section('title') Diplômes @endsection
+@section('section-title') Modifier un diplôme @endsection
 @section('content')
 <div class='row'>
-    <div class="col-sm-12">
-        
-        <div class="jumbotron">
-            <div>
-                <h3 class='text-center'>Ajouter diplôme</h3>
-            </div> <hr>
-            
+    <div class="col-sm-12">        
+        <div class="">
             {!! Form::model($diplome, ['action' => ['DiplomeController@update', $diplome->id], 'method' => 'PUT']) !!}
                 
                 @include('dashboard.diplomes.partials.form-fields')
-
-                 <br>
-                <div class='form-group text-center'>
-                    {{ Form::submit("Enregistrer", array('class' => 'btn btn-primary ')) }}
-                </div>                   
+                  
             {!! Form::close() !!}
             
         </div>

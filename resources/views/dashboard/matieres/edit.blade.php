@@ -1,13 +1,11 @@
-@extends('templates.dashboard-dev')
-@section('title') Editer une matière @endsection
+@extends('templates.app')
+@section('title') Matières @endsection
+@section('section-title') Modifier la matière : {{ $m->intitule }} @endsection
 @section('content')
 <div class='row'>
     <div class="col-sm-12">
 
-        <div class="jumbotron">
-            <div>
-                <h3 class='text-center'>Editer la matière : {{ $m->intitule }}</h3>
-            </div> <hr>
+        <div class="">
 
             {!! Form::model($m, ['action' => ['MatiereController@update', 'id' => $m->id], 'method' => 'PUT']) !!}
                 <div class="form-group">

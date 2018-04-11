@@ -1,13 +1,11 @@
-@extends('templates.dashboard-dev')
-@section('title') Créer un niveau @endsection
+@extends('templates.app')
+@section('title') Les niveaux @endsection
+@section('section-title') Ajouter un niveau @endsection
 @section('content')
 <div class='row'>
     <div class="col-sm-12">
-    <div class="jumbotron">
-            <div>
-                <h3 class='text-center'>Enregistrer un niveau</h3>
-            </div> <hr>
-
+        <div class="">
+           
             {!! Form::open(['action' => ['NiveauController@store'], 'method' => 'POST']) !!}
                 @include('dashboard.niveaux.partials.form-create-edit')
                  <br>

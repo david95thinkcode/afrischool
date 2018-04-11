@@ -20,3 +20,7 @@
       @endforeach
     </select>
 </div>
+<br>
+<div class='form-group'>
+    {{ Form::submit("Enregistrer", array('class' => 'btn btn-success ')) }}
+</div>

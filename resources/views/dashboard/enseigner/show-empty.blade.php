@@ -1,11 +1,9 @@
-@extends('templates.dashboard-dev')
+@extends('templates.app')
 @section('title') Matières par classe @endsection
+@section('section-title') Les matières de {{ $classe->cla_intitule }} @endsection
 @section('content')
 <div class='row'>
     <div class="col-sm-12">
-        <h3 class='text-center'>Les matières de {{ $classe->cla_intitule }}</h3>
-        <hr>
-        
         <div class="text-center">
             <a href="{{ route('matiere.show.classes') }}" class="btn btn-primary">Retour</a>
         </div> <br>

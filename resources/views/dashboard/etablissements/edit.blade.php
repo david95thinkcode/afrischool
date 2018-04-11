@@ -1,15 +1,12 @@
-@extends('templates.dashboard-dev')
+@extends('templates.app')
 @section('title') Modifier @endsection
+@section('section-title') Modifier : {{ $ets->raison_sociale }} @endsection
 @section('content')
 <div class='row'>
     <div class="col-sm-12">
         
-        <div class="jumbotron">
-            <div>
-                <h3 class='text-center'>{{ $ets->raison_sociale }}</h3>
-            </div>
-            <hr>
-            
+        <div class="">
+          
             {!! Form::model($ets, ['action' => ['EtablissementController@update', $ets->id], 'method' => 'PUT']) !!}
                 
                 <div class="form-group">

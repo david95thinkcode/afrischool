@@ -1,4 +1,4 @@
-@extends('templates.dashboard-dev')
+@extends('templates.app')
 @section('title') Inscriptions par classe @endsection
 @section('content')
 <div class='row'>

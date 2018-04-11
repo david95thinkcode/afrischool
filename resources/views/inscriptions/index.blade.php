@@ -1,12 +1,11 @@
-@extends('templates.dashboard-dev')
+@extends('templates.app')
 @section('title') Inscriptions @endsection
+@section('section-title') Liste des élèves inscrits @endsection
 @section('content')
 <div class='row'>
     <div class="col-sm-12">
 
         <div>
-            <h3 class='text-center'>Les élèves inscrits</h3>
-            <hr>
             <div class='text-center'>
                 {!! Form::open(['action' => ['InscriptionController@searchForClasse'], 'method' => 'POST', 'class' => '']) !!}
                     <div class="form-group">

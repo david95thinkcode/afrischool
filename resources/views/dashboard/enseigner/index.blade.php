@@ -1,10 +1,9 @@
-@extends('templates.dashboard-dev')
-@section('title') Matières par classe @endsection
+@extends('templates.app')
+@section('title') Matières enseignées @endsection
+@section('section-title') Liste des matières par classe @endsection
 @section('content')
 <div class='row'>
     <div class="col-sm-12">
-        <h3 class='text-center'>Les matières par classe</h3>
-        <hr>
         <div class='text-center'>
             {!! Form::open(['action' => ['MatiereController@searchForClasse'], 'method' => 'POST', 'class' => '']) !!}
                 <div class="form-group">

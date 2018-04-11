@@ -1,19 +1,13 @@
-@extends('templates.dashboard-dev')
-@section('title') Créer une classe @endsection
+@extends('templates.app')
+@section('title') Les classes @endsection
+@section('section-title') Ajouter une classe @endsection
 @section('content')
 <div class='row'>
-    <div class="col-sm-12">
-    <div class="jumbotron">
-            <div>
-                <h3 class='text-center'>Enregistrer une classe</h3>
-            </div> <hr>
-
+    <div class="col-sm-6">
+        <div class="">
+           
             {!! Form::open(['action' => ['ClasseController@store'], 'method' => 'POST']) !!}
                 @include('dashboard.classes.partials.form-create-edit')
-                 <br>
-                <div class='form-group text-center'>
-                    {{ Form::submit("Enregistrer", array('class' => 'btn btn-primary ')) }}
-                </div>
             {!! Form::close() !!}
 
         </div>

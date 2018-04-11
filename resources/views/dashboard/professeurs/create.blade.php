@@ -1,19 +1,15 @@
-@extends('templates.dashboard-dev')
+@extends('templates.app')
 @section('title') Professeurs @endsection
+@section('section-title') Ajouter un professeur @endsection
 @section('content')
 <div class='row'>
     <div class="col-sm-12">
 
-        <div class="jumbotron">
-            <div>
-                <h3 class='text-center'>Inscrire un professeur</h3>
-            </div> <hr>
-
+        <div class="">
             {!! Form::open(['action' => ['ProfesseurController@store'], 'method' => 'POST']) !!}
-                @include('dashboard.professeurs.partials.form-create-edit')
-                <div class='form-group text-center'>
-                    {{ Form::submit("Enregistrer", array('class' => 'btn btn-primary ')) }}
-                </div>
+                
+            @include('dashboard.professeurs.partials.form-create-edit')
+            
             {!! Form::close() !!}
 
         </div>

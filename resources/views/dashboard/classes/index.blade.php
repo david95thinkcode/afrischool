@@ -1,12 +1,11 @@
-@extends('templates.dashboard-dev')
+@extends('templates.app')
 @section('title') Les classes @endsection
+@section('section-title') Liste des classes @endsection
 @section('content')
 <div class='row'>
     <div class="col-sm-12">
-        <h3>Les classes</h3>
-
         <div class="table-responsive">
-            <table class="table table-striped">
+            <table class="table ">
                 <thead>
                     <th>#</th>
                     <th>Intitulé</th>

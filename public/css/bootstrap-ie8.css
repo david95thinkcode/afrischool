@@ -169,7 +169,7 @@ h6{font-size:16px}
 .rounded-left{border-bottom-left-radius:4px;border-top-left-radius:4px}
 .table th,.table td{padding:12px}
 .table{margin-bottom:16px}
-.table-sm th,.table-sm td{padding:5px}
+.table-condensed th,.table-condensed td{padding:5px}
 .table-responsive{min-height:0%}
 .tooltip{font-size:14px;filter:alpha(opacity=0)}
 .tooltip.show{filter:alpha(opacity=90)}

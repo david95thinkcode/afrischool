@@ -1,16 +1,13 @@
-@extends('templates.dashboard-dev')
+@extends('templates.app')
 @section('title') Inscriptions @endsection
+@section('section-title') Les élèves inscrits en {{ $inscriptions[0]->classe->cla_intitule }} @endsection
 @section('content')
 <div class='row'>
     <div class="col-sm-12">
 
         <div>
-            <div>
-                <h3 class='text-center'>Les élèves inscrits en {{ $inscriptions[0]->classe->cla_intitule }} </h3>
-            </div> <hr>
-
             <div class="table-responsive">
-                <table class="table table-striped">
+                <table class="table ">
                     <thead>
                         <th>#</th>
                         <th>Elève</th>

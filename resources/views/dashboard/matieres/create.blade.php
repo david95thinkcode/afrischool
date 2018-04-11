@@ -1,14 +1,11 @@
-@extends('templates.dashboard-dev')
-@section('title') Ajouter une matière @endsection
+@extends('templates.app')
+@section('title') Matières @endsection
+@section('section-title') Ajouter une matière @endsection
 @section('content')
 <div class='row'>
     <div class="col-sm-12">
 
-        <div class="jumbotron">
-            <div>
-                <h3 class='text-center'>Ajouter une matière</h3>
-            </div> <hr>
-
+        <div class="">
             {!! Form::open(['action' => ['MatiereController@store'], 'method' => 'POST']) !!}
                 <div class="form-group">
                     {!! Form::label('intitule', 'Titre de la matière') !!} 

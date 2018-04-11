@@ -52,3 +52,7 @@
        </div>
      </div>
 </div>
+
+<div class='form-group'>
+    {{ Form::submit("Enregistrer", array('class' => 'btn btn-success ')) }}
+</div>

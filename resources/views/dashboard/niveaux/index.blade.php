@@ -1,4 +1,4 @@
-@extends('templates.dashboard-dev')
+@extends('templates.app')
 @section('title') Les niveaux @endsection
 @section('content')
 <div class='row'>
@@ -11,7 +11,7 @@
 
         @if ($niveaux->count() != 0)
         <div class="table-responsive">
-            <table class="table table-striped">
+            <table class="table ">
                 <thead>
                     <th>#</th>
                     <th>Libelle</th>

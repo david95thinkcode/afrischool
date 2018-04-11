@@ -1,4 +1,4 @@
-@extends('templates.dashboard-dev')
+@extends('templates.app')
 @section('title') Matières par classe @endsection
 @section('content')
 <div class='row'>
@@ -10,7 +10,7 @@
             <a href="{{ route('matiere.show.classes') }}" class="btn btn-primary">Retour</a>
         </div> <br>
         <div class="table-responsive">
-            <table class="table table-striped">
+            <table class="table ">
                 <thead>
                     <th>#</th>
                     <th>Titre</th>

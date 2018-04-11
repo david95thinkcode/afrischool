@@ -20,3 +20,8 @@
                     {!! Form::label('dip_date_obtention', "Date d'obtention") !!} 
                     {!! Form::date('dip_date_obtention', old('dip_date_obtention'), ['class' => 'form-control']) !!}
                 </div>
+                <br>
+                <div class='form-group'>
+                    {{ Form::submit("Enregistrer", array('class' => 'btn btn-success ')) }}
+                </div>
+                

@@ -1,4 +1,4 @@
-@extends('templates.dashboard-dev')
+@extends('templates.app')
 @section('title') Détails sur {{ $ecole->sigle }} @endsection
 @section('content')
 <div class='row'>

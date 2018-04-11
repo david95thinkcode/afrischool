@@ -49,13 +49,17 @@
                         <li><a href="{{ route('matieres.index') }}">Liste de toutes les matières</a></li>
                     </ul>
                 </li>
-                <li><a><i class="fa fa-book"></i>Notes d'interrogation <span class="fa fa-chevron-down"></span></a>
+                <li><a><i class="fa fa-flag"></i>Notes <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                         <li><a href="#">Ajouter</a></li>
                         <li><a href="#">Liste par classe</a></li>
                     </ul>
                 </li>
                 <li class=""><a><i class="fa fa-file-text-o"></i> Examens 
+                    <span class="label label-success pull-right">Coming Soon</span></a>
+                    
+                </li>
+                <li class=""><a><i class="fa fa-file-text-o"></i> Emploi du temps  
                     <span class="label label-success pull-right">Coming Soon</span></a>
                     
                 </li>

@@ -3,7 +3,11 @@
 @section('content')
 <div class='row'>
     <div class="col-sm-12">
-        <h3>Les niveaux</h3>
+        <h3 class="text-center">Les niveaux</h3>
+        <br>
+        <div class="text-center">
+            <a href="{{ route('niveaux.create') }}" class="btn btn-primary">Ajouter </a>
+        </div> <br>
 
         @if ($niveaux->count() != 0)
         <div class="table-responsive">

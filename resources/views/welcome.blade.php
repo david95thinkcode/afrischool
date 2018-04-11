@@ -15,7 +15,7 @@
             <div class="row mb-2">
                 <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
                     <div class="tile-stats bg-green">
-                        <div class="count">209</div>
+                        <div class="count">{!! $count['eleves'] !!}</div>
                         <div class="icon">
                             <i class="fa fa-users"></i>
                         </div>
@@ -25,7 +25,7 @@
                 </div>
                 <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
                     <div class="tile-stats bg-blue">
-                        <div class="count">50</div>
+                        <div class="count">{!! $count['prof'] !!}</div>
                         <div class="icon">
                             <i class="fa fa-user-secret"></i>
                         </div>
@@ -35,7 +35,7 @@
                 </div>
                 <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
                     <div class="tile-stats bg_red">
-                        <div class="count">205</div>
+                        <div class="count">{!! $count['classes'] !!}</div>
                         <div class="icon">
                             <i class="fa fa-building-o"></i>
                         </div>
@@ -67,7 +67,7 @@
                 </div>
                 <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
                     <div class="tile-stats bg-orange">
-                        <div class="count">17</div>
+                        <div class="count">{!! $count['mat'] !!}</div>
                         <div class="icon">
                             <i class="fa fa-book"></i>
                         </div>

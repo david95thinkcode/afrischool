@@ -78,8 +78,6 @@ Route::prefix('dashboard')->group(function () {
         Route::get('pays', 'PublicResourcesController@getPays');
     });
 
-/*Route::get('/', 'HomeController@index')->name('home');*/
-
 // Authentication Routes...
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
 Route::post('login', 'Auth\LoginController@login')->name('login.req');

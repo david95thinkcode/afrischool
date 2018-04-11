@@ -56,6 +56,7 @@
     <script src="{{mix('js/app.js')}}"></script>
     <script src="{{asset('js/jquery.mCustomScrollbar.concat.min.js')}}"></script>
     <script src="{{asset('js/custom.min.js')}}"></script>
+    @include('flashy::message')
     @yield('js')
     <script src="{{asset('js/ie10-viewport-bug-workaround.js')}}"></script>
 </body>

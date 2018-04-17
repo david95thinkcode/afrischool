@@ -26,10 +26,10 @@ Route::prefix('dashboard')->group(function () {
     /**
      * Matiere
      */
-    Route::prefix('matiere')->group(function() {
+    Route::prefix('matiere')->group(function () {
 
         // Classes
-        Route::prefix('classes')->group(function() {
+        Route::prefix('classes')->group(function () {
 
             Route::get('/', 'MatiereController@showAllWithClasse')
                 ->name('matiere.show.classes');
@@ -44,39 +44,39 @@ Route::prefix('dashboard')->group(function () {
     });
 
     // Professeurs
-    Route::prefix('professeur/')->group(function() {
+    Route::prefix('professeur/')->group(function () {
         Route::resource('diplomes', 'DiplomeController');
         Route::get('{professeur}/diplome/create', 'DiplomeController@createFromProf')
             ->where('professeur', '[0-9]+')
             ->name('professeur.diplome.create');
     });
 
-    Route::prefix('inscription-eleve')->group(function() {
-      Route::get('/{type}', 'EleveController@create')->name('eleves.create');
+    Route::prefix('inscription-eleve')->group(function () {
+        Route::get('/{type}', 'EleveController@create')->name('eleves.create');
     });
 
-    Route::prefix('inscriptions-enregistres')->group(function() {
+    Route::prefix('inscriptions-enregistres')->group(function () {
 
         Route::get('/classes/{classe}', 'InscriptionController@showForClasse')
             ->name('inscriptions.classe.show');
 
         Route::post('/', 'InscriptionController@searchForClasse');
     });
-    
+
     // Activation
-    Route::prefix('activate')->group(function() {
+    Route::prefix('activate')->group(function () {
         Route::get('etablissement/{etablissement}', 'EtablissementController@activate')
-                ->where('etablissement', '[0-9]+')
-                ->name('etablissements.activate');
+            ->where('etablissement', '[0-9]+')
+            ->name('etablissements.activate');
     });
 });
 
-    /*
-    * Utilisée par les requêtes ajax
-    */
-    Route::prefix('ajax')->group(function () {
-        Route::get('pays', 'PublicResourcesController@getPays');
-    });
+/*
+* Utilisée par les requêtes ajax
+*/
+Route::prefix('ajax')->group(function () {
+    Route::get('pays', 'PublicResourcesController@getPays');
+});
 
 // Authentication Routes...
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');

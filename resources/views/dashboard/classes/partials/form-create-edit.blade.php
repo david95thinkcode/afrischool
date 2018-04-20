@@ -21,6 +21,6 @@
     </select>
 </div>
 <br>
-<div class='form-group'>
+<div class='form-group text-center'>
     {{ Form::submit("Enregistrer", array('class' => 'btn btn-success ')) }}
 </div>

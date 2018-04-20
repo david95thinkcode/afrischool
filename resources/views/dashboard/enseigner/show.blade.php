@@ -1,14 +1,11 @@
 @extends('templates.app')
 @section('title') Matières par classe @endsection
+@section('section-title')
+    Matières enseignées en {{ $enseigner->first()->classe->cla_intitule }}
+@endsection
 @section('content')
 <div class='row'>
     <div class="col-sm-12">
-        <h3 class='text-center'>Les matières de {{ $enseigner->first()->classe->cla_intitule }}</h3>
-        <br>
-
-        <div class="text-center">
-            <a href="{{ route('matiere.show.classes') }}" class="btn btn-primary">Retour</a>
-        </div> <br>
         <div class="table-responsive">
             <table class="table ">
                 <thead>
@@ -38,7 +35,7 @@
                             <form action="{{ route('enseigner.destroy', $ens->id) }}" method="POST" class='table-del-btn'>
                                 <input type="hidden" name="_method" value="DELETE">
                                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                              {!! Form::submit('Supprimer', array('class' => 'btn btn-sm btn-danger')) !!}
+                              {!! Form::submit('Retirer', array('class' => 'btn btn-sm btn-danger')) !!}
                             </form>
                         </td>
                     </tr>

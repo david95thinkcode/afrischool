@@ -91,7 +91,7 @@ class ClasseController extends Controller
     {
         $c = Classe::find($id);
         $c->niveau_id = $request->niveau;
-        // // $c->cla_intitule = $request->cla_intitule;
+        $c->cla_intitule = $request->cla_intitule;
         $c->save();
 
         return Redirect::route('classe.index')->with('status', 'Modifié avec succès !');

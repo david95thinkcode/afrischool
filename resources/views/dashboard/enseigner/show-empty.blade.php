@@ -4,10 +4,7 @@
 @section('content')
 <div class='row'>
     <div class="col-sm-12">
-        <div class="text-center">
-            <a href="{{ route('matiere.show.classes') }}" class="btn btn-primary">Retour</a>
-        </div> <br>
-       
+        
         <div class="jumbotron text-center">
             <p>Aucune matière n'a été enregistrée pour cette classe !</p>
 

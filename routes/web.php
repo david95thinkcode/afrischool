@@ -45,6 +45,11 @@ Route::prefix('dashboard')->group(function () {
 
     // Professeurs
     Route::prefix('professeur/')->group(function () {
+        Route::get('tous', 'ProfesseurController@listAll')
+            ->name('professeurs.list');
+        Route::post('par-classe', 'ProfesseurController@list')
+            ->name('classe.professeurs.list');
+
         Route::resource('diplomes', 'DiplomeController');
         Route::get('{professeur}/diplome/create', 'DiplomeController@createFromProf')
             ->where('professeur', '[0-9]+')

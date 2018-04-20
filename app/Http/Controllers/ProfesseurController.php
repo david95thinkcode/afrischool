@@ -6,6 +6,9 @@ use App\Models\Professeur;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreProfesseurRequest;
 use Illuminate\Support\Facades\Redirect;
+use App\Models\Enseigner;
+use App\Models\Classe;
+use App\Http\Requests\SearchProfesseurAboutClasseRequest;
 
 class ProfesseurController extends Controller
 {
@@ -16,8 +19,8 @@ class ProfesseurController extends Controller
      */
     public function index()
     {
-        $professeurs = Professeur::all();
-        return view('dashboard.professeurs.index', compact('professeurs'));
+        $classes = Classe::all();
+        return view('dashboard.professeurs.index', compact('classes'));
     }
 
     /**
@@ -63,6 +66,27 @@ class ProfesseurController extends Controller
         $p = Professeur::findorFail($id);
 
         return view('dashboard.professeurs.show', compact('p'));
+    }
+
+    /**
+     * Retourne une collection de professeurs pour une classe donnée
+     */
+    public function list(SearchProfesseurAboutClasseRequest $req)
+    {
+        $classe = Classe::findOrFail($req->classe);
+        $ens = Enseigner::where('classe_id', '=', $classe->id)->get();
+
+        return view('dashboard.professeurs.list', compact('classe', 'professeurs'));
+    }
+
+    /**
+     * Retourne tous les professeurs
+     */
+    public function listAll()
+    {
+        $professeurs = Professeur::all();
+
+        return view('dashboard.professeurs.list-all', compact('professeurs'));
     }
 
     /**

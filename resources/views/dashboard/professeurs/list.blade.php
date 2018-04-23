@@ -3,11 +3,7 @@
     Les Professeurs 
 @endsection
 @section('section-title')
-    @if (isset($classe))
-        Les professeurs de la classe de {{ $classe->cla_intitule }} 
-    @else
-        Liste de tous les professeurs
-    @endif
+        Les professeurs de la classe de {{ $classe->cla_intitule }}
 @endsection
 @section('content')
 <div class='row'>
@@ -18,40 +14,33 @@
                     <th>#</th>
                     <th>Nom</th>
                     <th>Nationalité</th>
-                    <th>Tel</th>
+                    <th>Teléphone</th>
                     <th>Email</th>
-                    <th>Matières enseignées </th>
+                    <th>Matière(s) enseignée(s) </th>
                     <th>Actions</th>
                 </thead>
                 <tbody>
-                @foreach ($professeurs as $p)
+                @foreach ($ens as $e)
                     <tr>
-                        <td>{{ $p->id }}</td>
-                        <td>{{ $p->prof_nom }} {{ $p->prof_prenoms }}</td>
-                        <td> {{ $p->prof_nationalite }}</td>
-                        <td>{{ $p->prof_tel }}</td>
-                        <td>{{ $p->prof_email }}</td>
+                        <td>{{ $e->id }}</td>
+                        <td>{{ $e->prof_nom }} {{ $e->prof_prenoms }}</td>
+                        <td>{{ $e->prof_nationalite }}</td>
+                        <td>{{ $e->prof_tel }}</td>
+                        <td>{{ $e->prof_email }}</td>
                         <td>
-                           
-                            @if ($p->enseigner != null)
-                                @foreach ($p->enseigner as $ens)
-                                    {{ $ens->matiere->intitule }},
-                                @endforeach
-                            @else
-                                <span class="badge">Aucune</span>
-                            @endif
+                            {{ $e->intitule }},
                         </td>
                         <td>
-                            <a href="{{ route('professeurs.show', ['id' => $p->id] ) }}" class="btn btn-sm btn-info">
+                            <a href="{{ route('professeurs.show', ['id' => $e->id] ) }}" class="btn btn-sm btn-info">
                             Afficher
                             </a>
-                            <a href="{{ route('professeurs.edit', ['id' => $p->id] ) }}" class="btn btn-sm btn-primary">
+                            <a href="{{ route('professeurs.edit', ['id' => $e->id] ) }}" class="btn btn-sm btn-primary">
                             Modifier
                             </a>
-                            <form action="{{ route('professeurs.destroy', $p->id) }}" method="POST" class='table-del-btn'>
+                            <form action="{{ route('professeurs.destroy', $e->id) }}" method="POST" class='table-del-btn'>
                                 <input type="hidden" name="_method" value="DELETE">
                                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                              {!! Form::submit('Del', array('class' => 'btn btn-sm btn-danger')) !!}
+                              {!! Form::submit('Retirer', array('class' => 'btn btn-sm btn-danger')) !!}
                             </form>
                         </td>
                     </tr>

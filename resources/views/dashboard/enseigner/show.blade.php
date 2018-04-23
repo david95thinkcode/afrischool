@@ -1,7 +1,7 @@
 @extends('templates.app')
 @section('title') Matières par classe @endsection
 @section('section-title')
-    Matières enseignées en {{ $enseigner->first()->classe->cla_intitule }}
+    Matières enseignées en {{ $enseigner->first()->cla_intitule }}
 @endsection
 @section('content')
 <div class='row'>
@@ -12,7 +12,7 @@
                     <th>#</th>
                     <th>Titre</th>
                     <th>Classe</th>
-                    <th>Coef </th>
+                    <th>Coefficient </th>
                     <th>Enseigné par</th>
                     <th>Actions</th>
                 </thead>
@@ -20,12 +20,12 @@
                 @foreach ($enseigner as $ens)
                     <tr>
                         <td>{{ $ens->id }}</td>
-                        <td>{{ $ens->matiere->intitule }}</td>
-                        <td>{{ $ens->classe->cla_intitule }}</td>
+                        <td>{{ $ens->intitule }}</td>
+                        <td>{{ $ens->cla_intitule }}</td>
                         <td>{{ $ens->coefficient }}</td>
                         <td>
                             @if($ens->professeur_id != null)
-                            {{ $ens->professeur->prof_prenoms }} {{ $ens->professeur->prof_nom }}
+                            {{ $ens->prof_prenoms }} {{ $ens->prof_nom }}
                             @endif
                         </td>
                         <td>

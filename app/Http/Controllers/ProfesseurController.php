@@ -1,13 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use App\Models\Professeur;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreProfesseurRequest;
 use Illuminate\Support\Facades\Redirect;
-use App\Models\Enseigner;
 use App\Models\Classe;
+use App\Models\Professeur;
 use App\Http\Requests\SearchProfesseurAboutClasseRequest;
 
 class ProfesseurController extends Controller
@@ -74,9 +73,14 @@ class ProfesseurController extends Controller
     public function list(SearchProfesseurAboutClasseRequest $req)
     {
         $classe = Classe::findOrFail($req->classe);
-        $ens = Enseigner::where('classe_id', '=', $classe->id)->get();
+        $ens = DB::table('enseigner')
+                ->where('classe_id', '=', $classe->id)
+                ->join('professeurs', 'enseigner.professeur_id', '=', 'professeurs.id')
+                ->join('matieres', 'enseigner.matiere_id', '=', 'matieres.id')
+                ->get();
+        //  dd($ens);
 
-        return view('dashboard.professeurs.list', compact('classe', 'professeurs'));
+        return view('dashboard.professeurs.list', compact('classe', 'ens'));
     }
 
     /**

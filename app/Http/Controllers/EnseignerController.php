@@ -87,7 +87,8 @@ class EnseignerController extends Controller
         $classes = Classe::all();
         $matieres = Matiere::all();
         $profs = Professeur::all();
-
+        
+        //dd($ens);
         return view('dashboard.enseigner.edit', compact('ens', 'classes', 'matieres', 'profs'));
     }
 

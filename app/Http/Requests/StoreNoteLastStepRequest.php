@@ -37,7 +37,7 @@ class StoreNoteLastStepRequest extends FormRequest
     {
         return [
             'type_evaluation.required' => "Renseignez le type d'évaluation SVP",
-            'matiere.required' => "Renseignez la matière SVP"
-        ]
+            'matiere.required' => "Renseignez la matière SVP", 
+        ];
     }
 }

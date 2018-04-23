@@ -22,7 +22,7 @@ Route::prefix('dashboard')->group(function () {
     Route::resource('matieres', 'MatiereController');
     Route::resource('enseigner', 'EnseignerController');
     Route::resource('inscriptions', 'InscriptionController');
-
+    Route::resource('notes', 'NoteController');
     /**
      * Matiere
      */

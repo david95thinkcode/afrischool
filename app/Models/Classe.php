@@ -49,4 +49,12 @@ class Classe extends Model
     {
         return $this->hasMany('App\Models\ProfesseurPrincipal');
     }
+
+     /**
+     * Une classe a beaucoup de notes
+     */
+    public function notes()
+    {
+        return $this->hasMany('App\Models\Note');
+    }
 }

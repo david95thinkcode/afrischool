@@ -10,6 +10,7 @@ use App\Models\Trimestre;
 use App\Models\Enseigner;
 use App\Models\Classe;
 use App\Models\Note;
+use App\Models\Inscription;
 
 class NoteController extends Controller
 {
@@ -41,12 +42,13 @@ class NoteController extends Controller
      */
     public function goToSecondStep(StoreNoteFirstStepRequest $req)
     {
-        $classe = Classe::find($req->classe);
+        $classe = Classe::findOrFail($req->classe);
         $trimestre = Trimestre::find($req->trimestre);
         $typeEv = TypeEvaluation::all();
-        $matieres = Enseigner::where('classe_id', '=', $cla)->get();
+        $matieres = Enseigner::where('classe_id', '=', $classe->id)->get();
+        $eleves = Inscription::where('classe_id', $classe->id)->get();
 
-        return view('dashboard.notes.create-last-step', compact('classe', 'trimestre', 'typeEv', 'matieres'));
+        return view('dashboard.notes.create-last-step', compact('classe', 'trimestre', 'typeEv', 'matieres', 'eleves'));
     }
 
     /**
@@ -64,10 +66,12 @@ class NoteController extends Controller
         $note->trimestre_id = $request->trimestre;
         $note->matiere_id = $request->matiere;
         $note->classe_id = $request->classe;
+        $note->eleve_id = $request->eleve;
         $note->not_note = $request->note;
         $note->appreciation = 'Je ne sais pas quoi dire pour l\'instant'; // TODO: A gérer avec du js ou un gestionnaire d'event de laravel
         $note->save();
-        
+
+        dd($note);        
     }
 
     /**

@@ -40,6 +40,12 @@ class CreateNotesTable extends Migration
                     ->references('id')
                     ->on('matieres')
                     ->onDelete('cascade');
+            
+            $table->unsignedInteger('eleve_id');
+            $table->foreign('eleve_id')
+                    ->references('id')
+                    ->on('eleves')
+                    ->onDelete('cascade');
 
             $table->timestamps();
         });

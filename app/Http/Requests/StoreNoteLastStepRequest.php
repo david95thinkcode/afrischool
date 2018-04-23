@@ -28,6 +28,7 @@ class StoreNoteLastStepRequest extends FormRequest
             'trimestre' => 'integer|required',
             'type_evaluation' => 'integer|required',
             'matiere' => 'integer|required',
+            'eleve' => 'integer|required',
             'note' => 'required'
         ];
     }

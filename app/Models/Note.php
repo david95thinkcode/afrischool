@@ -29,4 +29,9 @@ class Note extends Model
     {
         return $this->belongsTo('App\Models\Evaluation');
     }
+
+    public function eleve()
+    {
+        return $this->belongsTo('App\Models\Eleve');
+    }
 }

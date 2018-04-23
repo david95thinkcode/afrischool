@@ -51,7 +51,7 @@
                 </li>
                 <li><a><i class="fa fa-flag"></i>Notes <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                        <li><a href="#">Ajouter</a></li>
+                        <li><a href="{{ route('notes.create') }}">Ajouter</a></li>
                         <li><a href="#">Liste par classe</a></li>
                     </ul>
                 </li>

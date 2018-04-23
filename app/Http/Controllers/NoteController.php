@@ -33,7 +33,7 @@ class NoteController extends Controller
     {
         $classes = Classe::all();
         $trimestres = Trimestre::all();
-
+        
         return view('dashboard.notes.create-first-step', compact('classes', 'trimestres'));
     }
 

@@ -23,6 +23,16 @@ Route::prefix('dashboard')->group(function () {
     Route::resource('enseigner', 'EnseignerController');
     Route::resource('inscriptions', 'InscriptionController');
     Route::resource('notes', 'NoteController');
+
+    /**
+     * Notes
+     */
+    Route::prefix('notes')->group(function () {
+        
+        Route::post('last-step', 'MatiereController@searchForClasse')
+            ->name('notes.store.last-step');
+    });
+
     /**
      * Matiere
      */

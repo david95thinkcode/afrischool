@@ -31,10 +31,10 @@
                             {{ $e->intitule }},
                         </td>
                         <td>
-                            <a href="{{ route('professeurs.show', ['id' => $e->id] ) }}" class="btn btn-sm btn-info">
+                            <a href="{{ route('professeurs.show', ['id' => $e->professeur_id] ) }}" class="btn btn-sm btn-info">
                             Afficher
                             </a>
-                            <a href="{{ route('professeurs.edit', ['id' => $e->id] ) }}" class="btn btn-sm btn-primary">
+                            <a href="{{ route('enseigner.edit', ['id' => $e->id] ) }}" class="btn btn-sm btn-primary">
                             Modifier
                             </a>
                             <form action="{{ route('professeurs.destroy', $e->id) }}" method="POST" class='table-del-btn'>

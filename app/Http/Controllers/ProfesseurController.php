@@ -77,8 +77,9 @@ class ProfesseurController extends Controller
                 ->where('classe_id', '=', $classe->id)
                 ->join('professeurs', 'enseigner.professeur_id', '=', 'professeurs.id')
                 ->join('matieres', 'enseigner.matiere_id', '=', 'matieres.id')
+                ->select('enseigner.id', 'enseigner.professeur_id', 'professeurs.prof_nom', 'professeurs.prof_prenoms', 
+                    'professeurs.prof_tel', 'professeurs.prof_email', 'professeurs.prof_nationalite', 'matieres.intitule')
                 ->get();
-        //  dd($ens);
 
         return view('dashboard.professeurs.list', compact('classe', 'ens'));
     }

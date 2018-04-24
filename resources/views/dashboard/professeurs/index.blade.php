@@ -1,54 +1,33 @@
 @extends('templates.app')
-@section('title') Les Professeurs @endsection
-@section('section-title') Liste des professeurs @endsection
+@section('title') 
+    Les Professeurs 
+@endsection
+@section('section-title') 
+    Liste des professeurs 
+@endsection
 @section('content')
 <div class='row'>
-    <div class="col-sm-12">
-        <div class="table-responsive">
-            <table class="table table-condensed ">
-                <thead>
-                    <th>#</th>
-                    <th>Nom</th>
-                    <th>Tel</th>
-                    <th>Email</th>
-                    <th>Enseigne </th>
-                    <th>Classes</th>
-                    <th>Actions</th>
-                </thead>
-                <tbody>
-                @foreach ($professeurs as $p)
-                    <tr>
-                        <td>{{ $p->id }}</td>
-                        <td>{{ $p->prof_nom }} {{ $p->prof_prenoms }}</td>
-                        <td>{{ $p->prof_tel }}</td>
-                        <td>{{ $p->prof_email }}</td>
-                        <td>
-                            @foreach($p->enseigner as $ens)
-                            {{ $ens->matiere->intitule }},
-                            @endforeach
-                        </td>
-                        <td>
-                            @foreach( $p->enseigner as $c)
-                            {{ $c->classe->cla_intitule }},
-                            @endforeach
-                        </td>
-                        <td>
-                            <a href="{{ route('professeurs.show', ['id' => $p->id] ) }}" class="btn btn-sm btn-info">
-                            Afficher
-                            </a>
-                            <a href="{{ route('professeurs.edit', ['id' => $p->id] ) }}" class="btn btn-sm btn-warning">
-                            Modifier
-                            </a>
-                            <form action="{{ route('professeurs.destroy', $p->id) }}" method="POST" class='table-del-btn'>
-                                <input type="hidden" name="_method" value="DELETE">
-                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                              {!! Form::submit('Del', array('class' => 'btn btn-sm btn-danger')) !!}
-                            </form>
-                        </td>
-                    </tr>
-                @endforeach
-                </tbody>
-            </table>
+    <div class="col-md-5 col-md-offset-3 col-sm-6 col-sm-offset-3 col-xs-12">
+        <div class='panel panel-default mx-auto'>
+            <div class="panel-body">
+                <div class="">
+                    {!! Form::open(['action' => ['ProfesseurController@list'], 'method' => 'POST', 'class' => '']) !!}
+                        <div class="form-group">
+                            {!! Form::label('classe', 'Sélectionnez une classe') !!}
+                            <select name="classe" id="classe" class="form-control" required>                            
+                                    <option value="">Veuillez sélectionner une classe ici</option>
+                                    @foreach ($classes as $c)
+                                    <option value="{{ $c->id }}">{{ $c->cla_intitule }}</option>
+                                    @endforeach
+                            </select>          
+                        </div>
+                        
+                        <div class="mt-1">
+                            <button type="submit" class="btn btn-success">Rechercher</button>
+                        </div>    
+                    {!! Form::close() !!}
+                </div>
+            </div>
         </div>
     </div>
 </div>

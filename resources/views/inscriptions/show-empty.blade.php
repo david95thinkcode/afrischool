@@ -1,17 +1,17 @@
 @extends('templates.app')
-@section('title') Inscriptions par classe @endsection
+@section('title') 
+    Inscriptions par classe 
+@endsection
+@section('section-title')
+    Les élèves inscrits en {{ $classe->cla_intitule }}
+@endsection
 @section('content')
 <div class='row'>
-    <div class="col-sm-12">
-        <h3 class='text-center'>Les élèves inscrits en {{ $classe->cla_intitule }}</h3>
-        <br>
-        
-        <div class="text-center">
-            <a href="{{ route('inscriptions.index') }}" class="btn btn-primary">Retour</a>
-        </div> <br>
-       
+    <div class="col-sm-offset-4 col-sm-4">
         <div class="jumbotron text-center">
-            Aucune inscription n'a été enregistrée pour cette classe !
+            <h4>
+                Aucun élève inscrit pour cette classe !
+            </h4>
         </div>
     </div>
 </div>

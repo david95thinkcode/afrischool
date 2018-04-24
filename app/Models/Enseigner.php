@@ -28,9 +28,9 @@ class Enseigner extends Model
      */
     public function professeur()
     {
-        return $this->belongsTo('App\Models\Professeur');
+        return $this->belongsTo('App\Models\Professeur', 'professeur_id');
     }
-
+    
     /**
      * 
      */

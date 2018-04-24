@@ -23,8 +23,8 @@
                 <li><a><i class="fa fa-user-secret"></i> Professeurs <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                         <li><a href="{{ route('professeurs.create') }}">Créer</a></li>
-                        <li><a href="{{ route('professeurs.index') }}">Liste</a></li>
-                        <li><a href="#">...........</a></li>
+                        <li><a href="{{ route('professeurs.index') }}">Liste par classe</a></li>
+                        <li><a href="{{ route('professeurs.list') }}">Liste complète</a>
                     </ul>
                 </li>
                 <li><a><i class="fa fa-street-view"></i>Personnel <span class="fa fa-chevron-down"></span></a>
@@ -46,12 +46,12 @@
                         <li><a href="{{ route('matieres.create') }}">Créer</a></li>
                         <li><a href="{{ route('enseigner.create') }}">Ajouter une matière à une classe </a></li>
                         <li><a href="{{ route('matiere.show.classes') }}">Liste des matières enseignées par classe </a></li>
-                        <li><a href="{{ route('matieres.index') }}">Liste de toutes les matières</a></li>
+                        <li><a href="{{ route('matieres.index') }}">Liste complète des matières</a></li>
                     </ul>
                 </li>
                 <li><a><i class="fa fa-flag"></i>Notes <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                        <li><a href="#">Ajouter</a></li>
+                        <li><a href="{{ route('notes.create') }}">Ajouter</a></li>
                         <li><a href="#">Liste par classe</a></li>
                     </ul>
                 </li>

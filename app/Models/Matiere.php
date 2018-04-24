@@ -25,4 +25,12 @@ class Matiere extends Model
     {
         return $this->hasMany('App\Models\Enseigner');
     }
+
+     /**
+     * Une matière a beaucoup de notes
+     */
+    public function notes()
+    {
+        return $this->hasMany('App\Models\Note');
+    }
 }

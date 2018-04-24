@@ -1,11 +1,13 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use App\Models\Professeur;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreProfesseurRequest;
 use Illuminate\Support\Facades\Redirect;
+use App\Models\Classe;
+use App\Models\Professeur;
+use App\Http\Requests\SearchProfesseurAboutClasseRequest;
 
 class ProfesseurController extends Controller
 {
@@ -16,8 +18,8 @@ class ProfesseurController extends Controller
      */
     public function index()
     {
-        $professeurs = Professeur::all();
-        return view('dashboard.professeurs.index', compact('professeurs'));
+        $classes = Classe::all();
+        return view('dashboard.professeurs.index', compact('classes'));
     }
 
     /**
@@ -63,6 +65,33 @@ class ProfesseurController extends Controller
         $p = Professeur::findorFail($id);
 
         return view('dashboard.professeurs.show', compact('p'));
+    }
+
+    /**
+     * Retourne une collection de professeurs pour une classe donnée
+     */
+    public function list(SearchProfesseurAboutClasseRequest $req)
+    {
+        $classe = Classe::findOrFail($req->classe);
+        $ens = DB::table('enseigner')
+                ->where('classe_id', '=', $classe->id)
+                ->join('professeurs', 'enseigner.professeur_id', '=', 'professeurs.id')
+                ->join('matieres', 'enseigner.matiere_id', '=', 'matieres.id')
+                ->select('enseigner.id', 'enseigner.professeur_id', 'professeurs.prof_nom', 'professeurs.prof_prenoms', 
+                    'professeurs.prof_tel', 'professeurs.prof_email', 'professeurs.prof_nationalite', 'matieres.intitule')
+                ->get();
+
+        return view('dashboard.professeurs.list', compact('classe', 'ens'));
+    }
+
+    /**
+     * Retourne tous les professeurs
+     */
+    public function listAll()
+    {
+        $professeurs = Professeur::all();
+
+        return view('dashboard.professeurs.list-all', compact('professeurs'));
     }
 
     /**

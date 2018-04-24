@@ -22,6 +22,16 @@ Route::prefix('dashboard')->group(function () {
     Route::resource('matieres', 'MatiereController');
     Route::resource('enseigner', 'EnseignerController');
     Route::resource('inscriptions', 'InscriptionController');
+    Route::resource('notes', 'NoteController');
+
+    /**
+     * Notes
+     */
+    Route::prefix('notes')->group(function () {
+        
+        Route::post('last-step', 'MatiereController@searchForClasse')
+            ->name('notes.store.last-step');
+    });
 
     /**
      * Matiere
@@ -45,6 +55,11 @@ Route::prefix('dashboard')->group(function () {
 
     // Professeurs
     Route::prefix('professeur/')->group(function () {
+        Route::get('tous', 'ProfesseurController@listAll')
+            ->name('professeurs.list');
+        Route::post('par-classe', 'ProfesseurController@list')
+            ->name('classe.professeurs.list');
+
         Route::resource('diplomes', 'DiplomeController');
         Route::get('{professeur}/diplome/create', 'DiplomeController@createFromProf')
             ->where('professeur', '[0-9]+')

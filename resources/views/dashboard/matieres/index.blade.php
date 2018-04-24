@@ -2,8 +2,8 @@
 @section('title') Les matières @endsection
 @section('section-title') Liste de toutes les matières @endsection
 @section('content')
-<div class='row'>
-    <div class="col-sm-12">
+<div class='col-sm-12'>
+    <div class="x-content">
         <div class="table-responsive">
             <table class="table ">
                 <thead>

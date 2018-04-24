@@ -69,6 +69,14 @@ Route::prefix('dashboard')->group(function () {
             ->where('etablissement', '[0-9]+')
             ->name('etablissements.activate');
     });
+
+    /*users*/
+    Route::prefix('users')->group(function(){
+        Route::get('users', 'UserController@index')->name('users');
+        Route::get('users/{user}', 'UserController@show')->name('users.show');
+        Route::get('users/{user}/edit', 'UserController@edit')->name('users.edit');
+        Route::put('users/{user}', 'UserController@update')->name('users.update');
+    });
 });
 
 /*

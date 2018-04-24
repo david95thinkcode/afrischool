@@ -16,4 +16,19 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+
+    public function hasRole($role)
+    {
+        if ($role instanceof Model) $role = $role->getKey();
+
+        if ($this->roles->isEmpty()) return false;
+
+        return ($this->roles->contains('id', null, $role) || $this->roles->contains('name', null, $role));
+    }
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'users_roles', 'user_id', 'role_id');
+    }
 }

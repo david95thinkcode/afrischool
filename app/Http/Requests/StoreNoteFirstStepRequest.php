@@ -25,7 +25,8 @@ class StoreNoteFirstStepRequest extends FormRequest
     {
         return [
             'classe' => 'integer|required',
-            'trimestre' => 'integer|required'
+            'trimestre' => 'integer|required',
+            'anneeScolaire' => 'integer|required',
         ];
     }
 }

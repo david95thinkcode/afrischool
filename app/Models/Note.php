@@ -8,6 +8,10 @@ class Note extends Model
 {
     protected $table = 'notes';
 
+    protected $fillable = [
+        'evaluation_id','trimestre_id','matiere_id','classe_id','eleve_id', 'not_note', 'annee_scolaire_id'
+    ];
+
     public $timestamps = true;
 
     public function classe()
@@ -33,5 +37,10 @@ class Note extends Model
     public function eleve()
     {
         return $this->belongsTo('App\Models\Eleve');
+    }
+
+    public function anneeScolaire()
+    {
+        return $this->belongsTo(AnneeScolaire::class);
     }
 }

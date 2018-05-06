@@ -31,6 +31,10 @@
         .table-del-btn {
             display: inline;
         }
+        span.required{
+            color: red;
+            font-size: 16px;
+        }
     </style>
 </head>
 

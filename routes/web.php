@@ -22,7 +22,10 @@ Route::prefix('dashboard')->group(function () {
     Route::resource('matieres', 'MatiereController');
     Route::resource('enseigner', 'EnseignerController');
     Route::resource('inscriptions', 'InscriptionController');
-    Route::resource('notes', 'NoteController');
+    Route::get('notes/selection-classe', 'NoteController@create')->name('notes.create');
+    Route::post('notes/second-step', 'NoteController@goToSecondStep')->name('notes.classe.second');
+    Route::post('notes/fird-step', 'NoteController@lastStep')->name('notes.classe.fird');
+    Route::post('notes/save', 'NoteController@store')->name('notes.req');
 
     /**
      * Notes
@@ -114,5 +117,3 @@ Route::post('register', 'Auth\RegisterController@create')->name('register.req');
 Route::get('reinitialiser-mot-de-passe', 'Auth\ResetPasswordController@index')->name('password.request');
 Route::post('reinitialiser-mot-de-passe', 'Auth\ResetPasswordController@resetPassword')->name('password.tel');
 Route::post('reinitialisation-mot-de-passe', 'Auth\ResetPasswordController@requestPassword')->name('password.requeste');
-
-//Auth::routes();

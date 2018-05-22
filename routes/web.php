@@ -31,7 +31,6 @@ Route::prefix('dashboard')->group(function () {
      * Notes
      */
     Route::prefix('notes')->group(function () {
-        
         Route::post('last-step', 'MatiereController@searchForClasse')
             ->name('notes.store.last-step');
     });
@@ -43,14 +42,11 @@ Route::prefix('dashboard')->group(function () {
 
         // Classes
         Route::prefix('classes')->group(function () {
-
             Route::get('/', 'MatiereController@showAllWithClasse')
                 ->name('matiere.show.classes');
-
             Route::get('/{classe}', 'MatiereController@showForSpecificClasse')
                 ->where('classe', '[0-9]+')
                 ->name('matiere.show.classe');
-
             Route::post('/', 'MatiereController@searchForClasse');
         });
 
@@ -74,10 +70,8 @@ Route::prefix('dashboard')->group(function () {
     });
 
     Route::prefix('inscriptions-enregistres')->group(function () {
-
         Route::get('/classes/{classe}', 'InscriptionController@showForClasse')
             ->name('inscriptions.classe.show');
-
         Route::post('/', 'InscriptionController@searchForClasse');
     });
 

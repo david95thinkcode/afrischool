@@ -38,5 +38,10 @@ class Enseigner extends Model
     {
         return $this->belongsTo('App\Models\AnneeScolaire', 'annee_scolaire_id');
     }
+
+    public function horaires()
+    {
+        return $this->hasMany('App\Models\Horaire');
+    }
     
 }

@@ -56,12 +56,13 @@
                     </ul>
                 </li>
                 <li class=""><a><i class="fa fa-file-text-o"></i> Examens 
-                    <span class="label label-success pull-right">Coming Soon</span></a>
-                    
+                    <span class="label label-success pull-right">Coming Soon</span></a>                    
                 </li>
-                <li class=""><a><i class="fa fa-file-text-o"></i> Emploi du temps  
-                    <span class="label label-success pull-right">Coming Soon</span></a>
-                    
+                <li><a><i class="fa fa-file-text-o"></i>Emploi du temps <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                        <li><a href="{{ route('horaire.create') }}">Ajouter</a></li>
+                        <li><a href="{{ route('matieres.create') }}">Consulter</a></li>
+                    </ul>                 
                 </li>
                 <li class=""><a><i class="fa fa-money "></i> Finance 
                     <span class="label label-success pull-right">Coming Soon</span></a>

@@ -16,6 +16,7 @@ Route::get('/', 'PublicPagesController@index')->name('home');
 Route::prefix('dashboard')->group(function () {
     Route::get('/', 'DashboardController@Home')->name('dashboard.home');
     Route::resource('etablissements', 'EtablissementController');
+    // Route::resource('emploi-du-temps', 'HoraireController');
     Route::resource('professeurs', 'ProfesseurController');
     Route::resource('niveaux', 'NiveauController');
     Route::resource('classe', 'ClasseController');
@@ -73,6 +74,16 @@ Route::prefix('dashboard')->group(function () {
         Route::get('/classes/{classe}', 'InscriptionController@showForClasse')
             ->name('inscriptions.classe.show');
         Route::post('/', 'InscriptionController@searchForClasse');
+    });
+
+    // Emploi du temps
+    Route::prefix('emploi-du-temps')->group(function () {
+        Route::get('{classe}', 'HoraireController@showForClasse')->where('classe', '[0-9]+')->name('emploi-du-temps.afficher');
+        Route::get('create/horaire', 'HoraireController@create')->where('classe', '[0-9]+')->name('horaire.create');
+        //Route::get('{classe}/create/horaire', 'HoraireController@create')->where('classe', '[0-9]+')->name('horaire.create.second-step');
+        
+        Route::post('create/horaire', 'HoraireController@createSecondStep')->name('horaire.second-step.go');
+        Route::post('create/horaire/store', 'HoraireController@store')->name('horaire.store');
     });
 
     // Activation

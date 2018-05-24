@@ -37,7 +37,7 @@ class HoraireController extends Controller
     }
 
     /**
-     * Retourne l'emplie du temps d'une classe donnée
+     * Retourne l'emploie du temps complet d'une classe donnée
      */
     public function showAllForClasse($classe)
     {
@@ -50,8 +50,17 @@ class HoraireController extends Controller
                     ->join('horaires', 'horaires.enseigner_id', '=', 'enseigner.id')
                     ->select('horaires.jour_id', 'horaires.debut', 'horaires.fin', 'matieres.intitule', 'professeurs.prof_nom', 'professeurs.prof_prenoms')
                     ->get();
-       
-        return view('dashboard.emploi-du-temps.show-for-classe', compact('c', 'horaires'));
+        
+        $horairesByDay = [];
+        $horairesByDay['lundi'] = $horaires->where('jour_id', '=', 1);
+        $horairesByDay['mardi'] = $horaires->where('jour_id', '=', 2);
+        $horairesByDay['mercredi'] = $horaires->where('jour_id', '=', 3);
+        $horairesByDay['jeudi'] = $horaires->where('jour_id', '=', 4);
+        $horairesByDay['vendredi'] = $horaires->where('jour_id', '=', 5);
+        $horairesByDay['samedi'] = $horaires->where('jour_id', '=', 6);
+        $horairesByDay['dimanche'] = $horaires->where('jour_id', '=', 7);
+        
+        return view('dashboard.emploi-du-temps.show-for-classe', compact('c', 'horairesByDay'));
     }
 
     /**

@@ -5,41 +5,26 @@
 @endsection
 @section('content')
 <div class='row'>
-    <div class="col-sm-12">
+    <div class="col-sm-offset-1 col-sm-9">
         <div class="table-responsive">
-            <table class="table ">
+            <table class="table table-bordered">
                 <thead>
-                    <th>#</th>
                     <th>Jour</th>
-                    <th>Horaire</th>
+                    <th>Programmes</th>
                 </thead>
                 <tbody>
-                @foreach ($horaires as $h)
+                @foreach ($horairesByDay as $jour => $horaires)
                     <tr>
-                        @switch($h->jour_id)
-
-                            @case(1)
-                                
-                                @break
-                            
-                            @case(2)
-                                @break
-                            
-                            @case(3)
-                                @break
-                            
-                            @case(4)
-                                @break
-                            
-                            @case(5)
-                                @break
-                            
-                            @case(6)
-                                @break
-                            
-                            @case(7)
-                                @break
-                        @endswitch                        
+                        <td>{{$jour}}</td>
+                        <td>
+                            <ul>
+                                @foreach ($horaires as $h => $itemValue)
+                                    <li>
+                                        {{$itemValue->debut}} - {{$itemValue->fin}} : {{$itemValue->intitule}} - {{$itemValue->prof_nom}} {{$itemValue->prof_prenoms}}
+                                    </li>
+                                @endforeach                                
+                            </ul>
+                        </td>                                 
                     </tr>
                 @endforeach
                 </tbody>

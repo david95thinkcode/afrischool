@@ -32,7 +32,9 @@
                     {!! Form::label('fin', 'Heure de fin') !!}
                     {!! Form::time('fin', old('fin'), ['class' => 'form-control', 'required' => '']) !!}
                 </div>
-
+                
+                {!! Form::hidden('classe', old('classe'), ['class' => 'form-control', 'required' => '']) !!}
+                
                 <div class='col-md-12 text-center mt-1'>
                     {{ Form::submit("Enregistrer", ['class' => 'btn btn-success col-md-6 col-md-offset-3']) }}
                 </div>

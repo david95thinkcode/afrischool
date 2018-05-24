@@ -78,10 +78,11 @@ Route::prefix('dashboard')->group(function () {
 
     // Emploi du temps
     Route::prefix('emploi-du-temps')->group(function () {
-        Route::get('{classe}', 'HoraireController@showForClasse')->where('classe', '[0-9]+')->name('emploi-du-temps.afficher');
+        Route::get('consulter', 'HoraireController@search')->name('emploi-du-temps.search');
+        Route::get('{classe}', 'HoraireController@showAllForClasse')->where('classe', '[0-9]+')->name('emploi-du-temps.afficher');
         Route::get('create/horaire', 'HoraireController@create')->where('classe', '[0-9]+')->name('horaire.create');
-        //Route::get('{classe}/create/horaire', 'HoraireController@create')->where('classe', '[0-9]+')->name('horaire.create.second-step');
         
+        Route::post('consulter', 'HoraireController@showHoraires')->name('emploi-du-temps.search.go');
         Route::post('create/horaire', 'HoraireController@createSecondStep')->name('horaire.second-step.go');
         Route::post('create/horaire/store', 'HoraireController@store')->name('horaire.store');
     });

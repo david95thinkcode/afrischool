@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\DB;
 use App\Models\Jour;
 use App\Models\Horaire;
 use App\Models\Classe;
@@ -9,16 +10,48 @@ use App\Models\Enseigner;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreHoraireRequest;
 use App\Http\Requests\HoraireGotoSecondStepRequest;
-
+use Illuminate\Support\Facades\Redirect;
 class HoraireController extends Controller
 {
 
-    /**
-     * Retourne l'emplie du temps d'une classe données
-     */
-    public function showForClasse($classe)
+    public function search()
     {
-        return('En cours de dev...');
+        $enseigner_classes = Enseigner::all()->toArray();
+        $classes = [];
+
+        foreach ($enseigner_classes as $item) {
+            $exists = false;
+            foreach ($classes as $classe) {
+                if ($classe['id'] == $item['classe_id']) {
+                    $exists = true;
+                }
+            }            
+            if (!$exists) {
+                $classe_data = [];
+                $classe_data['id'] = $item['classe_id'];
+                $classe_data['datas'] = Classe::findorFail($item['classe_id']);
+                array_push($classes, $classe_data);
+            }
+        }
+        return view('dashboard.emploi-du-temps.search', compact('classes'));
+    }
+
+    /**
+     * Retourne l'emplie du temps d'une classe donnée
+     */
+    public function showAllForClasse($classe)
+    {
+        $c = Classe::findorFail($classe);
+        $horaires = DB::table('enseigner')
+                    ->where('classe_id', $classe)
+                    ->join('matieres', 'enseigner.matiere_id', '=', 'matieres.id')
+                    ->join('classes', 'enseigner.classe_id', '=', 'classes.id')
+                    ->join('professeurs', 'enseigner.professeur_id', '=', 'professeurs.id')
+                    ->join('horaires', 'horaires.enseigner_id', '=', 'enseigner.id')
+                    ->select('horaires.jour_id', 'horaires.debut', 'horaires.fin', 'matieres.intitule', 'professeurs.prof_nom', 'professeurs.prof_prenoms')
+                    ->get();
+       
+        return view('dashboard.emploi-du-temps.show-for-classe', compact('c', 'horaires'));
     }
 
     /**
@@ -96,7 +129,8 @@ class HoraireController extends Controller
         $h->enseigner_id = $request->enseigner;
         $h->save();
 
-        return ("DONE");
+        return Redirect::route('emploi-du-temps.afficher', ['classe' => $request->classe])
+                        ->with('status', 'Ajouté avec succès !');
     }
 
     /**
@@ -105,9 +139,17 @@ class HoraireController extends Controller
      * @param  \App\Horaire  $horaire
      * @return \Illuminate\Http\Response
      */
-    public function show(Horaire $horaire)
+    public function show($horaire)
     {
         //
+    }
+
+    // Recoit une classe comme donnée en post 
+    // et redirige vers la page de cosnultation de l'emploi du temps de cette classe
+    public function showHoraires(HoraireGotoSecondStepRequest $req)
+    {
+        $c = Classe::findorFail($req->classe);
+        return Redirect::route('emploi-du-temps.afficher', ['classe' => $req->classe]);
     }
 
     /**

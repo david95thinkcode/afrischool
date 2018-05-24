@@ -60,8 +60,8 @@
                 </li>
                 <li><a><i class="fa fa-file-text-o"></i>Emploi du temps <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
+                        <li><a href="{{ route('emploi-du-temps.search') }}">Consulter</a></li>
                         <li><a href="{{ route('horaire.create') }}">Ajouter</a></li>
-                        <li><a href="{{ route('matieres.create') }}">Consulter</a></li>
                     </ul>                 
                 </li>
                 <li class=""><a><i class="fa fa-money "></i> Finance 

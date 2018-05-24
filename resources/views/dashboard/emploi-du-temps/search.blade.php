@@ -1,13 +1,13 @@
 @extends('templates.app')
 @section('title') Emploi du temps @endsection
-@section('section-title') Ajouter un horaire @endsection
+@section('section-title') Consulter un emploi de temps @endsection
 @section('content')
     <div class='row'>
         <div class="col-md-5 col-md-offset-3 col-sm-6 col-sm-offset-3 col-xs-12">
             <div class="panel panel-default">
                 <div class="panel-body">
                     <div class="x-content">
-                        {!! Form::open(['route' => ['horaire.second-step.go'], 'method' => 'POST']) !!}
+                        {!! Form::open(['route' => ['emploi-du-temps.search.go'], 'method' => 'POST']) !!}
                         <div class="col-md-12 form-group mb-1{{ $errors->has('classe') ? ' has-error' : '' }}">
                             <label class="control-label col-md-12 col-sm-12 col-xs-12" for="classe">
                                 Selectionnez la classe

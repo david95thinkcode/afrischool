@@ -25,10 +25,10 @@ class StoreHoraireRequest extends FormRequest
     {
         return [
             'debut' => 'required|',
-            'fin' => 'required|',
-            
+            'fin' => 'required|',            
             'jour' => 'required|integer',
             'enseigner' => 'required|integer',
+            'classe' => 'required|integer'
         ];
     }
 }

@@ -16,7 +16,6 @@ Route::get('/', 'PublicPagesController@index')->name('home');
 Route::prefix('dashboard')->group(function () {
     Route::get('/', 'DashboardController@Home')->name('dashboard.home');
     Route::resource('etablissements', 'EtablissementController');
-    // Route::resource('emploi-du-temps', 'HoraireController');
     Route::resource('professeurs', 'ProfesseurController');
     Route::resource('niveaux', 'NiveauController');
     Route::resource('classe', 'ClasseController');

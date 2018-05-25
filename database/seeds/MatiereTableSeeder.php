@@ -15,14 +15,26 @@ class MatiereTableSeeder extends Seeder
 
         DB::table('matieres')->insert([
             [
+                'intitule' => 'Science Physique Chimie et Technologies (SPCT)'
+            ],
+            [
+                'intitule' => 'Mathématiques'
+            ],
+            [
+                'intitule' => 'Informatique'
+            ],
+            [
+                'intitule' => 'Science de la Vie et de la terre (SVT)'
+            ],
+            [
                 'intitule' => 'Anglais'
             ],
             [
                 'intitule' => 'Fongbé'
             ],
             [
-                'intitule' => 'Eléctricité'
-            ]
+                'intitule' => 'Education Physique et Sportive'
+            ],
         ]);
     }
 }

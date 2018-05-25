@@ -44,6 +44,16 @@ class ProfesseurTableSeeder extends Seeder
                 'prof_email' => 'test@mail.io',
                 'prof_date_naissance' => '1990-02-19',
                 'prof_nationalite' => 'Bénin'
+            ],
+            [
+                'id' => 4,
+                'prof_nom' => 'DOSSA',
+                'prof_prenoms' => 'Christian',
+                'prof_sexe' => "Masculin",
+                'prof_tel' => '002596521684',
+                'prof_email' => 'doss@ecolemail.com',
+                'prof_date_naissance' => '1990-02-19',
+                'prof_nationalite' => 'Bénin'
             ]
         ]);
     }

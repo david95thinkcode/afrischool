@@ -37,7 +37,7 @@ class HoraireController extends Controller
     }
 
     /**
-     * Retourne l'emploie du temps complet d'une classe donnée
+     * Retourne l'emploi du temps complet d'une classe donnée
      */
     public function showAllForClasse($classe)
     {

@@ -17,6 +17,7 @@
                     <ul class="nav child_menu">
                         <li><a href="{{ route('inscriptions.create') }}">Créer</a></li>
                         <li><a href="{{ route('inscriptions.index') }}">Liste par classe</a></li>
+                        <li><a href="{{route('eleve.reste.versement')}}">Paiement scolarité</a></li>
                         <li><a href="#">...........</a></li>
                     </ul>
                 </li>

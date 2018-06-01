@@ -21,7 +21,15 @@ Route::prefix('dashboard')->group(function () {
     Route::resource('classe', 'ClasseController');
     Route::resource('matieres', 'MatiereController');
     Route::resource('enseigner', 'EnseignerController');
+
     Route::resource('inscriptions', 'InscriptionController');
+    Route::get('inscription/parent-eleve', 'InscriptionController@indexParent')->name('eleve.parent.index');
+    Route::post('inscription/parent-eleve', 'InscriptionController@sessionParent')->name('eleve.parent.create');
+    Route::get('inscription/scolarite-eleve', 'InscriptionController@indexScolarite')->name('eleve.scolarite.index');
+    Route::post('inscription/scolarite-eleve', 'InscriptionController@sessionScolarite')->name('eleve.scolarite.create');
+    Route::get('reinscription/ancien/{id}', 'InscriptionController@indexAncien')->where('id', '[0-9]+')->name('reinscription.index');
+    Route::post('reinsciption/paiement', 'InscriptionController@paiement')->name('reinscription.paiement');
+
     Route::get('notes/selection-classe', 'NoteController@create')->name('notes.create');
     Route::post('notes/second-step', 'NoteController@goToSecondStep')->name('notes.classe.second');
     Route::post('notes/fird-step', 'NoteController@lastStep')->name('notes.classe.fird');
@@ -34,6 +42,12 @@ Route::prefix('dashboard')->group(function () {
         
         Route::post('last-step', 'MatiereController@searchForClasse')
             ->name('notes.store.last-step');
+    });
+
+    route::prefix('scolarite')->group(function(){
+        route::get('/', 'EleveController@listeInsolder')->name('eleve.reste.versement');
+        route::get('paiement-scolarite/{inscrit}/{eleve}', 'EleveController@indexsolderScolarite')->name('eleve.solder.scolarite');
+        route::post('paiement-scolarite', 'EleveController@solderScolarite')->where('inscrit', '[0-9]+')->name('eleve.solder');
     });
 
     /**
@@ -57,10 +71,10 @@ Route::prefix('dashboard')->group(function () {
     });
 
     // Professeurs
-    Route::prefix('professeur/')->group(function () {
+    Route::prefix('professeur')->group(function () {
         Route::get('tous', 'ProfesseurController@listAll')
             ->name('professeurs.list');
-        Route::post('par-classe', 'ProfesseurController@list')
+        Route::post('par-classe', 'ProfesseurController@listProfesseur')
             ->name('classe.professeurs.list');
 
         Route::resource('diplomes', 'DiplomeController');
@@ -75,7 +89,7 @@ Route::prefix('dashboard')->group(function () {
 
     Route::prefix('inscriptions-enregistres')->group(function () {
 
-        Route::get('/classes/{classe}', 'InscriptionController@showForClasse')
+        Route::get('classes/{classe}', 'InscriptionController@showForClasse')
             ->name('inscriptions.classe.show');
 
         Route::post('/', 'InscriptionController@searchForClasse');
@@ -84,8 +98,7 @@ Route::prefix('dashboard')->group(function () {
     // Activation
     Route::prefix('activate')->group(function () {
         Route::get('etablissement/{etablissement}', 'EtablissementController@activate')
-            ->where('etablissement', '[0-9]+')
-            ->name('etablissements.activate');
+            ->where('etablissement', '[0-9]+')->name('etablissements.activate');
     });
 
     /*users*/

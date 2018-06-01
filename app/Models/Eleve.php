@@ -25,4 +25,9 @@ class Eleve extends Model
     {
         return $this->hasMany('App\Models\Inscription');
     }
+
+    public function inscriptionNonSolder()
+    {
+        return $this->inscription()->where('reste', '>', 0);
+    }
 }

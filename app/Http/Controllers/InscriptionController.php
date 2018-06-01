@@ -2,18 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ScoolariteRequest;
 use Illuminate\Http\Request;
 use DB;
+use App\Traits\TraitSms;
 use App\Models\Classe;
 use App\Http\Requests\StoreInscriptionRequest;
+use App\Http\Requests\SearchInscriptionRequest;
+use App\Http\Requests\ReinsciptionRequest;
+use App\Http\Requests\ParentRequest;
 use App\Models\ParentEleve;
 use App\Models\Eleve;
+use App\Models\AnneeScolaire;
 use App\Models\Inscription;
 use Illuminate\Support\Facades\Redirect;
-use App\Http\Requests\SearchInscriptionRequest;
 
 class InscriptionController extends Controller
 {
+    use TraitSms;
     /**
      * Display a listing of the resource.
      *
@@ -45,16 +51,98 @@ class InscriptionController extends Controller
      */
     public function store(StoreInscriptionRequest $req)
     {
-        $parent = $this->storeParent($req->nom_parent, $req->prenoms_parent, $req->sexe_parent, $req->tel_parent, $req->mail_parent);
-        $eleve = $this->storeEleve($parent->id, $req->nom, $req->prenoms, $req->sexe, $req->date_naissance, $req->ancien, $req->redoublant, $req->ecole_provenance, $req->person_a_contacter_nom, $req->person_a_contacter_tel, $req->person_a_contacter_lien);
+        session()->forget('eleve');
+        session()->put('eleve',
+            $req->only(['nom', 'prenoms', 'date_naissance', 'sexe', 'ancien',
+                'ecole_provenance', 'classe', 'redoublant']));
 
-        $inscription = new Inscription();
-        $inscription->eleve_id = $eleve->id;
-        $inscription->classe_id = $req->classe;
+        return Redirect::route('eleve.parent.index');
+    }
 
-        $inscription->save();
+    public function indexParent()
+    {
+        return view('inscriptions.info-parent');
+    }
 
-        return Redirect::route('inscriptions.index')->with('status', 'Elève inscrit avec succès !');
+    public function sessionParent(ParentRequest $req)
+    {
+        session()->forget('parent');
+        session()->put('parent',
+            $req->only(['person_a_contacter_nom', 'person_a_contacter_tel', 'person_a_contacter_lien',
+                'nom_parent', 'prenoms_parent', 'sexe_parent', 'tel_parent', 'mail_parent']));
+
+        return Redirect::route('eleve.scolarite.index');
+    }
+
+    public function indexScolarite()
+    {
+        $annee_scolaires =  AnneeScolaire::all();
+        return view('inscriptions.scolarite', compact('annee_scolaires'));
+    }
+
+    public function sessionScolarite(ScoolariteRequest $req)
+    {
+        $parent = $this->storeParent(session('parent.nom_parent'), session('parent.prenoms_parent'),
+            session('parent.sexe_parent'), session('parent.tel_parent'),
+            session('parent.mail_parent'));
+
+        $eleve = $this->storeEleve($parent->id, session('eleve.nom'), session('eleve.prenoms'),
+            session('eleve.sexe'), session('eleve.date_naissance'), session('eleve.ancien'),
+            session('eleve.redoublant'), session('eleve.ecole_provenance'),
+            session('parent.person_a_contacter_nom'), session('parent.person_a_contacter_tel'),
+            session('parent.person_a_contacter_lien'));
+
+        $inscription = $this->storeScolarite($eleve->id, session('eleve.classe'), $req->annee_scolaire,
+            $req->montant_verser, $req->montant_scolarite, $req->date_inscription);
+        $anneedebut = \Carbon\Carbon::parse($inscription->anneescolaire->an_date_debut)->format('Y');
+        $anneefin = \Carbon\Carbon::parse($inscription->anneescolaire->an_date_fin)->format('Y');
+        $message = $inscription->montant_verse.' fcfa a été payé par '
+            .$eleve->nom.' '.$eleve->prenoms." pour l'annee scolaire "
+            .$anneedebut.' - '.$anneefin.' reste '.$inscription->reste." fcfa";
+        $numero =  '229'.$parent->par_tel;
+        $ecole = env('SCHOOL_NAME', 'AfrikaSchool');
+        $this->senderParent($ecole, $numero, $message);
+
+        return Redirect::route('inscriptions.create')->with('status', 'Elève inscrit avec succès !');
+    }
+
+    /**
+     * Formulaire de saisie de scolarité
+     */
+    public function indexAncien($id)
+    {
+        session()->forget('eleve');
+        session()->put('eleve', $id);
+        $annee_scolaires =  AnneeScolaire::all();
+        $classes = Classe::all();
+        return view('inscriptions.paiement', compact('annee_scolaires', 'classes'));
+    }
+
+    /**
+     * Reincription d'ancien élève
+     */
+    public function paiement(ReinsciptionRequest $req)
+    {
+        $eleve = Eleve::findOrFail(session('eleve'));
+        $inscription = $this->storeScolarite($eleve->id, $req->classe, $req->annee_scolaire,
+            $req->montant_verser, $req->montant_scolarite, $req->date_inscription);
+
+        if($inscription->reste == 0)
+        {
+            $inscription->est_solder = true;
+            $inscription->save();
+        }
+
+        $anneedebut = \Carbon\Carbon::parse($inscription->anneescolaire->an_date_debut)->format('Y');
+        $anneefin = \Carbon\Carbon::parse($inscription->anneescolaire->an_date_fin)->format('Y');
+        $message = $inscription->montant_verse.' fcfa a été payé par '
+            .$eleve->nom.' '.$eleve->prenoms." pour l'annee scolaire "
+            .$anneedebut.' - '.$anneefin.' reste '.$inscription->reste." fcfa";
+        $numero =  '229'.$eleve->parents->par_tel;
+        $ecole = env('SCHOOL_NAME', 'AfrikaSchool');
+        $this->senderParent($ecole, $numero, $message);
+
+        return Redirect::route('inscriptions.create')->with('status', 'Elève inscrit avec succès !');
     }
 
     /**
@@ -137,9 +225,6 @@ class InscriptionController extends Controller
         //
     }
 
-    /**
-     *
-     */
     public function storeEleve($parent_id, $nom, $prenom, $sexe, $date, $ancien, $redoublant, $ecole, $pac_nom, $pac_tel, $pac_lien) {
 
         $eleve = new Eleve();
@@ -171,9 +256,6 @@ class InscriptionController extends Controller
         return $eleve;
     }
 
-    /**
-     *
-     */
     public function storeParent($nom, $prenom, $sexe, $tel, $email)
     {
         $parent = new ParentEleve();
@@ -186,5 +268,21 @@ class InscriptionController extends Controller
         $parent->save();
 
         return $parent;
+    }
+
+    public function storeScolarite($eleve, $classe, $anne_scolaire, $verser, $scolarite, $date_inscription)
+    {
+        $inscription = new Inscription();
+        $inscription->eleve_id = $eleve;
+        $inscription->classe_id = $classe;
+        $inscription->annee_scolaire_id = $anne_scolaire;
+        $inscription->montant_scolarite = $scolarite;
+        $inscription->montant_verse = $verser;
+        $inscription->reste = $scolarite - $verser;
+        $inscription->date_inscription = $date_inscription;
+
+        $inscription->save();
+
+        return $inscription;
     }
 }

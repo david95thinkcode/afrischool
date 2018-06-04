@@ -9,7 +9,7 @@ class Note extends Model
     protected $table = 'notes';
 
     protected $fillable = [
-        'evaluation_id','trimestre_id','matiere_id','classe_id','eleve_id', 'not_note', 'annee_scolaire_id'
+        'types_evaluation_id','trimestre_id','matiere_id','classe_id','eleve_id', 'not_note', 'annee_scolaire_id'
     ];
 
     public $timestamps = true;

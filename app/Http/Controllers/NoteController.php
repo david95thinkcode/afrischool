@@ -50,7 +50,7 @@ class NoteController extends Controller
         $matiere = Matiere::findOrFail($req->matiere);
         session(['libelleMatiere' => $matiere->intitule]);
         $typeEvaluation = TypeEvaluation::findOrFail($req->typeEv);
-        session(['evaluation_id' => $req->typeEv]);
+        session(['types_evaluation_id' => $req->typeEv]);
         session(['libelleEvaluation' => $typeEvaluation->tev_libelle]);
         $eleves = Inscription::with('eleve')
             ->where(['inscriptions.classe_id' => session('classe'),
@@ -64,12 +64,6 @@ class NoteController extends Controller
                     'annee_scolaire_id' => session('annee_scolaire')])
             ->get();
 
-        /*$eleves = DB::table('eleves')
-            ->leftJoin('eleves', 'eleves.id', '=', 'inscriptions.eleves_id')
-            ->where(['inscriptions.classe_id' => session('classe'),
-                'inscriptions.annee_scolaire_id' => session('annee_scolaire'),])
-            ->get();*/
-        /*dd($eleves, $notes);*/
         return view('dashboard.notes.create-last-step', compact('eleves', 'notes'));
     }
 
@@ -77,7 +71,7 @@ class NoteController extends Controller
     {
 
         $note = Note::where(['eleve_id' =>$req->pk,
-            'evaluation_id' => session('evaluation_id'),
+            'types_evaluation_id' => session('types_evaluation_id'),
             'trimestre_id' => session('trimestre'),
             'classe_id' => session('classe'),
             'matiere_id' => session('matiere'),
@@ -85,7 +79,7 @@ class NoteController extends Controller
 
         if(is_null($note) ){
             Note::create([
-                'evaluation_id' => session('evaluation_id'),
+                'types_evaluation_id' => session('types_evaluation_id'),
                 'trimestre_id' => session('trimestre'),
                 'matiere_id' => session('matiere'),
                 'classe_id' => session('classe'),

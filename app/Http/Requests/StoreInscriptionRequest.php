@@ -31,18 +31,8 @@ class StoreInscriptionRequest extends FormRequest
             
             'ancien' => 'required',
             'ecole_provenance' => '',
-            'classe' => '',
-            'redoublant' => '',
-
-            'nom_parent' => 'required|string',
-            'prenoms_parent' => 'required|string',
-            'tel_parent' => 'required|string',
-            'mail_parent' => '',
-            'sexe_parent' => '',
-
-            'person_a_contacter_nom' => 'required|string',
-            'person_a_contacter_tel' => 'required|string',
-            'person_a_contacter_lien' => 'required|string'
+            'classe' => 'required',
+            'redoublant' => ''
         ];
     }
 

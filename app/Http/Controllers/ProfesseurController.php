@@ -57,12 +57,12 @@ class ProfesseurController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Professeur  $professeur
+     * @param  App\Models\Professeur  $professeur
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        $p = Professeur::findorFail($id);
+        $p = Professeur::findOrFail($id);
 
         return view('dashboard.professeurs.show', compact('p'));
     }
@@ -70,7 +70,7 @@ class ProfesseurController extends Controller
     /**
      * Retourne une collection de professeurs pour une classe donnée
      */
-    public function list(SearchProfesseurAboutClasseRequest $req)
+    public function listProfesseur(SearchProfesseurAboutClasseRequest $req)
     {
         $classe = Classe::findOrFail($req->classe);
         $ens = DB::table('enseigner')
@@ -97,7 +97,7 @@ class ProfesseurController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Professeur  $professeur
+     * @param  App\Professeur  $professeur
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -138,10 +138,8 @@ class ProfesseurController extends Controller
      */
     public function destroy($id)
     {
-        (Professeur::findorFail($id))->delete();
+        Professeur::findorFail($id)->delete();
 
-        return Redirect::route('professeurs.index')
-                ->with('status', 'Supprimé avec succès !');
-
+        return Redirect::route('professeurs.index')->with('status', 'Supprimé avec succès !');
     }
 }

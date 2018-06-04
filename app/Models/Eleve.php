@@ -30,4 +30,13 @@ class Eleve extends Model
     {
         return $this->inscription()->where('reste', '>', 0);
     }
+
+    /**
+     * eleve ayant une note dans cette classe
+     */
+    public function eleves()
+    {
+        return $this->belongsToMany(Eleve::class, 'notes', 'classe_id', 'eleve_id');
+    }
+
 }

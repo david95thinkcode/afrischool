@@ -6,6 +6,7 @@ use App\Http\Requests\ScoolariteRequest;
 use Illuminate\Http\Request;
 use DB;
 use App\Traits\TraitSms;
+use App\Traits\TraiteText;
 use App\Models\Classe;
 use App\Http\Requests\StoreInscriptionRequest;
 use App\Http\Requests\SearchInscriptionRequest;
@@ -19,7 +20,7 @@ use Illuminate\Support\Facades\Redirect;
 
 class InscriptionController extends Controller
 {
-    use TraitSms;
+    use TraitSms, TraiteText;
     /**
      * Display a listing of the resource.
      *
@@ -82,8 +83,10 @@ class InscriptionController extends Controller
 
     public function sessionScolarite(ScoolariteRequest $req)
     {
+        $mobileFiltrer = $this->deleteSpace(session('parent.tel_parent'));
+        $tel_parent = $this->deleteIndicatif($mobileFiltrer);
         $parent = $this->storeParent(session('parent.nom_parent'), session('parent.prenoms_parent'),
-            session('parent.sexe_parent'), session('parent.tel_parent'),
+            session('parent.sexe_parent'), $tel_parent,
             session('parent.mail_parent'));
 
         $eleve = $this->storeEleve($parent->id, session('eleve.nom'), session('eleve.prenoms'),
@@ -232,7 +235,7 @@ class InscriptionController extends Controller
         if ($ancien == 1) {
             $eleve->ancien = true;
         } else {
-            $eleve->ancien == false;
+            $eleve->ancien == true;
             $eleve->ecole_provenance = $ecole;
         }
 

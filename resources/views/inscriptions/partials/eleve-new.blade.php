@@ -49,7 +49,7 @@
             <input class="form-check-input" type="radio" id='redoublant-oui' name="redoublant" value="1">
             <label class="form-check-label" for="redoublant-oui">Oui</label>
 
-            <input class="form-check-input" type="radio" id="redoublant-non" name="redoublant" value="0">
+            <input class="form-check-input" type="radio" id="redoublant-non" name="redoublant" value="0" checked>
             <label class="form-check-label" for="redoublant-non">Non</label>
         </div>
     </div>

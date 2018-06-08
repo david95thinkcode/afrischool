@@ -17,7 +17,7 @@
         </div>
 
         <div class="col-md-12 col-xs-12 mt-1">
-            <table class="table table-bordered" id="table_note">
+            <table class="table table-bordered jambo_table" id="table_note">
                 <thead>
                 <tr>
                     <td>Nom</td>
@@ -62,15 +62,22 @@
 @endsection
 
 @section('custom-css')
+    <link rel="stylesheet" href="{{asset('css/dataTables.bootstrap.min.css')}}">
     <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css"
           rel="stylesheet"/>
 @endsection
 @section('custom-js')
+    <script src="{{asset('js/jquery.dataTables.js')}}"></script>
+    <script src="{{asset('js/dataTables.bootstrap.min.js')}}"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js">
     </script>
     <script type="text/javascript">
         $(document).ready( function () {
-            $('#table_note').DataTable();
+            $('#table_note').dataTable({
+                "language": {
+                    "url": "{{asset('lang/French.json')}}"
+                }
+            });
         } );
         $(function () {
             //toggle `popup` / `inline` mode

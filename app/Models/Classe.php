@@ -57,4 +57,12 @@ class Classe extends Model
     {
         return $this->hasMany('App\Models\Note');
     }
+
+    /**
+     * eleve ayant une note dans cette classe
+     */
+    public function eleves()
+    {
+        return $this->belongsToMany(Eleve::class, 'notes', 'classe_id', 'eleve_id');
+    }
 }

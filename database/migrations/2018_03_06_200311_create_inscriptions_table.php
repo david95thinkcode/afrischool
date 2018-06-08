@@ -15,7 +15,11 @@ class CreateInscriptionsTable extends Migration
     {
         Schema::create('inscriptions', function (Blueprint $table) {
             $table->increments('id');
-            
+            $table->double('montant_scolarite')->nullable();
+            $table->double('montant_verse')->nullable();
+            $table->double('reste')->nullable();
+            $table->boolean('est_solder');
+            $table->date('date_inscription')->nullable();
             $table->unsignedInteger('eleve_id');
             $table->foreign('eleve_id')
                     ->references('id')

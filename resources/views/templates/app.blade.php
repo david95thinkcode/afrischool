@@ -9,13 +9,11 @@
     <link rel="icon" href="#">
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" 
-    integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" 
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
     integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-    <link href="{{mix('css/app.css')}}" rel="stylesheet"> 
+    <link href="{{mix('css/app.css')}}" rel="stylesheet">
     <link href="{{asset('css/jquery.mCustomScrollbar.min.css')}}" rel="stylesheet"> 
-    <link href="{{asset('css/custom.min.css')}}" rel="stylesheet"> 
+    <link href="{{asset('css/custom.min.css')}}" rel="stylesheet">
     @yield('custom-css')
     <link href="{{asset('css/ie10-viewport-bug-workaround.css')}}" rel="stylesheet"> 
     <!--[if IE]>
@@ -39,48 +37,48 @@
 </head>
 
 <body class="nav-md">
-  <div class="container body">
-    <div class="main_container">
-        @include('partials._sidemenu')
+    <div class="container body">
+        <div class="main_container">
+            @include('partials._sidemenu')
 
-        <!-- top navigation -->
-        @include('partials._topnav')
-        <!-- /top navigation -->
+            <!-- top navigation -->
+            @include('partials._topnav')
+            <!-- /top navigation -->
 
-        <!-- page content -->
-        <div class="right_col" role="main">
-            <div class="">
-                <div class="row">
-                    <h3 class="text-center">@yield('section-title')</h3> 
-                    <hr>                   
-                </div>
-
-                <div class="row">
-                    <div class="col-sm-offset-3 col-sm-6">
-                        @include('partials.session-messages')
+            <!-- page content -->
+            <div class="right_col" role="main">
+                <div class="">
+                    <div class="row">
+                        <h3 class="text-center">@yield('section-title')</h3>
+                        <hr>
                     </div>
-                </div>
-                
-                <div class="row">
-                    @yield('content')
-                </div>                
-                
-            </div>
-        </div>
-        <!-- /page content -->
 
-        <!-- footer content -->
-        @include('partials.footer')
-        <!-- /footer content -->
+                    <div class="row">
+                        <div class="col-sm-offset-3 col-sm-6">
+                            @include('partials.session-messages')
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        @yield('content')
+                    </div>
+
+                </div>
+            </div>
+            <!-- /page content -->
+
+            <!-- footer content -->
+            @include('partials.footer')
+            <!-- /footer content -->
+        </div>
     </div>
-  </div>
     
     <!-- Scripts -->
     <script src="{{mix('js/app.js')}}"></script>
     <script src="{{asset('js/jquery.mCustomScrollbar.concat.min.js')}}"></script>
     <script src="{{asset('js/custom.min.js')}}"></script>
-    @include('flashy::message')
     @yield('custom-js')
+    @include('flashy::message')
     <script src="{{asset('js/ie10-viewport-bug-workaround.js')}}"></script>
 </body>
 

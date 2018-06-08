@@ -21,23 +21,41 @@ Route::prefix('dashboard')->group(function () {
     Route::resource('classe', 'ClasseController');
     Route::resource('matieres', 'MatiereController');
     Route::resource('enseigner', 'EnseignerController');
+    //inscription
     Route::resource('inscriptions', 'InscriptionController');
+    Route::get('inscription/parent-eleve', 'InscriptionController@indexParent')->name('eleve.parent.index');
+    Route::post('inscription/parent-eleve', 'InscriptionController@sessionParent')->name('eleve.parent.create');
+    Route::get('inscription/scolarite-eleve', 'InscriptionController@indexScolarite')->name('eleve.scolarite.index');
+    Route::post('inscription/scolarite-eleve', 'InscriptionController@sessionScolarite')->name('eleve.scolarite.create');
+    Route::get('reinscription/ancien/{id}', 'InscriptionController@indexAncien')->where('id', '[0-9]+')->name('reinscription.index');
+    Route::post('reinsciption/paiement', 'InscriptionController@paiement')->name('reinscription.paiement');
+    Route::prefix('inscription-eleve')->group(function () {
+        Route::get('/{type}', 'EleveController@create')->name('eleves.create');
+    });
+    Route::prefix('inscriptions-enregistres')->group(function () {
+
+        Route::get('classes/{classe}', 'InscriptionController@showForClasse')
+            ->name('inscriptions.classe.show');
+
+        Route::post('/', 'InscriptionController@searchForClasse');
+    });
+    //gestion des notes
     Route::get('notes/selection-classe', 'NoteController@create')->name('notes.create');
     Route::post('notes/second-step', 'NoteController@goToSecondStep')->name('notes.classe.second');
     Route::post('notes/fird-step', 'NoteController@lastStep')->name('notes.classe.fird');
     Route::post('notes/save', 'NoteController@store')->name('notes.req');
-
-    /**
-     * Notes
-     */
+    // Notes
     Route::prefix('notes')->group(function () {
         Route::post('last-step', 'MatiereController@searchForClasse')
             ->name('notes.store.last-step');
     });
-
-    /**
-     * Matiere
-     */
+    //gestion scolarité
+    route::prefix('scolarite')->group(function(){
+        route::get('/', 'EleveController@listeInsolder')->name('eleve.reste.versement');
+        route::get('paiement-scolarite/{inscrit}/{eleve}', 'EleveController@indexsolderScolarite')->name('eleve.solder.scolarite');
+        route::post('paiement-scolarite', 'EleveController@solderScolarite')->where('inscrit', '[0-9]+')->name('eleve.solder');
+    });
+    //Matiere
     Route::prefix('matiere')->group(function () {
 
         // Classes
@@ -51,12 +69,11 @@ Route::prefix('dashboard')->group(function () {
         });
 
     });
-
     // Professeurs
-    Route::prefix('professeur/')->group(function () {
+    Route::prefix('professeur')->group(function () {
         Route::get('tous', 'ProfesseurController@listAll')
             ->name('professeurs.list');
-        Route::post('par-classe', 'ProfesseurController@list')
+        Route::post('par-classe', 'ProfesseurController@listProfesseur')
             ->name('classe.professeurs.list');
 
         Route::resource('diplomes', 'DiplomeController');
@@ -90,8 +107,7 @@ Route::prefix('dashboard')->group(function () {
     // Activation
     Route::prefix('activate')->group(function () {
         Route::get('etablissement/{etablissement}', 'EtablissementController@activate')
-            ->where('etablissement', '[0-9]+')
-            ->name('etablissements.activate');
+            ->where('etablissement', '[0-9]+')->name('etablissements.activate');
     });
 
     /*users*/
@@ -100,6 +116,15 @@ Route::prefix('dashboard')->group(function () {
         Route::get('users/{user}', 'UserController@show')->name('users.show');
         Route::get('users/{user}/edit', 'UserController@edit')->name('users.edit');
         Route::put('users/{user}', 'UserController@update')->name('users.update');
+    });
+
+    //Notifications
+    Route::prefix('notification')->group(function(){
+        Route::get('parents-eleves', 'NotificationController@indexForm')->name('notifier.user');
+        Route::post('parents-eleves', 'NotificationController@sendNotification')->name('notifier.user.send');
+        Route::get('notes-eleves', 'NotificationController@indexNotes')->name('notifier.notes');
+        Route::post('notes-eleves', 'NotificationController@sendNotes')->name('notifier.notes.send');
+
     });
 });
 

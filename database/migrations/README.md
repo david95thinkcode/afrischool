@@ -135,6 +135,10 @@ id|int
 eleve_id|int
 classe_id|int
 annee_scolaire_id|int
+montant_scolarite|double
+montant_verse|double
+reste|double
+est_solder|boolean
 
 - ### Professeur Principal
 ~~~~

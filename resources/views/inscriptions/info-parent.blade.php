@@ -1,14 +1,10 @@
 @extends('templates.app')
-@section('title') Elèves @endsection
+@section('title') Information des parents @endsection
 @section('section-title') Inscrire un élève @endsection
 @section('content')
     <div class="col-sm-12">
         <div class="x-content">
-            {!! Form::open(['action' => ['InscriptionController@store'], 'method' => 'POST']) !!}
-                <fieldset>
-                    <legend>Informations sur l'élève</legend>
-                    @include('inscriptions.partials.eleve-ancien')
-                </fieldset>
+            {!! Form::open(['action' => ['InscriptionController@sessionParent'], 'method' => 'POST']) !!}
 
                 <fieldset>
                     <legend>Informations sur un parent</legend>
@@ -22,7 +18,7 @@
 
                 <br>
                 <div class='form-group text-center'>
-                    {{ Form::submit("Enregistrer", array('class' => 'btn btn-success ')) }}
+                    {{ Form::submit("Suivant", array('class' => 'btn btn-success ')) }}
                 </div>
             {!! Form::close() !!}
         </div>

@@ -84,6 +84,7 @@ Route::prefix('dashboard')->group(function () {
         Route::post('consulter', 'HoraireController@showHoraires')->name('emploi-du-temps.search.go');
         Route::post('create/horaire', 'HoraireController@createSecondStep')->name('horaire.second-step.go');
         Route::post('create/horaire/store', 'HoraireController@store')->name('horaire.store');
+        Route::delete('delete/horaire/{horaire}', 'HoraireController@destroy')->name('horaire.destroy');
     });
 
     // Activation

@@ -31,7 +31,12 @@
                                     <td class="text-center"><strong>{{$itemValue->debut}} - {{$itemValue->fin}}</strong></td>
                                     <td class="text-center">{{$itemValue->intitule}}</td>
                                     <td class="text-center">{{$itemValue->prof_nom}} {{$itemValue->prof_prenoms}}</td>
-                                    <td class="text-center"><button class="btn btn-warning">Retirer du programme</button></td>
+                                    <td class="text-center">
+                                        <form action="{{ route('horaire.destroy', $itemValue->horaire_id) }}" method="POST" class='table-del-btn'>
+                                            <input type="hidden" name="_method" value="DELETE">
+                                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                        {!! Form::submit('Retirer du programme', array('class' => 'btn btn-warning')) !!}
+                                        </form>
                                 </tr>
                             @endforeach
                         @else

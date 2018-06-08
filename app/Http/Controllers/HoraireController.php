@@ -48,9 +48,9 @@ class HoraireController extends Controller
                     ->join('classes', 'enseigner.classe_id', '=', 'classes.id')
                     ->join('professeurs', 'enseigner.professeur_id', '=', 'professeurs.id')
                     ->join('horaires', 'horaires.enseigner_id', '=', 'enseigner.id')
-                    ->select('horaires.jour_id', 'horaires.debut', 'horaires.fin', 'matieres.intitule', 'professeurs.prof_nom', 'professeurs.prof_prenoms')
+                    ->select('horaires.id as horaire_id', 'horaires.jour_id', 'horaires.debut', 'horaires.fin', 'matieres.intitule', 'professeurs.prof_nom', 'professeurs.prof_prenoms')
                     ->get();
-        
+        // dd($horaires);
         $horairesByDay = [];
         $horairesByDay['lundi'] = $horaires->where('jour_id', '=', 1);
         $horairesByDay['mardi'] = $horaires->where('jour_id', '=', 2);
@@ -210,8 +210,13 @@ class HoraireController extends Controller
      * @param  \App\Horaire  $horaire
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Horaire $horaire)
+    public function destroy($id)
     {
-        //
+        $horaire = Horaire::findOrFail($id);
+        $classe =  $horaire->enseigner->classe;
+        $horaire->delete();
+        
+        return Redirect::route('emploi-du-temps.afficher', ['classe' => $classe])
+                ->with('status', ' Un programme a été retiré avec succès !');;
     }
 }

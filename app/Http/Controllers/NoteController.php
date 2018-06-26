@@ -41,7 +41,7 @@ class NoteController extends Controller
         session(['annee_scolaire' => $annee_scolaire->id]);
         $typeEv = TypeEvaluation::all();
         $matieres = Enseigner::with('matiere')->where(['classe_id' => $classe->id, 'annee_scolaire_id' => $req->anneeScolaire])->get();
-
+        
         return view('dashboard.notes.create-second-step', compact('classe', 'trimestre', 'typeEv', 'matieres', 'eleves'));
     }
 

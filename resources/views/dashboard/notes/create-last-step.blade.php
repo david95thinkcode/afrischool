@@ -10,7 +10,7 @@
                         <div class="col-md-6"><strong>Classe :</strong> {{session('libelleClasse')}}</div>
                         <div class="col-md-6"><strong>Trimestre :</strong> {{session('trimestre')}} trimestre</div>
                         <div class="col-md-6"><strong>Matière :</strong> {{session('libelleMatiere')}}</div>
-                        <div class="col-md-6"><strong>Matière :</strong> {{session('libelleEvaluation')}}</div>
+                        <div class="col-md-6"><strong>Evaluation :</strong> {{session('libelleEvaluation')}}</div>
                     </div>
                 </div>
             </div>
@@ -29,8 +29,8 @@
                 <tbody>
                 @php
                     $eleves = $eleves->unique(function ($item) {
-                                                            return $item->eleve->nom.$item->eleve->prenoms;
-                                                        });
+                        return $item->eleve->nom.$item->eleve->prenoms;
+                    });
                 @endphp
                 @foreach($eleves as $eleve)
                     <tr>

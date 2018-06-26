@@ -303,6 +303,7 @@ class ComposerStaticInit6156c0f747ab86bed04a46cc77e88f7f
 
     public static $classMap = array (
         'AdresseTableSeeder' => __DIR__ . '/../..' . '/database/seeds/AdresseTableSeeder.php',
+        'AnneeScolaireTableSeeder' => __DIR__ . '/../..' . '/database/seeds/AnneeScolaireTableSeeder.php',
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
         'App\\Http\\Controllers\\Auth\\ForgotPasswordController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/ForgotPasswordController.php',
@@ -311,6 +312,7 @@ class ComposerStaticInit6156c0f747ab86bed04a46cc77e88f7f
         'App\\Http\\Controllers\\Auth\\ResetPasswordController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/ResetPasswordController.php',
         'App\\Http\\Controllers\\CategorieEtsController' => __DIR__ . '/../..' . '/app/Http/Controllers/CategorieEtsController.php',
         'App\\Http\\Controllers\\ClasseController' => __DIR__ . '/../..' . '/app/Http/Controllers/ClasseController.php',
+        'App\\Http\\Controllers\\ConsultationController' => __DIR__ . '/../..' . '/app/Http/Controllers/ConsultationController.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
         'App\\Http\\Controllers\\DashboardController' => __DIR__ . '/../..' . '/app/Http/Controllers/DashboardController.php',
         'App\\Http\\Controllers\\DiplomeController' => __DIR__ . '/../..' . '/app/Http/Controllers/DiplomeController.php',

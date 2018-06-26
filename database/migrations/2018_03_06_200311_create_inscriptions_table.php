@@ -18,7 +18,7 @@ class CreateInscriptionsTable extends Migration
             $table->double('montant_scolarite')->nullable();
             $table->double('montant_verse')->nullable();
             $table->double('reste')->nullable();
-            $table->boolean('est_solder');
+            $table->boolean('est_solder')->default(false);
             $table->date('date_inscription')->nullable();
             $table->unsignedInteger('eleve_id');
             $table->foreign('eleve_id')

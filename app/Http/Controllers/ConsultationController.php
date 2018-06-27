@@ -8,6 +8,9 @@ use App\Models\ParentEleve;
 use App\Models\Eleve;
 use App\Models\Note;
 use App\Models\Trimestre;
+use App\Models\Matiere;
+use App\Models\Enseigner;
+use App\Models\AnneeScolaire;
 
 class ConsultationController extends Controller
 {
@@ -28,13 +31,35 @@ class ConsultationController extends Controller
         
     }
     
+    /**
+     * Retourne les notes de l'enfant sur une vue
+     */
     public function notes($ideleve)
     {
-        $enfant = Eleve::findOrFail($ideleve);
-        $notes = Note::with('matiere', 'evaluation')->where('eleve_id', $enfant->id)->get();
+        $matiereWithNotes = [];
+        $anneScolaire = AnneeScolaire::where('an_ouverte', true)->first();
         $trimestres = Trimestre::all();
-
-        return view('parents-dashboard.enfant-note', compact('enfant', 'notes', 'trimestres'));
+        $enfant = Eleve::with(['inscription' => function($query) use ($anneScolaire) {
+            $query->where('annee_scolaire_id', $anneScolaire->id); }])
+            ->where('id', $ideleve)
+            ->first();
+        
+        // Récup les matières enseignées dans la classe de l'éléève
+        $matieresEnseignes = Enseigner::where([
+            ['classe_id', '=', $enfant->inscription[0]->classe_id], 
+            ['annee_scolaire_id', $anneScolaire->id]
+            ])->get();        
+        
+        // Récup les notes de chaque matières pour l'élève
+        foreach ($matieresEnseignes as $m) {
+            $n = Matiere::with(['notes' => function($query) use ($enfant) {
+                $query->where('eleve_id', $enfant->id); }])
+                ->where('id', $m->id)
+                ->first();
+            array_push($matiereWithNotes, $n);
+        }
+        
+        return view('parents-dashboard.enfant-note', compact('enfant', 'matiereWithNotes', 'trimestres'));
     }
 
     public function absence($ideleve)

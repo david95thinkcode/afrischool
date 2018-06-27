@@ -14,9 +14,7 @@
 
 @section('content')
   <div class="container">
-        {{-- @foreach ($notes as $n)
-        @endforeach --}}
-        
+      
         @foreach ($trimestres as $t)
           <div class="row">
             <div class="col-sm-12">
@@ -26,7 +24,7 @@
                         {{-- <h5 class="card-title">Special title treatment</h5> --}}
                         <div>
                             <table class="table">
-                                <thead class="thead-dark">
+                                <thead class="thead-dark table-bordered">
                                     <tr>
                                         <th scope="col">Matière</th>
                                         <th scope="col">Interrogations</th>
@@ -35,18 +33,36 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($notes as $n)
-                                        @if ($n->trimestre_id == $t->id)
-                                        <th scope="row">{!! $n->matiere->intitule !!}</th>
-                                        {{-- TODO --}}
-                                        <td>Mark</td>
-                                        <td>Otto</td>
-                                        <td>@mdo</td>
-                                            
-                                        @endif
-                                    @endforeach
+                                    {{-- Each matieres --}}
+                                    @foreach ($matiereWithNotes as $m)
                                     <tr>
+                                        <th scope="row">{!! $m->intitule !!}</th>
+                                        {{-- Interro notes --}}
+                                        <td class="text-center">
+                                            @foreach ($m->notes as $n)
+                                                @if (($n->types_evaluation_id == 1) && ($n->trimestre_id == $t->id))
+                                                    {!! $n->not_note !!} 
+                                                @endif
+                                            @endforeach
+                                        </td>
+                                        {{-- Devoir notes --}}
+                                        <td class="text-center">
+                                            @foreach ($m->notes as $n)
+                                                @if (($n->types_evaluation_id == 2) && ($n->trimestre_id == $t->id))
+                                                    {!! $n->not_note !!} 
+                                                @endif
+                                            @endforeach
+                                        </td>
+                                        {{-- Examen notes --}}
+                                        <td class="text-center">
+                                            @foreach ($m->notes as $n)
+                                                @if (($n->types_evaluation_id == 3) && ($n->trimestre_id == $t->id))
+                                                    {!! $n->not_note !!} 
+                                                @endif
+                                            @endforeach
+                                        </td>
                                     </tr>                                    
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -56,4 +72,12 @@
           </div>
         @endforeach
     </div>
+@endsection
+
+@section('custom-css')
+    <style>
+        .card-body {
+            padding: 0px;
+        }
+    </style>
 @endsection

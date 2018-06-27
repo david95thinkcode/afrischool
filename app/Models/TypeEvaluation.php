@@ -13,8 +13,8 @@ class TypeEvaluation extends Model
     /**
      * Plusieurs évaluations appartiennent à un même type d'évaluation
      */
-    public function evaluations()
-    {
-        return $this->hasMany('App\Models\Evaluation');
-    }
+    // public function evaluations()
+    // {
+    //     return $this->hasMany('App\Models\Evaluation');
+    // }
 }

@@ -29,9 +29,9 @@ class Note extends Model
         return $this->belongsTo('App\Models\Trimestre');
     }
 
-    public function evaluation()
+    public function typeevaluation()
     {
-        return $this->belongsTo('App\Models\Evaluation');
+        return $this->belongsTo(TypeEvaluation::class, 'types_evaluation_id');
     }
 
     public function eleve()

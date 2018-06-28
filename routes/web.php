@@ -134,9 +134,6 @@ Route::prefix('dashboard')->group(function () {
 Route::prefix('consultation')->group(function(){
     Route::get('/', 'ConsultationController@choose')->name('consultation.choix');
     Route::get('enfant/{ideleve}', 'ConsultationController@home')->name('consultation.index');
-    Route::get('enfant/{ideleve}/notes', 'ConsultationController@notes')->name('consultation.notes');
-    Route::get('enfant/{ideleve}/absence', 'ConsultationController@absence')->name('consultation.absence');
-    Route::get('enfant/{ideleve}/scolarite', 'ConsultationController@scolarite')->name('consultation.scolarite');
 });
 
 /*

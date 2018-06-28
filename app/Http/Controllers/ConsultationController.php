@@ -20,21 +20,17 @@ class ConsultationController extends Controller
         // Affiche ses enfants
 
         // TODO: Récupérer l'identifiant du parent connecté
+
         $parent = ParentEleve::findOrFail(1); // par défaut en attendant fin du TODO
         $enfants = Eleve::where('parent_id', $parent->id)->get();
 
         return view('parents-dashboard.index', compact('enfants'));
     }
     
-    public function home()
-    {
-        
-    }
-    
     /**
      * Retourne les notes de l'enfant sur une vue
      */
-    public function notes($ideleve)
+    public function home($ideleve)
     {
         $matiereWithNotes = [];
         $anneScolaire = AnneeScolaire::where('an_ouverte', true)->first();
@@ -43,7 +39,7 @@ class ConsultationController extends Controller
             $query->where('annee_scolaire_id', $anneScolaire->id); }])
             ->where('id', $ideleve)
             ->first();
-        
+
         // Récup les matières enseignées dans la classe de l'éléève
         $matieresEnseignes = Enseigner::where([
             ['classe_id', '=', $enfant->inscription[0]->classe_id], 
@@ -59,17 +55,7 @@ class ConsultationController extends Controller
             array_push($matiereWithNotes, $n);
         }
         
-        return view('parents-dashboard.enfant-note', compact('enfant', 'matiereWithNotes', 'trimestres'));
+        return view('parents-dashboard.home', compact('enfant', 'matiereWithNotes', 'trimestres'));
     }
 
-    public function absence($ideleve)
-    {
-
-    }
-
-    public function scolarite($ideleve)
-    {
-        $enfant = Eleve::findOrFail($ideleve);
-        dd($enfant);
-    }
 }

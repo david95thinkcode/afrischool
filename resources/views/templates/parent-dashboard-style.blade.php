@@ -28,7 +28,7 @@
             <div class="row">                
                 <div class="col-sm-12">
                     <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
-                        <h1 class="display-4">@yield('main-title')</h1>
+                        <h1 class="display-4 main-title">@yield('main-title')</h1>
                         <p class="lead">@yield('main-descriptive-text')</p>
                     </div>
                     @yield('content')
@@ -36,7 +36,6 @@
             </div>        
         </div>
         
-        {{-- @include('partials.footer') --}}
         <!-- Bootstrap core JavaScript
         ================================================== -->
         <!-- Placed at the end of the document so the pages load faster -->

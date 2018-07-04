@@ -45,14 +45,6 @@ Propriété|Type
 id|int
 intitule|string
 
-- ### Niveaux
-
-Propriété|Type
-----------|----
-id|int
-niv_libelle|string
-niv_description|string
-
 - ### Professeurs
 
 Propriété|Type

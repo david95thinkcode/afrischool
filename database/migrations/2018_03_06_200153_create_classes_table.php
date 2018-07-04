@@ -16,7 +16,9 @@ class CreateClassesTable extends Migration
         Schema::create('classes', function (Blueprint $table) {
             $table->increments('id');
             $table->string('cla_intitule');
-            
+            $table->boolean('estPrimaire')->default(false);
+            $table->boolean('estCollege')->default(false);
+            $table->boolean('estUniversite')->default(false);
             $table->unsignedInteger('niveau_id')->nullable();
             $table->foreign('niveau_id')
                     ->references('id')

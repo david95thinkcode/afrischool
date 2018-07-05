@@ -15,7 +15,7 @@ class CreateMatieresTable extends Migration
     {
         Schema::create('matieres', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('intitule', 50);            
+            $table->string('intitule', 50);
             $table->timestamps();
         });
     }

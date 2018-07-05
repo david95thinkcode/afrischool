@@ -9,6 +9,7 @@ use App\Models\Classe;
 use App\Models\Enseigner;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Requests\StoreEnseignerRequest;
+use App\Models\AnneeScolaire;
 
 class EnseignerController extends Controller
 {
@@ -45,13 +46,17 @@ class EnseignerController extends Controller
     public function store(StoreEnseignerRequest $request)
     {
         $e = new Enseigner();
-        $exists = $this->exists($request->matiere, $request->classe);
-
+        $currentAnneeScolaire = AnneeScolaire::where('an_ouverte', true)
+            ->orderBy('an_date_fin', 'desc')
+            ->first();
+        $exists = $this->exists($request->matiere, $request->classe, $currentAnneeScolaire->id);
+        
         if (!$exists) {
             $e->classe_id = $request->classe;
             $e->matiere_id = $request->matiere;
             $e->professeur_id = $request->professeur;
             $e->coefficient = $request->coefficient;
+            $e->annee_scolaire_id = $currentAnneeScolaire->id;
             $e->save();
 
             return Redirect::route('matiere.show.classe', ['classe' => $e->classe_id])
@@ -60,7 +65,7 @@ class EnseignerController extends Controller
         else {
             return redirect()
                     ->action('EnseignerController@create')
-                    ->with('danger', 'La matière que vous avez sélectionné était déjà assignée à la classe');
+                    ->with('danger', 'La matière que vous avez sélectionné est déjà assignée à la classe');
         }
     }
 
@@ -88,7 +93,6 @@ class EnseignerController extends Controller
         $matieres = Matiere::all();
         $profs = Professeur::all();
         
-        //dd($ens);
         return view('dashboard.enseigner.edit', compact('ens', 'classes', 'matieres', 'profs'));
     }
 
@@ -103,21 +107,18 @@ class EnseignerController extends Controller
     {
         $e = Enseigner::findOrFail($id);
         $exists = $this->exists($req->matiere, $req->classe);
-
         if (!$exists) {
             $e->classe_id = $req->classe;
             $e->matiere_id = $req->matiere;
             $e->professeur_id = $req->professeur;
             $e->coefficient = $req->coefficient;
             $e->save();
-
             return Redirect::route('matiere.show.classe', ['classe' => $e->classe_id])
-                    ->with('status', 'Enregistré !');
-        }
-        else {
+                ->with('status', 'Enregistré !');
+        }else {
             return redirect()
-                    ->action('EnseignerController@edit', ['id' => $id])
-                    ->with('danger', 'La matière que vous essayez d\'assigner était déjà assignée à la classe');
+                ->action('EnseignerController@edit', ['id' => $id])
+                ->with('danger', 'La matière que vous essayez d\'assigner était déjà assignée à la classe');
         }
     }
 
@@ -129,7 +130,6 @@ class EnseignerController extends Controller
      */
     public function destroy($id)
     {
-
         $classe = Enseigner::findOrFail($id)->classe_id;
         Enseigner::find($id)->delete();
 
@@ -143,16 +143,14 @@ class EnseignerController extends Controller
      * @param $matiere
      * @param $classe
      */
-    public function exists($matiere, $classe)
-    {   
-        // Ne pas enregistrer si la même matière est déjà assignée à une classe
-        // TODO :: ajouter un controle sur l'année scolaire en cours également
-        // ->where('annee_scolaire_id', AnneeScolaire::where('an_ouverte', true))
-
+    public function exists($matiere, $classe, $anneescolaireID)
+    {
         $status;
-        $exists = Enseigner::where('classe_id', $classe)
-                    ->get()
-                    ->where('matiere_id', $matiere);
+        $exists = Enseigner::where([
+            ['classe_id', '=', $classe],
+            ['matiere_id', '=', $matiere],
+            ['annee_scolaire_id', '=', $anneescolaireID]
+        ])->get();
         
         if ($exists->count() == 0)  {
             $status = false;

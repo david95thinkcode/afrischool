@@ -5,7 +5,7 @@
 @endsection
 @section('content')
 <div class='row'>
-    <div class="col-sm-12">
+    <div class="col-sm-offset-2 col-sm-8">
         <div class="table-responsive">
             <table class="table ">
                 <thead>
@@ -29,7 +29,7 @@
                             @endif
                         </td>
                         <td>
-                            <a href="{{ route('enseigner.edit', ['id' => $ens->id]) }}" class="btn btn-sm btn-primary">
+                            <a href="{{ route('enseigner.edit', ['id' => $ens->id]) }}" disabled class="btn btn-sm btn-warning">
                                 Modifier
                             </a>
                             <form action="{{ route('enseigner.destroy', $ens->id) }}" method="POST" class='table-del-btn'>

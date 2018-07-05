@@ -25,7 +25,8 @@ class StoreClasseRequest extends FormRequest
     {
         return [
             'cla_intitule' => 'required|unique:classes|string',
-            'niveau' => ''
+            'cla_description' => '',
+            'niveau' => 'required'
         ];
     }
 }

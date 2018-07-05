@@ -17,10 +17,15 @@ Route::prefix('dashboard')->group(function () {
     Route::get('/', 'DashboardController@Home')->name('dashboard.home');
     Route::resource('etablissements', 'EtablissementController');
     Route::resource('professeurs', 'ProfesseurController');
-    Route::resource('niveaux', 'NiveauController');
     Route::resource('classe', 'ClasseController');
     Route::resource('matieres', 'MatiereController');
     Route::resource('enseigner', 'EnseignerController');
+
+    // classe
+    Route::get('classe/liste/{niveau}', 'ClasseController@list')
+        ->where('niveau', '[A-Za-z]+')
+        ->name('classe.list');
+
     //inscription
     Route::resource('inscriptions', 'InscriptionController');
     Route::get('inscription/parent-eleve', 'InscriptionController@indexParent')->name('eleve.parent.index');

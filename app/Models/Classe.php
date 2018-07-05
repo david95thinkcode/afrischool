@@ -11,14 +11,6 @@ class Classe extends Model
     public $timestamps = true;
 
     /**
-     * une classe a appartient à un niveau
-     */
-    public function niveau()
-    {
-        return $this->belongsTo('App\Models\Niveau');
-    }
-
-    /**
      * Plusieurs matières sont enseignées dans une classe
      */
     public function enseigner()

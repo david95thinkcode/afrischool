@@ -1,5 +1,5 @@
 @extends('templates.app')
-@section('title') {{ $c->cla_intitule }} - Modifier @endsection
+@section('title') {{ $classe->cla_intitule }} - Modifier @endsection
 @section('section-title') Modifier une classe @endsection
 @section('content')
 <div class='row'>
@@ -7,7 +7,7 @@
         <div class="panel panel-default mx-auto">
             <div class="panel-body">
                 <div class="">
-                    {!! Form::model($c, ['action' => ['ClasseController@update', $c->id], 'method' => 'PUT']) !!}
+                    {!! Form::model($classe, ['action' => ['ClasseController@update', $classe->id], 'method' => 'PUT']) !!}
                         
                         @include('dashboard.classes.partials.form-create-edit')
                         

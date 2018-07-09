@@ -18,15 +18,22 @@ class NiveauTableSeeder extends Seeder
         DB::table('niveaux')->insert([
             [
                 'id' => 1,
-                'niv_libelle' => 'CE',
-                'niv_description' => 'Cours Elémentaires',
+                'niv_libelle' => 'collège',
+                'niv_description' => 'Le collège',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
             [
                 'id' => 2,
-                'niv_libelle' => 'CP',
-                'niv_description' => 'Cours Primaires',
+                'niv_libelle' => 'primaire',
+                'niv_description' => 'Le primaire',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+            [
+                'id' => 3,
+                'niv_libelle' => 'lycée',
+                'niv_description' => 'Le lycée',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ]

@@ -15,7 +15,6 @@ class DatabaseSeeder extends Seeder
         $this->call(TrimestreTableSeeder::class);
         $this->call(CategorieEtsTableSeeder::class);
         $this->call(TypeEvaluationTableSeeder::class);
-        $this->call(NiveauTableSeeder::class);
         $this->call(JourTableSeeder::class);
         $this->call(AdresseTableSeeder::class);
         $this->call(EtablissementTableSeeder::class);

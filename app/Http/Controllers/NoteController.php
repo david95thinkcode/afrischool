@@ -45,6 +45,7 @@ class NoteController extends Controller
      */
     public function goToSecondStep(StoreNoteFirstStepRequest $req)
     {
+        $typeEv;
         $classe = Classe::findOrFail($req->classe);
         $trimestre = Trimestre::findOrFail($req->trimestre);
         $annee_scolaire = AnneeScolaire::findOrFail($req->anneeScolaire);
@@ -52,7 +53,13 @@ class NoteController extends Controller
         session(['libelleClasse' => $classe->cla_intitule]);
         session(['trimestre' => $trimestre->id]);
         session(['annee_scolaire' => $annee_scolaire->id]);
-        $typeEv = TypeEvaluation::all();
+        if ($classe->estPrimaire) {
+            $typeEv = TypeEvaluation::where('id', 2)
+            ->orWhere('id', 3)
+            ->get();
+        } else {
+            $typeEv = TypeEvaluation::all();
+        }
         $matieres = Enseigner::with('matiere')->where(['classe_id' => $classe->id, 'annee_scolaire_id' => $req->anneeScolaire])->get();
         
         return view('dashboard.notes.create-second-step', compact('classe', 'trimestre', 'typeEv', 'matieres', 'eleves'));

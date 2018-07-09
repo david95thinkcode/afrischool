@@ -45,14 +45,6 @@ Propriété|Type
 id|int
 intitule|string
 
-- ### Niveaux
-
-Propriété|Type
-----------|----
-id|int
-niv_libelle|string
-niv_description|string
-
 - ### Professeurs
 
 Propriété|Type
@@ -90,9 +82,9 @@ Propriété|Type
 ----------|----
 id|int
 cla_intitule|string
-classe_id|int
-matiere_id|int
-professeur_id|int !!!
+estPrimaire|boolean
+estCollege|boolean
+estUniversite|boolean
 niveau_id|int
 
 - ### Etablissements

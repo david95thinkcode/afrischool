@@ -18,7 +18,7 @@ class ConsultationController extends Controller
     {
         // Appelée après connexion du parent
         // Affiche ses enfants
-
+        // TODO: Gérer l'authentification du parent
         // TODO: Récupérer l'identifiant du parent connecté
 
         $parent = ParentEleve::findOrFail(1); // par défaut en attendant fin du TODO

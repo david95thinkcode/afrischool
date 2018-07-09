@@ -43,7 +43,6 @@
                     <ul class="nav child_menu">
                         <li><a href="{{ route('classe.create') }}">Créer</a></li>
                         <li><a href="{{ route('classe.index') }}">Liste</a></li>
-                        <li><a href="{{ route('niveaux.index') }}">Les niveaux de classes disponibles</a></li>
                     </ul>
                 </li>
                 <li><a><i class="fa fa-book"></i>Matières

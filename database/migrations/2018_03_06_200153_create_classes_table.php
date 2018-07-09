@@ -16,13 +16,10 @@ class CreateClassesTable extends Migration
         Schema::create('classes', function (Blueprint $table) {
             $table->increments('id');
             $table->string('cla_intitule');
-            
-            $table->unsignedInteger('niveau_id')->nullable();
-            $table->foreign('niveau_id')
-                    ->references('id')
-                    ->on('niveaux')
-                    ->onDelete('cascade');
-
+            $table->string('cla_description')->nullable();
+            $table->boolean('estPrimaire')->default(false);
+            $table->boolean('estCollege')->default(false);
+            $table->boolean('estUniversite')->default(false);
             $table->timestamps();
         });
     }

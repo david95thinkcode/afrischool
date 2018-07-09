@@ -24,6 +24,8 @@ class UpdateClasseRequest extends FormRequest
     public function rules()
     {
         return [
+            'cla_intitule' => '',
+            'cla_description' => '',
             'niveau' => ''
         ];
     }

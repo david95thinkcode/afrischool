@@ -90,15 +90,11 @@ class MatiereController extends Controller
         
         if ($enseigner->count() != null) {            
             $classes = Classe::all();
-
             return view('dashboard.enseigner.show', compact('enseigner', 'classes'));
-        }
-        else {
+        }else {
             $classe = Classe::find($classe_id);
-
             return view('dashboard.enseigner.show-empty', compact('classe'));
         }
-
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\Matiere;
@@ -44,12 +45,18 @@ class MatiereController extends Controller
      */
     public function store(StoreMatiereRequest $request)
     {
-        $m = new Matiere();
-        $m->intitule = $request->intitule;
-        $m->save();
+        $exist = Matiere::where('intitule', 'LIKE', '%' . $request->intitule . '%')->first();
+        if(is_null($exist)){
+            $m = new Matiere();
+            $m->intitule = $request->intitule;
+            $m->save();
 
-        return Redirect::route('matieres.index')
+            return Redirect::route('matieres.index')
                 ->with('status', 'Enregistré avec succès !');
+        }else{
+            return Redirect::route('matieres.index')
+                ->with('danger', 'Matière déjà existant');
+        }
     }
 
     /**

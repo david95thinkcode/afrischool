@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Carbon\Carbon;
 
 class EtablissementTableSeeder extends Seeder
 {
@@ -15,6 +16,7 @@ class EtablissementTableSeeder extends Seeder
 
         DB::table('etablissements')->insert([
             [
+                'id' => 1,
                 'raison_sociale' => 'Institut CERCO',
                 'sigle' => 'CERCO',
                 'directeur' => 'KOUTOUMA Sawal',
@@ -22,9 +24,12 @@ class EtablissementTableSeeder extends Seeder
                 'email' => 'koutoumat@sawal.com',
                 'site_web' => 'www.afrischool.com',
                 'categorie_ets_id' => '1',
-                'adresse_id' => '2'
+                'adresse_id' => '2',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
             ],
             [
+                'id' => 2,
                 'raison_sociale' => 'Ecole Supérieure de Gestion d\'Informatique et des Sciences',
                 'sigle' => 'ESGIS',
                 'directeur' => 'AKAKPO Matthieu',
@@ -32,7 +37,9 @@ class EtablissementTableSeeder extends Seeder
                 'email' => 'www.esgis.bj',
                 'site_web' => 'www.afrischool.com',
                 'categorie_ets_id' => '2',
-                'adresse_id' => '1'
+                'adresse_id' => '1',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
             ],
         ]);
     }

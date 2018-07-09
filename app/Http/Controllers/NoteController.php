@@ -15,11 +15,24 @@ use App\Models\Eleve;
 use App\Models\AnneeScolaire;
 use App\Models\Note;
 use App\Models\Inscription;
+use Illuminate\Support\Facades\Redirect;
 
 class NoteController extends Controller
 {
 
-    public function create()
+    public function selectType()
+    {
+        return view('dashboard.notes.selecttype');
+    }
+
+    public function createcollege()
+    {
+        $classes = Classe::all();
+        $trimestres = Trimestre::all();
+        $anneeScolaires = AnneeScolaire::all();
+        return view('dashboard.notes.create-first-step', compact('classes', 'trimestres', 'anneeScolaires'));
+    }
+    public function createprimaire()
     {
         $classes = Classe::all();
         $trimestres = Trimestre::all();
@@ -52,6 +65,60 @@ class NoteController extends Controller
         $typeEvaluation = TypeEvaluation::findOrFail($req->typeEv);
         session(['types_evaluation_id' => $req->typeEv]);
         session(['libelleEvaluation' => $typeEvaluation->tev_libelle]);
+
+        return Redirect::route('reload.note');
+    }
+
+    public function store(Request $req)
+    {
+        $pk = $req->pk;
+        $value = $req->value;
+        Note::where('id', $pk)->update(['not_note' => $value]);
+
+        $note = Note::find($pk);
+        $noter = Note::where(['eleve_id' => $note->eleve_id,
+            'types_evaluation_id' => session('types_evaluation_id'),
+            'trimestre_id' => session('trimestre'),
+            'classe_id' => session('classe'),
+            'matiere_id' => session('matiere'),
+            'annee_scolaire_id' => session('annee_scolaire')])
+            ->orderBy('id', 'desc')->first();
+        if($pk == $noter->id){
+
+            Note::create([
+                'types_evaluation_id' => $noter->types_evaluation_id,
+                'trimestre_id' => $noter->trimestre_id,
+                'matiere_id' => $noter->matiere_id,
+                'classe_id' => $noter->classe_id,
+                'annee_scolaire_id' => $noter->annee_scolaire_id,
+                'eleve_id' => $noter->eleve_id,
+            ]);
+
+            return response()->json(['code' => 'new'], 200);
+        }
+
+        return response()->json(['code' => 200], 200);
+    }
+
+    public function createNewLigne($eleve)
+    {
+        Note::create(['eleve_id' => $eleve,
+            'types_evaluation_id' => session('types_evaluation_id'),
+            'trimestre_id' => session('trimestre'),
+            'classe_id' => session('classe'),
+            'matiere_id' => session('matiere'),
+            'annee_scolaire_id' => session('annee_scolaire')]);
+        return Redirect::route('reload.note');
+    }
+
+    public function indexclass()
+    {
+        $classes = Classe::all();
+        return view('dashboard.notes.index-class', compact('classes'));
+    }
+
+    public function reload()
+    {
         $eleves = Inscription::with('eleve')
             ->where(['inscriptions.classe_id' => session('classe'),
                 'inscriptions.annee_scolaire_id' => session('annee_scolaire')])
@@ -59,43 +126,11 @@ class NoteController extends Controller
 
 
         $notes = Note::where(['trimestre_id' => session('trimestre'),
-                    'classe_id' => session('classe'),
-                    'matiere_id' => session('matiere'),
-                    'annee_scolaire_id' => session('annee_scolaire')])
+            'classe_id' => session('classe'),
+            'matiere_id' => session('matiere'),
+            'annee_scolaire_id' => session('annee_scolaire')])
             ->get();
 
         return view('dashboard.notes.create-last-step', compact('eleves', 'notes'));
     }
-
-    public function store(Request $req)
-    {
-
-        $note = Note::where(['eleve_id' =>$req->pk,
-            'types_evaluation_id' => session('types_evaluation_id'),
-            'trimestre_id' => session('trimestre'),
-            'classe_id' => session('classe'),
-            'matiere_id' => session('matiere'),
-            'annee_scolaire_id' => session('annee_scolaire')])->first();
-
-        if(is_null($note) ){
-            Note::create([
-                'types_evaluation_id' => session('types_evaluation_id'),
-                'trimestre_id' => session('trimestre'),
-                'matiere_id' => session('matiere'),
-                'classe_id' => session('classe'),
-                'annee_scolaire_id' => session('annee_scolaire'),
-                'eleve_id' => $req->pk,
-                'not_note' => $req->value,
-            ]);
-
-            return response()->json(['code' => 'new'], 200);
-        }else{
-
-            $note->not_note = $req->value;
-            $note->save();
-            return response()->json(['code' => 'new'], 200);
-        }
-
-    }
-
 }

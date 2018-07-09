@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Carbon\Carbon;
 
 class MatiereTableSeeder extends Seeder
 {
@@ -15,25 +16,45 @@ class MatiereTableSeeder extends Seeder
 
         DB::table('matieres')->insert([
             [
-                'intitule' => 'Science Physique Chimie et Technologies (SPCT)'
+                'id' => 1,
+                'intitule' => 'Science Physique Chimie et Technologies (SPCT)',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
             ],
             [
-                'intitule' => 'Mathématiques'
+                'id' => 2,
+                'intitule' => 'Mathématiques',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
             ],
             [
-                'intitule' => 'Informatique'
+                'intitule' => 'Informatique',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
             ],
             [
-                'intitule' => 'Science de la Vie et de la terre (SVT)'
+                'id' => 3,
+                'intitule' => 'Science de la Vie et de la terre (SVT)',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
             ],
             [
-                'intitule' => 'Anglais'
+                'id' => 4,
+                'intitule' => 'Anglais',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
             ],
             [
-                'intitule' => 'Fongbé'
+                'id' => 5,
+                'intitule' => 'Fongbé',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
             ],
             [
-                'intitule' => 'Education Physique et Sportive'
+                'id' => 6,
+                'intitule' => 'Education Physique et Sportive',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
             ],
         ]);
     }

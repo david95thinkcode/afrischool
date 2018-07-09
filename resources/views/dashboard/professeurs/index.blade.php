@@ -11,7 +11,7 @@
         <div class='panel panel-default mx-auto'>
             <div class="panel-body">
                 <div class="">
-                    {!! Form::open(['action' => ['ProfesseurController@list'], 'method' => 'POST', 'class' => '']) !!}
+                    {!! Form::open(['action' => ['ProfesseurController@listProfesseur'], 'method' => 'POST', 'class' => '']) !!}
                         <div class="form-group">
                             {!! Form::label('classe', 'Sélectionnez une classe') !!}
                             <select name="classe" id="classe" class="form-control" required>                            

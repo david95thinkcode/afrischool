@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-
+use Carbon\Carbon;
 class TypeEvaluationTableSeeder extends Seeder
 {
     /**
@@ -17,14 +17,20 @@ class TypeEvaluationTableSeeder extends Seeder
             [
                 'id' => 1,
                 'tev_libelle' => 'Interrogation',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
             ],
             [
                 'id' => 2,
                 'tev_libelle' => 'Devoir',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
             ],
             [
                 'id' => 3,
                 'tev_libelle' => 'Examen',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
             ]
         ]);
     }

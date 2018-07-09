@@ -6,8 +6,10 @@
     protected function sendSms($mobile, $message)
     {
         $messageF =  $this->removeAccent($message);
+        $user = env('OCEANIC_USER');
+        $password = env('OCEANIC_PASSWORD');
         $text2 = urlencode($messageF);
-        $url2 = "http://oceanicsms.com/api/http/sendmsg.php?user=Benttoid&password=innovation1992&from=Vroomiste&to=$mobile&text=$text2&api=14265";
+        $url2 = "http://oceanicsms.com/api/http/sendmsg.php?user=$user&password=$password&from=Vroomiste&to=$mobile&text=$text2&api=14265";
         
         $this->CallUrl($url2);
     }
@@ -17,8 +19,10 @@
         $societe = $this->removeAccent($ecole);
         $societe1 = urlencode($societe);
         $messageF =  $this->removeAccent($message);
+        $user = env('OCEANIC_USER');
+        $password = env('OCEANIC_PASSWORD');
         $text2 = urlencode($messageF);
-        $url2 = "http://oceanicsms.com/api/http/sendmsg.php?user=Benttoid&password=innovation1992&from=$societe1&to=$numero&text=$text2&api=14265";
+        $url2 = "http://oceanicsms.com/api/http/sendmsg.php?user=$user&password=$password&from=$societe1&to=$numero&text=$text2&api=14265";
         
         $this->CallUrl($url2);
     }

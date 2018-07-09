@@ -40,6 +40,7 @@ class NiveauController extends Controller
      */
     public function store(StoreNiveauRequest $req)
     {
+
         $n = new Niveau();
         $n->niv_libelle = $req->niv_libelle;
         $n->niv_description = $req->niv_description;
@@ -83,7 +84,7 @@ class NiveauController extends Controller
     public function update(UpdateNiveauRequest $req, $id)
     {
         $n = Niveau::findOrFail($id);
-        //$n->niv_libelle = $req->niv_libelle;
+        $n->niv_libelle = $req->niv_libelle;
         $n->niv_description = $req->niv_description;
         $n->save();
 

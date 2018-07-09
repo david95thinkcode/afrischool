@@ -33,21 +33,22 @@ Route::prefix('dashboard')->group(function () {
         Route::get('/{type}', 'EleveController@create')->name('eleves.create');
     });
     Route::prefix('inscriptions-enregistres')->group(function () {
-
-        Route::get('classes/{classe}', 'InscriptionController@showForClasse')
-            ->name('inscriptions.classe.show');
-
+        Route::get('classes/{classe}', 'InscriptionController@showForClasse')->name('inscriptions.classe.show');
         Route::post('/', 'InscriptionController@searchForClasse');
     });
-    //gestion des notes
-    Route::get('notes/selection-classe', 'NoteController@create')->name('notes.create');
-    Route::post('notes/second-step', 'NoteController@goToSecondStep')->name('notes.classe.second');
-    Route::post('notes/fird-step', 'NoteController@lastStep')->name('notes.classe.fird');
-    Route::post('notes/save', 'NoteController@store')->name('notes.req');
+    Route::post('creer-annee-scolaire', 'EnseignerController@createAnneeScolaire')->name('anneescolaire.store');
     // Notes
     Route::prefix('notes')->group(function () {
-        Route::post('last-step', 'MatiereController@searchForClasse')
-            ->name('notes.store.last-step');
+        Route::post('last-step', 'MatiereController@searchForClasse')->name('notes.store.last-step');
+        Route::get('classes', 'NoteController@indexClass')->name('note.byclass');
+        Route::get('selection-classe', 'NoteController@selectType')->name('notes.selecteType');
+        Route::get('college', 'NoteController@createCollege')->name('notes.create.college');
+        Route::get('primaire', 'NoteController@createPrimaire')->name('notes.create.primaire');
+        Route::post('second-step', 'NoteController@goToSecondStep')->name('notes.classe.second');
+        Route::post('fird-step', 'NoteController@lastStep')->name('notes.classe.fird');
+        Route::post('save', 'NoteController@store')->name('notes.req');
+        Route::get('add-ligne-eleve/{eleve}', 'NoteController@createNewLigne')->name('add.ligne.eleve');
+        Route::get('reload-table', 'NoteController@reload')->name('reload.note');
     });
     //gestion scolarité
     route::prefix('scolarite')->group(function(){
@@ -57,14 +58,10 @@ Route::prefix('dashboard')->group(function () {
     });
     //Matiere
     Route::prefix('matiere')->group(function () {
-
-        // Classes
         Route::prefix('classes')->group(function () {
-            Route::get('/', 'MatiereController@showAllWithClasse')
-                ->name('matiere.show.classes');
+            Route::get('/', 'MatiereController@showAllWithClasse')->name('matiere.show.classes');
             Route::get('/{classe}', 'MatiereController@showForSpecificClasse')
-                ->where('classe', '[0-9]+')
-                ->name('matiere.show.classe');
+                ->where('classe', '[0-9]+')->name('matiere.show.classe');
             Route::post('/', 'MatiereController@searchForClasse');
         });
 
@@ -109,7 +106,6 @@ Route::prefix('dashboard')->group(function () {
         Route::get('etablissement/{etablissement}', 'EtablissementController@activate')
             ->where('etablissement', '[0-9]+')->name('etablissements.activate');
     });
-
     /*users*/
     Route::prefix('users')->group(function(){
         Route::get('users', 'UserController@index')->name('users');
@@ -117,14 +113,20 @@ Route::prefix('dashboard')->group(function () {
         Route::get('users/{user}/edit', 'UserController@edit')->name('users.edit');
         Route::put('users/{user}', 'UserController@update')->name('users.update');
     });
-
     //Notifications
     Route::prefix('notification')->group(function(){
         Route::get('parents-eleves', 'NotificationController@indexForm')->name('notifier.user');
         Route::post('parents-eleves', 'NotificationController@sendNotification')->name('notifier.user.send');
         Route::get('notes-eleves', 'NotificationController@indexNotes')->name('notifier.notes');
         Route::post('notes-eleves', 'NotificationController@sendNotes')->name('notifier.notes.send');
-
+    });
+    //Finance
+    Route::prefix('finance')->group(function(){
+        Route::get('informations-generales', 'ComptabiliteController@index')->name('finance.index');
+        Route::get('saisir-depenses', 'ComptabiliteController@indexDepenses')->name('finance.depense.index');
+        Route::post('save-depenses', 'ComptabiliteController@storeDepenses')->name('finance.depense.save');
+        Route::get('information-dépenses', 'ComptabiliteController@showDepense')->name('finance.depense.show');
+        Route::post('periode-depenses', 'ComptabiliteController@periodeDepense')->name('finance.depense.periode');
     });
 });
 

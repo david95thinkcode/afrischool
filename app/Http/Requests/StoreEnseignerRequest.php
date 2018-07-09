@@ -26,8 +26,9 @@ class StoreEnseignerRequest extends FormRequest
         return [
             'classe' => 'required|integer',
             'matiere' => 'required|integer',
-            'coefficient' => 'required|integer',
-            'professeur' => '',
+            'coefficient' => '',
+            'professeur' => 'required|integer',
+            'anneescolaire' => 'required|integer',
         ];
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Carbon\Carbon;
 
 class ProfesseurTableSeeder extends Seeder
 {
@@ -22,7 +23,9 @@ class ProfesseurTableSeeder extends Seeder
                 'prof_tel' => '0000025525578',
                 'prof_email' => 'POlo@mail.io',
                 'prof_date_naissance' => '1968-03-29',
-                'prof_nationalite' => 'Congo'
+                'prof_nationalite' => 'Congo',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
 
             ],
             [
@@ -33,7 +36,9 @@ class ProfesseurTableSeeder extends Seeder
                 'prof_tel' => '0000025525578',
                 'prof_email' => 'test@mail.io',
                 'prof_date_naissance' => '1950-09-09',
-                'prof_nationalite' => 'Burkina-Faso'
+                'prof_nationalite' => 'Burkina-Faso',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
             ],
             [
                 'id' => 3,
@@ -43,7 +48,9 @@ class ProfesseurTableSeeder extends Seeder
                 'prof_tel' => '0000025525578',
                 'prof_email' => 'test@mail.io',
                 'prof_date_naissance' => '1990-02-19',
-                'prof_nationalite' => 'Bénin'
+                'prof_nationalite' => 'Bénin',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
             ],
             [
                 'id' => 4,
@@ -53,7 +60,9 @@ class ProfesseurTableSeeder extends Seeder
                 'prof_tel' => '002596521684',
                 'prof_email' => 'doss@ecolemail.com',
                 'prof_date_naissance' => '1990-02-19',
-                'prof_nationalite' => 'Bénin'
+                'prof_nationalite' => 'Bénin',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
             ]
         ]);
     }

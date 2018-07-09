@@ -5,7 +5,7 @@
 <div class='row'>
     <div class="col-sm-12">
         <div class="table-responsive">
-            <table class="table ">
+            <table class="table table-bordered jambo_table" id="table_list">
                 <thead>
                     <th>#</th>
                     <th>Intitulé</th>
@@ -38,4 +38,21 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('custom-css')
+    <link rel="stylesheet" href="{{asset('css/dataTables.bootstrap.min.css')}}">
+@endsection
+@section('custom-js')
+    <script src="{{asset('js/jquery.dataTables.js')}}"></script>
+    <script src="{{asset('js/dataTables.bootstrap.min.js')}}"></script>
+    <script type="text/javascript">
+        $(document).ready( function () {
+            $('#table_list').dataTable({
+                "language": {
+                    "url": "{{asset('lang/French.json')}}"
+                }
+            });
+        });
+    </script>
 @endsection

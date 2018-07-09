@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Carbon\Carbon;
 
 class EvaluationTableSeeder extends Seeder
 {
@@ -19,12 +20,16 @@ class EvaluationTableSeeder extends Seeder
                 'eva_intitule' => '1er devoir',
                 'eva_appreciation' => '',
                 'type_evaluation_id' => 1,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
             ],
             [
                 'id' => 2,
                 'eva_intitule' => '1er examen',
                 'eva_appreciation' => '',
                 'type_evaluation_id' => 3,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
             ],
         ]);
     }

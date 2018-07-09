@@ -39,19 +39,25 @@
                         <td>{{$eleve->eleve->date_naissance}}</td>
                         @if(!is_null($notes))
                             @php
-                                $note = $notes->where('eleve_id', $eleve->eleve->id)->first();
+                                $noters = $notes->where('eleve_id', $eleve->eleve->id);
                             @endphp
                         @endif
-                        <td>
-                            <a href="#" data-name="not_note" data-value=""
-                               class="note" data-url="{{route('notes.req')}}"
-                               data-type="text" data-pk="{{$eleve->eleve->id}}">
-                                @if(!is_null($note))
-                                    {{$note->not_note}}
-                                @else
-                                    saisir note
-                                @endif
-                            </a>
+                        <td class="text-center">
+                            @forelse($noters as $noter)
+                                <a href="#" data-name="not_note" data-value="{{$noter->not_note}}"
+                                   class="note " data-url="{{route('notes.req')}}"
+                                   data-type="text" data-pk="{{$noter->id}}" >
+                                    @if(is_null($noter->not_note))
+                                        saisir la note
+                                    @else
+                                        {{$noter->not_note}}
+                                    @endif
+                                </a><hr>
+                            @empty
+                                <a href="{{route('add.ligne.eleve', ['eleve' => $eleve->eleve->id])}}" class="btn btn-success">
+                                    Ajouter une ligne
+                                </a>
+                            @endforelse
                         </td>
                     </tr>
                 @endforeach
@@ -97,6 +103,11 @@
                 validate: function (value) {
                     if ($.trim(value) == '') {
                         return 'Ce champs est obligatoire';
+                    }
+                },
+                success: function(data) {
+                    if(data.code == "new"){
+                        location.reload();
                     }
                 },
                 error: function (response, newValue) {

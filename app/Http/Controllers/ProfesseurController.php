@@ -57,7 +57,6 @@ class ProfesseurController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  App\Models\Professeur  $professeur
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -80,7 +79,6 @@ class ProfesseurController extends Controller
                 ->select('enseigner.id', 'enseigner.professeur_id', 'professeurs.prof_nom', 'professeurs.prof_prenoms', 
                     'professeurs.prof_tel', 'professeurs.prof_email', 'professeurs.prof_nationalite', 'matieres.intitule')
                 ->get();
-
         return view('dashboard.professeurs.list', compact('classe', 'ens'));
     }
 
@@ -97,7 +95,6 @@ class ProfesseurController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  App\Professeur  $professeur
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -111,7 +108,6 @@ class ProfesseurController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Professeur  $professeur
      * @return \Illuminate\Http\Response
      */
     public function update(StoreProfesseurRequest $request, $id)
@@ -133,7 +129,6 @@ class ProfesseurController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Professeur  $professeur
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

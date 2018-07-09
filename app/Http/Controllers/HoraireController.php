@@ -134,20 +134,6 @@ class HoraireController extends Controller
         // TODO: finir le controle de doublon et désactiver les comment marks
         // Controle doublon
         $action;
-        // $collection = DB::table('horaires')
-        //             ->where('jour_id', '=', $request->jour)
-        //             ->join('enseigner', 'enseigner.id', '=', 'horaires.enseigner_id')
-        //             ->where('enseigner.classe_id', '=', $request->classe)
-        //             ->select('horaires.debut', 'horaires.fin')
-        //             ->get();
-        // dd($collection);
-        // $exists = $collection->where('debut', '=', $request->debut);
-        
-        // dd($exists);
-        // if (count($exists) > 0) {
-        //     $action = "Impossible d'ajouter ce programme !";
-        // }
-        // else {
             
             $h = new Horaire();
             $h->debut = $request->debut;
@@ -157,7 +143,6 @@ class HoraireController extends Controller
             $h->save();
             $action = Redirect::route('emploi-du-temps.afficher', ['classe' => $request->classe])->with('status', 'Ajouté avec succès !');
 
-        // }
 
         return $action;
     }

@@ -15,16 +15,19 @@ class AdresseTableSeeder extends Seeder
 
         DB::table('adresses')->insert([
             [
+                'id' => 1,
                 'pays' => 'Bénin',
                 'ville' => 'Cotonou',
                 'quartier' => 'Gbegamey'
             ],
             [
+                'id' => 2,
                 'pays' => 'Togo',
                 'ville' => 'Lomé',
                 'quartier' => 'Kégué'
             ],
             [
+                'id' => 3,
                 'pays' => 'Côte d\'Ivoire',
                 'ville' => 'Abidjan',
                 'quartier' => 'Cocodi'

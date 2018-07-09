@@ -12,6 +12,5 @@ class PermissionTableSeeder extends Seeder
     {
         $permissions = [['slug' => 'edit'], ['slug' => 'update']];
         \App\Models\Permission::create($permissions);
-        /*DB::table('permissions')->insert($permissions);*/
     }
 }

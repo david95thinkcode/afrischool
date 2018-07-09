@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AnneeScolaire;
 use Illuminate\Http\Request;
 use App\Models\Professeur;
 use App\Models\Matiere;
@@ -32,16 +33,11 @@ class EnseignerController extends Controller
         $classes = Classe::all();
         $matieres = Matiere::all();
         $profs = Professeur::all();
+        $scolarite =  AnneeScolaire::all();
 
-        return view('dashboard.enseigner.create', compact('classes', 'matieres', 'profs'));
+        return view('dashboard.enseigner.create', compact('classes', 'scolarite', 'matieres', 'profs'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(StoreEnseignerRequest $request)
     {
         $e = new Enseigner();
@@ -51,7 +47,8 @@ class EnseignerController extends Controller
             $e->classe_id = $request->classe;
             $e->matiere_id = $request->matiere;
             $e->professeur_id = $request->professeur;
-            $e->coefficient = $request->coefficient;
+            $e->coefficient = ($request->coefficient)?$request->coefficient:1;
+            $e->annee_scolaire_id = $request->anneescolaire;
             $e->save();
 
             return Redirect::route('matiere.show.classe', ['classe' => $e->classe_id])
@@ -64,41 +61,17 @@ class EnseignerController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         $ens = Enseigner::findOrfail($id);
         $classes = Classe::all();
         $matieres = Matiere::all();
         $profs = Professeur::all();
-        
-        //dd($ens);
-        return view('dashboard.enseigner.edit', compact('ens', 'classes', 'matieres', 'profs'));
+        $scolarite =  AnneeScolaire::all();
+
+        return view('dashboard.enseigner.edit', compact('ens', 'classes', 'scolarite', 'matieres', 'profs'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(StoreEnseignerRequest $req, $id)
     {
         $e = Enseigner::findOrFail($id);
@@ -121,12 +94,19 @@ class EnseignerController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    public function createAnneeScolaire(Request $req)
+    {
+        $an = new AnneeScolaire();
+
+        $an->an_description = $req->description;
+        $an->an_date_debut = $req->datedebut;
+        $an->an_date_fin = $req->datefin;
+        $an->an_ouverte = 1;
+        $an->save();
+
+        return Redirect::back();
+    }
+
     public function destroy($id)
     {
 
@@ -137,23 +117,17 @@ class EnseignerController extends Controller
                 ->with('info', 'Une matière a été retirée avec succès');
     }
 
-    /**
-     * Retourne true si une ligne de enseigner est trouvée
-     * dont les attributs correspondent aux paramètres reçus
-     * @param $matiere
-     * @param $classe
-     */
     public function exists($matiere, $classe)
     {   
         // Ne pas enregistrer si la même matière est déjà assignée à une classe
         // TODO :: ajouter un controle sur l'année scolaire en cours également
         // ->where('annee_scolaire_id', AnneeScolaire::where('an_ouverte', true))
 
-        $status;
+        $status = true;
         $exists = Enseigner::where('classe_id', $classe)
                     ->get()
                     ->where('matiere_id', $matiere);
-        
+
         if ($exists->count() == 0)  {
             $status = false;
         } else {

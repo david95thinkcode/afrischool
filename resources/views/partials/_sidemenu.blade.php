@@ -3,7 +3,7 @@
         <div class="navbar nav_title mb-1" style="border: 0;">
             <a href="{!! route('home') !!}" class="site_title">
                 <i class="fa fa-graduation-cap"></i> 
-                <span>AfriSchool</span>
+                <span>AfrikaSchool</span>
             </a>
         </div>
 
@@ -15,34 +15,39 @@
                 <li><a><i class="fa fa-users"></i> Élèves 
                     <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                        <li><a href="{{ route('inscriptions.create') }}">Créer</a></li>
+                        <li><a href="{{ route('inscriptions.create') }}">Inscrire</a></li>
                         <li><a href="{{ route('inscriptions.index') }}">Liste par classe</a></li>
                         <li><a href="{{route('eleve.reste.versement')}}">Paiement scolarité</a></li>
                         <li><a href="#">...........</a></li>
                     </ul>
                 </li>
-                <li><a><i class="fa fa-user-secret"></i> Professeurs <span class="fa fa-chevron-down"></span></a>
+                <li><a><i class="fa fa-user-secret"></i> Professeurs
+                        <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                         <li><a href="{{ route('professeurs.create') }}">Créer</a></li>
                         <li><a href="{{ route('professeurs.index') }}">Liste par classe</a></li>
+                        <li><a href="{{ route('enseigner.create') }}">Ajouter un professeur à une classe </a></li>
                         <li><a href="{{ route('professeurs.list') }}">Liste complète</a>
                     </ul>
                 </li>
-                <li><a><i class="fa fa-street-view"></i>Personnel <span class="fa fa-chevron-down"></span></a>
+                <li><a><i class="fa fa-street-view"></i>Personnel
+                        <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                         <li><a href="#">Créer</a></li>
                         <li><a href="#">...........</a></li>
                         <li><a href="#">...........</a></li>
                     </ul>
                 </li>
-                <li><a><i class="fa fa-building-o"></i> Classes <span class="fa fa-chevron-down"></span></a>
+                <li><a><i class="fa fa-building-o"></i> Classes
+                        <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                         <li><a href="{{ route('classe.create') }}">Créer</a></li>
                         <li><a href="{{ route('classe.index') }}">Liste</a></li>
                         <li><a href="{{ route('niveaux.index') }}">Les niveaux de classes disponibles</a></li>
                     </ul>
                 </li>
-                <li><a><i class="fa fa-book"></i>Matières <span class="fa fa-chevron-down"></span></a>
+                <li><a><i class="fa fa-book"></i>Matières
+                        <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                         <li><a href="{{ route('matieres.create') }}">Créer</a></li>
                         <li><a href="{{ route('enseigner.create') }}">Ajouter une matière à une classe </a></li>
@@ -51,10 +56,11 @@
                     </ul>
                 </li>
                 <li>
-                    <a><i class="fa fa-flag"></i>Notes <span class="fa fa-chevron-down"></span></a>
+                    <a><i class="fa fa-flag"></i>Notes
+                        <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                        <li><a href="{{ route('notes.create') }}">Ajouter</a></li>
-                        <li><a href="#">Liste par classe</a></li>
+                        <li><a href="{{ route('notes.selecteType') }}">Ajouter</a></li>
+                        <li><a href="#">Bulletin de notes</a></li>
                     </ul>
                 </li>
                 <li>
@@ -71,12 +77,17 @@
                         <li><a href="{{route('notifier.notes')}}">Notes des élèves</a></li>
                     </ul>
                 </li>
-                <li class="">
-                    <a><i class="fa fa-file-text-o"></i> Examens
-                    <span class="label label-success pull-right">Coming Soon</span></a>
+                <li>
+                    <a><i class="fa fa-flag"></i>Finance <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                        <li><a href="{{ route('finance.index') }}">Informations générales</a></li>
+                        <li><a href="{{ route('finance.depense.index') }}">Saisir les dépenses</a></li>
+                        <li><a href="{{ route('finance.depense.show') }}">information dépenses</a></li>
+                        <li><a href="#">#</a></li>
+                    </ul>
                 </li>
-                <li class="">
-                    <a><i class="fa fa-money "></i> Finance
+                <li>
+                    <a><i class="fa fa-file-text-o"></i> Examens
                     <span class="label label-success pull-right">Coming Soon</span></a>
                 </li>
                 <li>

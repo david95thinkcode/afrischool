@@ -1,7 +1,10 @@
 - Choisir la classe, l'année scolaire et le niveau (college, primaire)
-- afficher la liste des élèves de la classe (collection de Eleve with inscription)
+- afficher la liste des élèves de la classe 
+(collection de Eleve with inscription)
+
 - trouver les matières enseignées dans la classe au trimestre, 
-pr l'année académoqie en dans la variable de sesion (collection de enseigner)
+pr l'année académique dans la variable de sesion (collection de enseigner)
+
 - Pour chaque matière (de enseigner), aller rechercher les notes
 where note.matière == enseigner.mat, 
 && note.anneescolaire = enseigner.annee,

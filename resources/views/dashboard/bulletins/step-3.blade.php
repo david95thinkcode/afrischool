@@ -10,8 +10,8 @@
         <div class="panel panel-default">
             <div class="panel-body">
                 <div class="x-content">
-                    <div class="col-md-6"><strong>Classe :</strong> {{session('classe.nom')}}</div>
-                    <div class="col-md-6"><strong>Année scolaire :</strong> {{session('anneescolaire')}}</div>
+                    <div class="col-md-6"><strong>Classe :</strong> {{session('classe.cla_intitule')}}</div>
+                    <div class="col-md-6"><strong>Année scolaire :</strong> {{ session('anneescolaire.an_description') }}</div>
                 </div>
             </div>
         </div>

@@ -8,10 +8,10 @@
                     <div class="text-center">
                         <h3 class="mb-1 text-center">Bulletins du ...</h3>
                         <a href="{{ route('bulletin.criteres.get', ['niveau' => 'PRM']) }}"
-                           class="btn btn-lg btn-primary">Collège</a>
+                           class="btn btn-lg btn-primary">Primaire</a>
                         <a href="{{ route('bulletin.criteres.get', ['niveau' => 'CLG']) }}"
                            class="btn btn-lg btn-success"
-                           title="Un élève provenant d'une autre école">Primaire</a>
+                           title="Un élève provenant d'une autre école">College</a>
                     </div>
                 </div>
             </div>

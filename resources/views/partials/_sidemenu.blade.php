@@ -59,7 +59,7 @@
                         <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                         <li><a href="{{ route('notes.selecteType') }}">Ajouter</a></li>
-                        <li><a href="#">Bulletin de notes</a></li>
+                        <li><a href="{!! route('bulletin.index') !!}">Bulletin de notes</a></li>
                     </ul>
                 </li>
                 <li>

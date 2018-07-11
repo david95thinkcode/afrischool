@@ -47,8 +47,7 @@ Route::prefix('dashboard')->group(function () {
         Route::post('last-step', 'MatiereController@searchForClasse')->name('notes.store.last-step');
         Route::get('classes', 'NoteController@indexClass')->name('note.byclass');
         Route::get('selection-classe', 'NoteController@selectType')->name('notes.selecteType');
-        Route::get('college', 'NoteController@createCollege')->name('notes.create.college');
-        Route::get('primaire', 'NoteController@createPrimaire')->name('notes.create.primaire');
+        Route::get('classe/{niveau}', 'NoteController@selectNiveau')->where('niveau', '[A-Za-z]+')->name('notes.create');
         Route::post('second-step', 'NoteController@goToSecondStep')->name('notes.classe.second');
         Route::post('fird-step', 'NoteController@lastStep')->name('notes.classe.fird');
         Route::post('save', 'NoteController@store')->name('notes.req');

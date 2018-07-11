@@ -7,11 +7,17 @@
                 <div class="panel-body">
                     <div class="text-center">
                         <h3 class="mb-1 text-center">Vous désirez gérer ...</h3>
-                        <a href="{{ route('notes.create.college') }}"
-                           class="btn btn-lg btn-primary">Le Collège</a>
-                        <a href="{{ route('notes.create.primaire') }}"
-                           class="btn btn-lg btn-success"
-                           title="Un élève provenant d'une autre école">Le primaire</a>
+                        <a href="{!! route('notes.create', ['niveau' => 'PRM']) !!}" class="btn btn-warning">
+                            Primaire
+                        </a>
+
+                        <a href="{!! route('notes.create', ['niveau' => 'CLG']) !!}" class="btn btn-success">
+                            Collège
+                        </a>
+
+                        <a href="{!! route('notes.create', ['niveau' => 'UNV']) !!}" class="btn btn-info">
+                            Université
+                        </a>
                     </div>
                 </div>
             </div>

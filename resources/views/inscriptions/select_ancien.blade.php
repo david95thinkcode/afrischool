@@ -7,7 +7,7 @@
             <table id="anciens" class="table table-bordered jambo_table">
                 <thead>
                     <tr>
-                        <th>N°</th>
+                        <th>#</th>
                         <th>Nom prénom(s)</th>
                         <th>Sexe</th>
                         <th>Date de naissance</th>
@@ -17,11 +17,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @php $i = 0;@endphp
-                    @forelse($anciens as $ancien)
-                        @php $i++ @endphp
+                    @foreach($anciens as $ancien)
                         <tr>
-                            <td class="text-center">{{$i}}</td>
+                            <td class="text-center">{{$ancien->id}}</td>
                             <td class="text-center">
                                 {{$ancien->prenoms}} {{$ancien->nom}}
                             </td>
@@ -35,11 +33,7 @@
                                 </a>
                             </td>
                         </tr>
-                    @empty
-                        <tr class="text-center my-5 py-5">
-                            Pas d'anciens élèves enregistrés
-                        </tr>
-                    @endforelse
+                    @endforeach
                 </tbody>
             </table>
         </div>

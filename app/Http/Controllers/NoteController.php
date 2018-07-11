@@ -19,33 +19,43 @@ use Illuminate\Support\Facades\Redirect;
 
 class NoteController extends Controller
 {
+    const COLLEGE_ID = 'CLG';
+    const PRIMAIRE_ID = 'PRM';
+    const UNIVERSITE_ID = 'UNV';
+    const NIVEAUCLASSE = [
+        self::PRIMAIRE_ID => "Primaire",
+        self::COLLEGE_ID => "Collège",
+        self::UNIVERSITE_ID => "Université"
+    ];
 
     public function selectType()
     {
         return view('dashboard.notes.selecttype');
     }
 
-    public function createcollege()
+    public function selectNiveau($niveau)
     {
-        $classes = Classe::all();
-        $trimestres = Trimestre::all();
-        $anneeScolaires = AnneeScolaire::all();
-        return view('dashboard.notes.create-first-step', compact('classes', 'trimestres', 'anneeScolaires'));
-    }
-    public function createprimaire()
-    {
-        $classes = Classe::all();
+        switch ($niveau) {
+            case self::PRIMAIRE_ID:
+                $classes = Classe::where('estPrimaire', true)->get();
+                break;
+            case self::COLLEGE_ID:
+                $classes = Classe::where('estCollege', true)->get();
+                break;
+            case self::UNIVERSITE_ID:
+                $classes = Classe::where('estUniversite', true)->get();
+                break;
+            default:
+                $classes = null;
+                break;
+        }
         $trimestres = Trimestre::all();
         $anneeScolaires = AnneeScolaire::all();
         return view('dashboard.notes.create-first-step', compact('classes', 'trimestres', 'anneeScolaires'));
     }
 
-    /**
-     * Retourne la dernière vue pour enregistrer les notes
-     */
     public function goToSecondStep(StoreNoteFirstStepRequest $req)
     {
-        $typeEv;
         $classe = Classe::findOrFail($req->classe);
         $trimestre = Trimestre::findOrFail($req->trimestre);
         $annee_scolaire = AnneeScolaire::findOrFail($req->anneeScolaire);
@@ -65,6 +75,9 @@ class NoteController extends Controller
         return view('dashboard.notes.create-second-step', compact('classe', 'trimestre', 'typeEv', 'matieres', 'eleves'));
     }
 
+    /**
+     * Retourne la dernière vue pour enregistrer les notes
+     */
     public function lastStep(Request $req){
         session(['matiere' => $req->matiere]);
         $matiere = Matiere::findOrFail($req->matiere);

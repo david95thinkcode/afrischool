@@ -11,7 +11,20 @@
     <select class="form-control" name="niveau" id='niveau' required>
         <option value="">-- Sélectionner --</option>
       @foreach ($typedeclasse as $key => $value)
-        <option value="{!! $key !!}">{!! $value !!}</option>
+        @if ($key == 'PRM' && $classe->estPrimaire)
+            <option value="{!! $key !!}" selected>{!! $value !!}</option>
+        @else
+            @if($key == 'CLG' && $classe->estCollege)
+                <option value="{!! $key !!}" selected>{!! $value !!}</option>
+            @else
+                @if($key == 'UNV' && $classe->estUniversite)
+                    <option value="{!! $key !!}" selected>{!! $value !!}</option>
+                @else
+                    <option value="{!! $key !!}">{!! $value !!}</option>
+                @endif
+            @endif
+        @endif
+        
       @endforeach
     </select>
 </div>

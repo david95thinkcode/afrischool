@@ -1,0 +1,49 @@
+- Choisir la classe, l'année scolaire et le niveau (college, primaire)
+- afficher la liste des élèves de la classe 
+(collection de Eleve with inscription)
+
+- trouver les matières enseignées dans la classe au trimestre, 
+pr l'année académique dans la variable de sesion (collection de enseigner)
+
+- Pour chaque matière (de enseigner), aller rechercher les notes
+where note.matière == enseigner.mat, 
+&& note.anneescolaire = enseigner.annee,
+&& note.trimestre = seesion(trimestre)
+&& note.classe == enseigner.classe
+&& note.eleve == eleve.id
+(collection de notes pour chaque matière)
+
+- Avec les notes récupérées, regrouper les notes de même type( type evaluation )
+dans un tableau associatif :
+
+$LesNotes = [
+    'matiereID' => [
+        'typeEvaID' => [
+            'note_not',
+            'note_not'
+        ],
+        'typeEvaID' => [ 
+            ...
+        ]
+    ],
+    '12' => [
+        'devoir' => [
+            '15',
+            '11'
+        ],
+        'examen' => [ 
+            ...
+        ]
+    ]
+]
+
+Dans une autre tableau associatif, faire la moyenne des notes de chaque
+type d'évaluation chaque occurence de matière de la variable LesNotes :
+
+$LesMoyennes = [
+    'matiereID' => ('moyenne des notes d'examen + celle de devoir'),
+    ...
+]
+
+Pour trouver la moyenne générale, multiplier par son coefficient chaque matière 
+de la variable "LesMoyennes" puis diviser par le nombre de matière de "LesMoyennes"

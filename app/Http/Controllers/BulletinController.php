@@ -72,7 +72,6 @@ class BulletinController extends Controller
     {
         // le matricule est le numéro de l'élève dans la table inscription
         
-        
         $notesBrutes = [];
         $notesOrdonnes = [];
         $moyennesByMat = [];
@@ -84,13 +83,12 @@ class BulletinController extends Controller
 
         if ($eleve != null) {
             // matière enseignées dans la classe
-            $matEnseignees = Enseigner::with('matiere')
+            $matEnseignees = Enseigner::with('matiere', 'professeur')
             ->where([
                 ['classe_id', $eleve->classe_id],
                 ['annee_scolaire_id', session()->get('anneescolaire.id')]
             ])
-            ->get()
-            ->toArray();
+            ->get();
 
             // les notes de chaque matière
             foreach ($matEnseignees as $key => $m) {
@@ -101,20 +99,22 @@ class BulletinController extends Controller
                     ['trimestre_id', $idTrimestre],
                     ['matiere_id', $m['matiere_id']]
                 ])
-                ->get()
-                ->toArray();
+                ->get();
+                
                 array_push($notesBrutes, $note);
             }
-            
-            $notesOrdonnes = $this->OrdonnerNotes($notesBrutes, $matEnseignees);
 
-            dd($notesBrutes);
+            $notesOrdonnes = $this->OrdonnerNotes($notesBrutes, $matEnseignees);
+            
+            // dd($notesOrdonnes);
+            
+            return view('dashboard.bulletins.show', compact('eleve','notesOrdonnes'));
 
             // TODO: ordonnons le tableau de notesbrutes
 
-            // TODO: Calculons les moyennes par matière
+            // TODO: Calculons les moyennes par matière (avec du JS)
 
-            // TODO: Obtenons la moyenne générale
+            // TODO: Obtenons la moyenne générale (avec du JS)
 
         }
         else {
@@ -128,6 +128,9 @@ class BulletinController extends Controller
         $distinctsMatieres = [];
         $orderedNotes = [];
 
+        $classeID = $notesBruteArray[0][0]['classe_id'];
+        $yearID = $notesBruteArray[0][0]['annee_scolaire_id'];
+
         // Remplissage $distinctsMatieres
         foreach ($EnseignerArrays as $key => $e) {
             
@@ -135,7 +138,7 @@ class BulletinController extends Controller
                 array_push($distinctsMatieres, $e['matiere_id']);
             } else {
                 
-                $found = false; // devient 
+                $found = false;
                 foreach ($distinctsMatieres as $matiereID) {
                     if ($e['matiere_id'] == $matiereID) {
                         $found = true;
@@ -151,7 +154,7 @@ class BulletinController extends Controller
         // chaque collection de note de notesbrutes
         foreach ($notesBruteArray as $key => $noteCollection) {
             
-            $matiereID; // identifiant de la matière
+            $matiereID;
             $matiere = Matiere::findOrFail($matiereID);
             $classifiedNoteByMatiere = [
                 'interrogation' => [],
@@ -169,8 +172,9 @@ class BulletinController extends Controller
              * ]
              */ 
             foreach ($noteCollection as $k => $v) {  
+                
                 $matiereID = $v['matiere_id'];
-                // var_dump($matiereID);
+                
                 switch ($v['types_evaluation_id']) {
                     case 1:
                         array_push($classifiedNoteByMatiere['interrogation'], $v);
@@ -186,12 +190,24 @@ class BulletinController extends Controller
                         break;
                 }
             }
-            
-            $orderedNotes[$matiere->intitule] = []; // très important
-            array_push($orderedNotes[$matiere->intitule], $classifiedNoteByMatiere);
-    
+
+
+            // Détails de la amtière
+            $matiereDetails;
+
+            foreach ($EnseignerArrays as $ensIndex => $enseignerModel) {
+                if ($enseignerModel->matiere->id == $matiere->id) 
+                {
+                    $matiereDetails = $enseignerModel;
+                    // echo("Trouvé : " . $enseignerModel->matiere->id . " == " . $matiereID . " - " );
+                    // echo ($matiereDetails->matiere->intitule . ' : ' .$matiereDetails->professeur->prof_nom . ' ' . $matiereDetails->professeur->prof_prenoms . "\n");
+                }
+            }
+
+            // Finalisation
+            $orderedNotes[$matiere->intitule]['details'] = $matiereDetails;
+            $orderedNotes[$matiere->intitule]['notes'] = $classifiedNoteByMatiere;
         }
-        dd($orderedNotes);
 
         return $orderedNotes;
     }

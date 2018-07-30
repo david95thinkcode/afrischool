@@ -71,7 +71,7 @@ class BulletinController extends Controller
     public function ShowByTrimestre($idTrimestre, $matricule)
     {
         // le matricule est le numéro de l'élève dans la table inscription
-        
+        $view = '';
         $notesBrutes = [];
         $notesOrdonnes = [];
         $moyennesByMat = [];
@@ -108,14 +108,14 @@ class BulletinController extends Controller
             
             // dd($notesOrdonnes);
             
-            return view('dashboard.bulletins.show', compact('eleve','notesOrdonnes'));
+            // Montrons la vue adéquate
+            if (session()->get('classe.estPrimaire') == 1) {
+                $view = 'dashboard.bulletins.b-primaire';
+            }
+            else if (session()->get('classe.estCollege') == 1) {
+                $view = 'dashboard.bulletins.b-college';            }
 
-            // TODO: ordonnons le tableau de notesbrutes
-
-            // TODO: Calculons les moyennes par matière (avec du JS)
-
-            // TODO: Obtenons la moyenne générale (avec du JS)
-
+            return view($view, compact('eleve','notesOrdonnes'));
         }
         else {
             abort(404);
@@ -212,19 +212,4 @@ class BulletinController extends Controller
         return $orderedNotes;
     }
     
-    private function CalculerChaqueMoyenne($notesOrdonnesArray)
-    {
-
-    }
-
-    /**
-     * Retourne la moyenne générale
-     *
-     * @param [type] $notesArray
-     * @return void
-     */
-    public function CalculMoyenneGene($notesArray)
-    {
-
-    }
 }

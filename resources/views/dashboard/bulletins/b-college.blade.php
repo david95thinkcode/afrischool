@@ -10,7 +10,7 @@
 <div class='row'>
     <div class="col-sm-offset-2 col-sm-8">
         <div class="table-responsive">
-            <table class="table ">
+            <table class="table" id='bulletinTable'>
                 <thead>
                     <th>Matière</th>
                     <th>Interrogation</th>
@@ -30,31 +30,31 @@
                             
                             {{-- Interrogations --}}
                             @if (($typeEvaluation == 'interrogation') && (count($notes) > 0))
-                                <td>
+                                <td class="b-interro">
                                 @foreach ($notes as $note)
                                     {!! $note->not_note !!}
                                 @endforeach
                                 </td>
                             @elseif(($typeEvaluation == 'interrogation') && (count($notes) == 0))
-                                <td>aucune note</td>
+                                <td class="b-interro">aucune note</td>
                             @endif
                             
                             {{-- Les devoirs --}}
                             @if (($typeEvaluation == 'devoir') && (count($notes) == 0))
-                                <td>aucune note</td>
-                                <td>aucune note</td>
+                                <td class="b-devoir">aucune note</td>
+                                <td class="b-devoir">aucune note</td>
                             @elseif (($typeEvaluation == 'devoir') && (count($notes) == 1))
-                                <td>{!! $notes->not_note !!}</td>
-                                <td>aucune note</td>
+                                <td class="b-devoir">{!! $notes->not_note !!}</td>
+                                <td class="b-devoir">aucune note</td>
                             @elseif (($typeEvaluation == 'devoir') && (count($notes) == 2))
                                 @foreach ($notes as $note)
-                                    <td>{!! $note->not_note !!}</td>                                
+                                    <td class="b-devoir">{!! $note->not_note !!}</td>                                
                                 @endforeach
                             @endif
 
                         @endforeach
                         
-                        <td>{!! $item['details']->coefficient !!}</td>
+                        <td class="b-coef">{!! $item['details']->coefficient !!}</td>
                         {{-- moyenne et mentions --}}
                         <td class="b-moy"></td>
                         <td class="b-mention"></td>
@@ -64,6 +64,16 @@
                 </tbody>
             </table>
         </div>
+
+        <div>
+            <h5>Moyenne Générale : 
+                <span class='badge badge-primary' id="GAVG"></span>
+            </h5>
+        </div>
     </div>
 </div>
+@endsection
+
+@section('custom-js')
+    {!! Html::script('js/bulletins/job-college.js') !!}
 @endsection

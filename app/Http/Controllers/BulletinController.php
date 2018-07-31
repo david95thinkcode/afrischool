@@ -71,8 +71,6 @@ class BulletinController extends Controller
     public function ShowByTrimestre($idTrimestre, $matricule)
     {
         // le matricule est le numéro de l'élève dans la table inscription
-        
-        
         $notesBrutes = [];
         $notesOrdonnes = [];
         $moyennesByMat = [];
@@ -108,13 +106,15 @@ class BulletinController extends Controller
             
             $notesOrdonnes = $this->OrdonnerNotes($notesBrutes, $matEnseignees);
 
-            dd($notesBrutes);
+            //dd($notesBrutes);
 
             // TODO: ordonnons le tableau de notesbrutes
 
             // TODO: Calculons les moyennes par matière
 
             // TODO: Obtenons la moyenne générale
+
+            return view('dashboard.bulletins.bulletin');
 
         }
         else {
@@ -131,10 +131,10 @@ class BulletinController extends Controller
         // Remplissage $distinctsMatieres
         foreach ($EnseignerArrays as $key => $e) {
             
-            if (count($distinctsMatieres) == 0) {
+            if (count($distinctsMatieres) == 0)
+            {
                 array_push($distinctsMatieres, $e['matiere_id']);
             } else {
-                
                 $found = false; // devient 
                 foreach ($distinctsMatieres as $matiereID) {
                     if ($e['matiere_id'] == $matiereID) {
@@ -191,7 +191,7 @@ class BulletinController extends Controller
             array_push($orderedNotes[$matiere->intitule], $classifiedNoteByMatiere);
     
         }
-        dd($orderedNotes);
+        //dd($orderedNotes);
 
         return $orderedNotes;
     }

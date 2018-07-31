@@ -21,7 +21,7 @@
 <div class='row'>
     <div class="col-sm-offset-1 col-sm-9">
         <div class="table-responsive">
-            <table class="table table-bordered">
+            <table class="table table-bordered jambo_table" id="table_list">
                 <thead>
                     <tr>
                         <th class="text-center"># Matricule</th>
@@ -80,6 +80,7 @@
 @endsection
  @fore
 @section('custom-css')
+    <link rel="stylesheet" href="{{asset('css/dataTables.bootstrap.min.css')}}">
     <style>
         table {
             font-size: medium;
@@ -94,4 +95,17 @@
             color: maroon;
         }
     </style>
+@endsection
+@section('custom-js')
+    <script src="{{asset('js/jquery.dataTables.js')}}"></script>
+    <script src="{{asset('js/dataTables.bootstrap.min.js')}}"></script>
+    <script type="text/javascript">
+        $(document).ready( function () {
+            $('#table_list').dataTable({
+                "language": {
+                    "url": "{{asset('lang/French.json')}}"
+                }
+            });
+        });
+    </script>
 @endsection

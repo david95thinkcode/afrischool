@@ -149,6 +149,7 @@ class NoteController extends Controller
             'classe_id' => session('classe'),
             'matiere_id' => session('matiere'),
             'annee_scolaire_id' => session('annee_scolaire')])
+
             ->get();
 
         return view('dashboard.notes.create-last-step', compact('eleves', 'notes'));

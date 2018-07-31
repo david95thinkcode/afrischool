@@ -21,6 +21,20 @@ Route::prefix('dashboard')->group(function () {
     Route::resource('matieres', 'MatiereController');
     Route::resource('enseigner', 'EnseignerController');
 
+    // bulletins
+    Route::prefix('bulletins')->group(function () {
+        Route::get('/', 'BulletinController@index')->name('bulletin.index');
+        Route::get('{niveau}/', 'BulletinController@SelectCriteres')
+            ->where('niveau', '[A-Za-z]+')
+            ->name('bulletin.criteres.get');
+        Route::post('/', 'BulletinController@ListEleves')
+            ->where('niveau', '[A-Za-z]+')
+            ->name('bulletin.criteres.post');
+        Route::get('trimestre/{idtrimestre}/{matricule}', 'BulletinController@ShowByTrimestre')
+            ->where('idtrimestre', '[0-9]')
+            ->where('matricule', '[0-9]+')
+            ->name('bulletin.showbytrimestre');
+    });
     // classe
     Route::get('classe/liste/{niveau}', 'ClasseController@listclasse')
         ->where('niveau', '[A-Za-z]+')

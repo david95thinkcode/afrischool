@@ -20,7 +20,7 @@ class Inscription extends Model
      */
     public function eleve()
     {
-        return $this->belongsTo('App\Models\Eleve', 'eleve_id');
+        return $this->belongsTo(Eleve::class, 'eleve_id');
     }
 
     /**

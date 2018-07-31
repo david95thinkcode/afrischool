@@ -31,9 +31,18 @@
                             {{-- Interrogations --}}
                             @if (($typeEvaluation == 'interrogation') && (count($notes) > 0))
                                 <td class="b-interro">
+                                @php 
+                                    $increment = 0;
+                                    $variable = 0;
+                                @endphp
                                 @foreach ($notes as $note)
-                                    {!! $note->not_note !!}
+                                    @php
+                                      $increment++;
+                                      $variable +=  $note->not_note;
+                                    @endphp
                                 @endforeach
+                                {{-- AVG --}}
+                                {!! $variable / $increment !!}
                                 </td>
                             @elseif(($typeEvaluation == 'interrogation') && (count($notes) == 0))
                                 <td class="b-interro">aucune note</td>

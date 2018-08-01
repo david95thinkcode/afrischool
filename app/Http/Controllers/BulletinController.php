@@ -14,7 +14,6 @@ use App\Models\Trimestre;
 
 class BulletinController extends Controller
 {
-    //
     // etape1
     public function index()
     {
@@ -69,7 +68,7 @@ class BulletinController extends Controller
     public function ShowByTrimestre($idTrimestre, $matricule)
     {
         // le matricule est le numéro de l'élève dans la table inscription
-        $view = '';
+        $bulletinview = '';
         $notesBrutes = [];
         $notesOrdonnes = [];
         $moyennesByMat = [];
@@ -80,6 +79,7 @@ class BulletinController extends Controller
             ->first();
 
         if ($eleve != null) {
+
             // matière enseignées dans la classe
             $matEnseignees = Enseigner::with('matiere', 'professeur')
                 ->where([
@@ -106,20 +106,20 @@ class BulletinController extends Controller
 
             if (count($notesBrutes) > 0) {
                 $notesOrdonnes = $this->OrdonnerNotes($notesBrutes, $matEnseignees);
+                
                 // dd($notesOrdonnes);
 
                 // Montrons la vue adéquate
                 if (session()->get('classe.estPrimaire') == 1) {
-                    $view = 'dashboard.bulletins.b-primaire';
+                    $bulletinview = 'dashboard.bulletins.b-primaire';
                 } else if (session()->get('classe.estCollege') == 1) {
-                    $view = 'dashboard.bulletins.b-college';
+                    $bulletinview = 'dashboard.bulletins.b-college';
                 }
 
-                return view($view, compact('eleve', 'notesOrdonnes'));
+                return view($bulletinview, compact('eleve', 'notesOrdonnes'));
 
             } else {
-                // TODO pour @Romeo 
-                // faire une vue pour afficher le message ci-dessous dedans
+                // TODO pour @Romeo : faire une vue pour afficher le message ci-dessous dedans
                 return ('Impossible de générer le bulletin car aucune note enregistrée pour ce trimestre');
             }
 
@@ -160,7 +160,7 @@ class BulletinController extends Controller
         foreach ($notesBruteArray as $key => $noteCollection) {
 
             $matiereID;
-            $matiere = Matiere::findOrFail($matiereID);
+            $matiereDetails;
             $classifiedNoteByMatiere = [
                 'interrogation' => [],
                 'devoir' => [],
@@ -176,34 +176,40 @@ class BulletinController extends Controller
              *                        ]
              * ]
              */
-            foreach ($noteCollection as $k => $v) {
-
-                $matiereID = $v['matiere_id'];
-
-                switch ($v['types_evaluation_id']) {
-                    case 1:
-                        array_push($classifiedNoteByMatiere['interrogation'], $v);
-                        break;
-                    case 2:
-                        array_push($classifiedNoteByMatiere['devoir'], $v);
-                        break;
-                    case 3:
-                        array_push($classifiedNoteByMatiere['examen'], $v);
-                        break;
-                    default:
-                        # code...
-                        break;
+            foreach ($noteCollection as $k => $noteModel) {                
+                
+                foreach ($distinctsMatieres as $distMatKey => $distMatvalue) {
+                    
+                    // On compare la matiere de la note à l'ID de la matière
+                    // actuellement dans la boucle du tableau de matière distinctes 
+                    //  
+                    if ($noteModel['matiere_id'] == $distMatvalue) {
+                        
+                        $matiereID = $noteModel['matiere_id'];
+        
+                        switch ($noteModel['types_evaluation_id']) {
+                            case 1:
+                                array_push($classifiedNoteByMatiere['interrogation'], $noteModel);
+                                break;
+                            case 2:
+                                array_push($classifiedNoteByMatiere['devoir'], $noteModel);
+                                break;
+                            case 3:
+                                array_push($classifiedNoteByMatiere['examen'], $noteModel);
+                                break;
+                            default:
+                                # code...
+                                break;
+                        }
+                    }
                 }
             }
 
-            // Détails de la amtière
-            $matiereDetails;
+            $matiere = Matiere::findOrFail($matiereID);// Détails de la matière
 
             foreach ($EnseignerArrays as $ensIndex => $enseignerModel) {
                 if ($enseignerModel->matiere->id == $matiere->id) {
                     $matiereDetails = $enseignerModel;
-                    // echo("Trouvé : " . $enseignerModel->matiere->id . " == " . $matiereID . " - " );
-                    // echo ($matiereDetails->matiere->intitule . ' : ' .$matiereDetails->professeur->prof_nom . ' ' . $matiereDetails->professeur->prof_prenoms . "\n");
                 }
             }
 

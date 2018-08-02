@@ -222,9 +222,24 @@ class BulletinController extends Controller
 
     public function ShowFinal($matricule)
     {
+        /**
+         * $trimestreAVG : Cette variable contient la moyenne 
+         * générale par trimestre
+         * 
+         * NB: 
+         * $trimestreAVG[1] => moyenne du trimestre 1
+         * $trimestreAVG[2] => moyenne du trimestre 2
+         * $trimestreAVG[3] => moyenne du trimestre 3
+         * 
+         */
+        $trimestreAVG = []; 
+
         $notesByTrimestre = [];
         $avgByTrimestreAndMatiere = [];
-        $trimestreAVG = []; 
+        
+        // Tableau contenant la moyenne générale
+        // de chaque matière à l'issue des 3 trimestres 
+        $finalAvgByMatiere = [];
 
         $eleve = Inscription::with('eleve', 'classe')
             ->where('id', $matricule)
@@ -245,7 +260,7 @@ class BulletinController extends Controller
                 if ((!is_null($trimestreNoteArray)) || (count($trimestreNoteArray)> 0)) {
                     $avgs = [];
 
-                    // Calculer la moyenne de devoir et d'interro
+                    // Calcul moyenne de devoir et d'interro
                     foreach ($trimestreNoteArray as $tnaKey => $tnaValue) {
                         // Moyenne Interrogation si eleve en college
                         if ($eleve->classe->estCollege == 1) {
@@ -258,27 +273,98 @@ class BulletinController extends Controller
                         $avgs[$tnaKey]['moyenne']['devoir'] = $avgDevoir;
                     }
                     
+                    // Moyenne générale de chaque matière
+                    // pour chaque trimestre
                     $avgByTrimestreAndMatiere[$key] = $avgs;
-
-                    // Moyenne générale par trimestre
-                    $trimestreAVG[$key] = $this->getFinalAVGBytrimestre($avgByTrimestreAndMatiere[$key]);
+                    
+                    // Moyenne générale pour chaque trimestre ($key)
+                    // calculée à partir de toutes les moyennes de l'année
+                    $trimestreAVG[$key] = $this->getFinalAVGBytrimestre($avgByTrimestreAndMatiere[$key]);    
                 }
             }
+            
+            $finalAvgByMatiere = $this->getFinalAvgByMatiere($avgByTrimestreAndMatiere);
         }
         else {
             $notesByTrimestre = null;
             abort(403);
         }
-        return $trimestreAVG;
+
+        return [$finalAvgByMatiere, $trimestreAVG];
     }
 
 
     /**
+     * Moyenne générale finale de chaque matière.
+     *
+     * @param [type] $moyenneMatiereParTrimestre
+     * @return mixed
+     */
+    private function getFinalAvgByMatiere($moyenneMatiereParTrimestre)
+    {
+        /**
+         * Moyenne générale finale de chaque matière.
+         * 
+         * Ne rien faire si les moyennes générale des matières par trimestre des  
+         * trois (3) trimestres ne sont pas fournies
+         * Lorsque les données sont fournies,
+         * créer un tableau avec pour indice les matieres,
+         * pour chaque tableau par exemple [GrandTableau]['Informatique'] = [],
+         * créer à l'intérieur l'attribut 'sum'.
+         * 'sum' sera actualisé à chaque fois qu'une moyenne est trouvée pour
+         * la matière 'Informatique' dans un autre trimestre.
+         * 
+         * Enfin, faire la division de la 'sum' par 3
+         * quand tous les trimestres ont été parcourus pour obtenir 
+         * la moyenne générale finale de cette matière. 
+         * 
+         * NB : 
+         * [GrandTableau]['matiere']['sum'] => Contient la sum des moyennes
+         * [GrandTableau]['matiere']['avg'] => Contient la moyenne générale de la matière
+         * [GrandTableau]['matiere']['details'] => Contient des détails sur la matière
+         * 
+         */
+        
+        $finalAvgs = [];
+                
+        if (count($moyenneMatiereParTrimestre) > 0) 
+        {
+            $avgSum = [];
+            
+            foreach ($moyenneMatiereParTrimestre as $key => $matieres) {
+                // $key correspond au numéro du trimestre
+                
+                foreach ($matieres as $matKey => $matValue) {
+                    
+                    if (!isset($avgSum[$matKey])) { // Moyenne du trimestre 1 ?
+                        $avgSum[$matKey]['details'] = $matValue['details'];
+                        $avgSum[$matKey]['sum'] = $matValue['moyenne']['devoir'];
+                    } 
+                    else { 
+                        $avgSum[$matKey]['sum'] += $matValue['moyenne']['devoir'];
+                    }                    
+                }
+            }
+            
+            // Trouvons les moyennes
+            foreach ($avgSum as $keyMat => $v) {
+                $finalAvgs[$keyMat] = $v;
+                $finalAvgs[$keyMat]['avg'] = $finalAvgs[$keyMat]['sum'] / 3;
+            }
+        } 
+        else {
+            $finalAvgs = null;
+        }
+        
+        return $finalAvgs;
+    }
+
+    /**
      * Calcule la moyenne générale 
-     * à partir d'un lot de matière recu  en paramètre
+     * à partir d'un lot de matière recu en paramètre
      *
      * @param [array] $notesByTrimestreCollection
-     * @return int 
+     * @return float 
      */
     private function getFinalAVGBytrimestre($notesByTrimestreCollection)
     {
@@ -320,7 +406,7 @@ class BulletinController extends Controller
     }
 
     /**
-     * Retourne la moyenne des interrogation
+     * Retourne la moyenne des interrogations
      * 
      * @param [Collection] Collection de Note d'interrogation
      * @return [float] $avg
@@ -352,8 +438,7 @@ class BulletinController extends Controller
     }
 
 
-    //////////////////////////////////////
-    // TODO: clone de ShowByTrimestre
+    // clone de ShowByTrimestre
     // Mais adapté à autre chose
     public function getNotesByTrimestre($idTrimestre, $matricule)
     {

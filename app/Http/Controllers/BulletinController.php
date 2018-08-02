@@ -14,7 +14,7 @@ use App\Models\Trimestre;
 
 class BulletinController extends Controller
 {
-    // etape1
+    //etape1
     public function index()
     {
         return view('dashboard.bulletins.step-1');

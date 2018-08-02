@@ -23,7 +23,7 @@ class ComptabiliteController extends Controller
         $dep = Depenses::first();
         if(empty($dep))
         {
-            Depenses::create(['libelle' => 'saisir libelle']);
+            Depenses::create(['libelle' => 'saisir libelle', 'montant' => 0]);
             $depenses = Depenses::all();
             return view('comptabilite.indexDepenses', compact('depenses'));
         }
@@ -40,7 +40,7 @@ class ComptabiliteController extends Controller
         $dep = Depenses::orderBy('id', 'desc')->first();
 
         if($pk == $dep->id){
-            Depenses::create();
+            Depenses::create(['libelle' => 'saisir libelle', 'montant' => 0]);
             return response()->json(['code' => 'new'], 200);
         }
 
@@ -50,7 +50,17 @@ class ComptabiliteController extends Controller
     public function showDepense()
     {
         $depenses = Depenses::whereYear('created_at', '=', date('Y'))
-            ->where('montant', '<>', null)
+            ->where('montant', '<>', 0)
+            ->get();
+
+        return view('comptabilite.showDepenses', compact('depenses'));
+    }
+
+    public function periodeDepense(Request $req)
+    {
+        $depenses = Depenses::where('created_at', '>=', $req->datedebut)
+            ->where('created_at', '<=', $req->datefin)
+            ->where('montant', '<>', 0)
             ->get();
 
         return view('comptabilite.showDepenses', compact('depenses'));

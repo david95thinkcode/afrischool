@@ -183,7 +183,7 @@ class InscriptionController extends Controller
      */
     public function show($id)
     {
-      $ins = DB::table('inscriptions')
+      $inscription = DB::table('inscriptions')
             ->where('inscriptions.id', '=', $id)
             ->join('classes', 'inscriptions.classe_id', '=', 'classes.id')
             ->join('eleves', 'inscriptions.eleve_id', '=', 'eleves.id')
@@ -191,7 +191,7 @@ class InscriptionController extends Controller
             ->get()
             ->first();
 
-        dd($ins);
+        return view('inscriptions.eleve-detail', compact('inscription'));
     }
 
     /**
@@ -202,7 +202,16 @@ class InscriptionController extends Controller
      */
     public function edit($id)
     {
-        //
+        $inscription = DB::table('inscriptions')
+            ->where('inscriptions.id', '=', $id)
+            ->join('classes', 'inscriptions.classe_id', '=', 'classes.id')
+            ->join('eleves', 'inscriptions.eleve_id', '=', 'eleves.id')
+            ->join('parents', 'eleves.id', '=', 'parents.id')
+            ->get()
+            ->first();
+        $classes = Classe::all();
+
+        return view('inscriptions.edit-eleve', compact('inscription', 'classes'));
     }
 
     /**
@@ -212,9 +221,46 @@ class InscriptionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $req, $id)
     {
-        //
+        $eleve = Eleve::find($id);
+        $eleve->nom = $req->nom;
+        $eleve->prenoms = $req->prenoms;
+        $eleve->sexe = $req->sexe;
+        $eleve->date_naissance = $req->date_naissance;
+
+        if ($req->ancien == 1) {$eleve->ancien = true;}else{$eleve->ancien == false;$eleve->ecole_provenance = $req->ecole_provenance;}
+
+        if ($req->redoublant == 1) {$eleve->redoublant = true;}else{$eleve->redoublant = false;}
+        $eleve->save();
+
+        return Redirect::route('inscriptions.edit',['id' => $id])->with('status', 'Informations élève modifiés avec succès !');
+    }
+
+    public function indexInfoParent($id)
+    {
+        $inscription = DB::table('inscriptions')
+            ->where('inscriptions.id', '=', $id)
+            ->join('classes', 'inscriptions.classe_id', '=', 'classes.id')
+            ->join('eleves', 'inscriptions.eleve_id', '=', 'eleves.id')
+            ->join('parents', 'eleves.id', '=', 'parents.id')
+            ->get()
+            ->first();
+
+        return view('inscriptions.edit-parent', compact('inscription'));
+    }
+
+    public function updateInfoParent(Request $req, $id)
+    {
+        $parent = ParentEleve::find($id);
+        $parent->par_nom = $req->nom_parent;
+        $parent->par_prenoms = $req->prenoms_parent;
+        $parent->par_sexe = $req->sexe_parent;
+        $parent->par_tel = $req->tel_parent;
+        $parent->par_email = $req->mail_parent;
+
+        $parent->save();
+        return Redirect::route('parent.info',['id' => $id])->with('status', 'Informations parent modifiés avec succès !');
     }
 
     /**
@@ -235,7 +281,7 @@ class InscriptionController extends Controller
         if ($ancien == 1) {
             $eleve->ancien = true;
         } else {
-            $eleve->ancien == true;
+            $eleve->ancien == false;
             $eleve->ecole_provenance = $ecole;
         }
 

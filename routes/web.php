@@ -40,6 +40,10 @@ Route::prefix('dashboard')->group(function () {
         ->where('niveau', '[A-Za-z]+')
         ->name('classe.list');
 
+    //update eleve
+    Route::get('informations/parent-eleve/{id}', 'InscriptionController@indexInfoParent')->where('id', '[0-9]+')->name('parent.info');
+    Route::put('informations/parent-eleve/{id}', 'InscriptionController@updateInfoParent')->name('parent.update');
+
     //inscription
     Route::resource('inscriptions', 'InscriptionController');
     Route::get('inscription/parent-eleve', 'InscriptionController@indexParent')->name('eleve.parent.index');

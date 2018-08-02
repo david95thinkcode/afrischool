@@ -6,20 +6,23 @@
         <div class="col-md-6 col-md-offset-3 col-sm-6 col-sm-offset-3 col-xs-12">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <div class="x-content">
-                        <div class="col-md-6 col-xs-12">
-                            {!! Form::label('datedebut', 'Date de début') !!}
-                            {!! Form::date('datedebut', old('datedebut'), ['class' => 'form-control', 'required' => '']) !!}
-                        </div>
-                        <div class="col-md-6 col-xs-12 mb-1">
-                            {!! Form::label('datefin', 'Date de fin') !!}
-                            {!! Form::date('datefin', old('datefin'), ['class' => 'form-control', 'required' => '']) !!}
-                        </div>
+                    <form method="POST" action="{{ route('finance.depense.periode') }}">
+                        {{ csrf_field() }}
+                        <div class="x-content">
+                            <div class="col-md-6 col-xs-12">
+                                {!! Form::label('datedebut', 'Date de début') !!}
+                                {!! Form::date('datedebut', old('datedebut'), ['class' => 'form-control', 'required' => '']) !!}
+                            </div>
+                            <div class="col-md-6 col-xs-12 mb-1">
+                                {!! Form::label('datefin', 'Date de fin') !!}
+                                {!! Form::date('datefin', old('datefin'), ['class' => 'form-control', 'required' => '']) !!}
+                            </div>
 
-                        <div class='form-group text-center'>
-                            {{ Form::submit("Afficher", array('class' => 'btn btn-success ')) }}
+                            <div class='form-group text-center'>
+                                {{ Form::submit("Afficher", array('class' => 'btn btn-success ')) }}
+                            </div>
                         </div>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>

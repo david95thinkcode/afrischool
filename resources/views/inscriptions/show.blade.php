@@ -4,10 +4,9 @@
 @section('content')
 <div class='row'>
     <div class="col-sm-12">
-
         <div>
             <div class="table-responsive">
-                <table class="table ">
+                <table class="table table-bordered jambo_table" id="table_eleves">
                     <thead>
                         <th>#</th>
                         <th>Elève</th>
@@ -32,7 +31,7 @@
                                     {!! date('Y') - date('Y', strtotime($i->eleve->date_naissance)) !!} ans
                                 </td>
                                 <td>
-                                  {!! $i->created_at !!}
+                                  {!! $i->date_inscription !!}
                                 </td>
                                 <td>
                                   <a href="{{ route('inscriptions.show', ['id' => $i->id]) }}" class="btn btn-sm btn-info sm-mg-2">Afficher</a>
@@ -46,4 +45,22 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('custom-css')
+    <link rel="stylesheet" href="{{asset('css/dataTables.bootstrap.min.css')}}">
+@endsection
+@section('custom-js')
+    <script src="{{asset('js/jquery.dataTables.js')}}"></script>
+    <script src="{{asset('js/dataTables.bootstrap.min.js')}}"></script>
+    <script type="text/javascript">
+        $(document).ready( function () {
+            $('#table_eleves').dataTable({
+                "language": {
+                    "url": "{{asset('lang/French.json')}}"
+                },
+                "order": [[ 3, "desc" ]]
+            });
+        } );
+    </script>
 @endsection

@@ -59,6 +59,10 @@ class NoteController extends Controller
         $classe = Classe::findOrFail($req->classe);
         $trimestre = Trimestre::findOrFail($req->trimestre);
         $annee_scolaire = AnneeScolaire::findOrFail($req->anneeScolaire);
+        session()->forget('classe');
+        session()->forget('libelleClasse');
+        session()->forget('trimestre');
+        session()->forget('annee_scolaire');
         session(['classe' => $classe->id]);
         session(['libelleClasse' => $classe->cla_intitule]);
         session(['trimestre' => $trimestre->id]);
@@ -79,10 +83,15 @@ class NoteController extends Controller
      * Retourne la dernière vue pour enregistrer les notes
      */
     public function lastStep(Request $req){
-        session(['matiere' => $req->matiere]);
         $matiere = Matiere::findOrFail($req->matiere);
-        session(['libelleMatiere' => $matiere->intitule]);
         $typeEvaluation = TypeEvaluation::findOrFail($req->typeEv);
+
+        session()->forget('matiere');
+        session()->forget('libelleMatiere');
+        session()->forget('types_evaluation_id');
+        session()->forget('libelleEvaluation');
+        session(['matiere' => $req->matiere]);
+        session(['libelleMatiere' => $matiere->intitule]);
         session(['types_evaluation_id' => $req->typeEv]);
         session(['libelleEvaluation' => $typeEvaluation->tev_libelle]);
 
@@ -127,7 +136,8 @@ class NoteController extends Controller
             'trimestre_id' => session('trimestre'),
             'classe_id' => session('classe'),
             'matiere_id' => session('matiere'),
-            'annee_scolaire_id' => session('annee_scolaire')]);
+            'annee_scolaire_id' => session('annee_scolaire'),
+            'types_evaluation_id' => session('types_evaluation_id') ]);
         return Redirect::route('reload.note');
     }
 
@@ -148,7 +158,8 @@ class NoteController extends Controller
         $notes = Note::where(['trimestre_id' => session('trimestre'),
             'classe_id' => session('classe'),
             'matiere_id' => session('matiere'),
-            'annee_scolaire_id' => session('annee_scolaire')])
+            'annee_scolaire_id' => session('annee_scolaire'),
+            'types_evaluation_id' => session('types_evaluation_id')])
 
             ->get();
 

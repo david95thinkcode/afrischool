@@ -166,15 +166,6 @@ class BulletinController extends Controller
                 'examen' => [],
             ];
 
-            /** structuration des notes d'une matière dans un tableau
-             * du genre
-             * [
-             *      'interrogation => [
-             *                          [ 'note_not' => 12 ],
-             *                          [ 'note_not' => 11 ],
-             *                        ]
-             * ]
-             */
             foreach ($noteCollection as $k => $v) {
 
                 $matiereID = $v['matiere_id'];
@@ -195,7 +186,7 @@ class BulletinController extends Controller
                 }
             }
 
-            // Détails de la amtière
+            //Détails de la amtière
             $matiereDetails;
 
             foreach ($EnseignerArrays as $ensIndex => $enseignerModel) {

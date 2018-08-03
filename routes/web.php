@@ -34,6 +34,9 @@ Route::prefix('dashboard')->group(function () {
             ->where('idtrimestre', '[0-9]')
             ->where('matricule', '[0-9]+')
             ->name('bulletin.showbytrimestre');
+        Route::get('final/{matricule}', 'BulletinController@ShowFinal')
+            ->where('matricule', '[0-9]+')
+            ->name('bulletin.final');
     });
     // classe
     Route::get('classe/liste/{niveau}', 'ClasseController@listclasse')

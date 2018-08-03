@@ -26,7 +26,7 @@
                     <tr>
                         <th class="text-center"># Matricule</th>
                         <th class="text-center">Elève</th>
-                        <th class="text-center">Bulletin du</th>
+                        <th class="text-center">Bulletin</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -38,40 +38,12 @@
                                 @foreach ($trimestres as $tr)
                                     <a href="{!! route('bulletin.showbytrimestre', ['trimestre' => $tr->id, 'matricule' => $el->id]) !!}" class="btn btn-info">Trimestre {!! $tr->tri_numero !!}</a>
                                 @endforeach
+
+                                {{-- General --}}
+                                <a href="{!! route('bulletin.final', ['matricule' => $el->id]) !!}" class="btn btn-primary">Final</a>
                             </td>
                         </tr>
                     @endforeach
-
-                    {{-- @foreach ($horairesByDay as $jour => $horaires)
-                    
-                        @if ($horaires->count() > 0)
-                            @foreach ($horaires as $h => $itemValue)
-                                <tr>
-                                    @if ($loop->first)                                    
-                                        <th rowspan="{{$horaires->count()}}" class="day">{{$jour}}</th>
-                                    @endif
-                                    <td class="text-center"><strong>{{$itemValue->debut}} - {{$itemValue->fin}}</strong></td>
-                                    <td class="text-center">{{$itemValue->intitule}}</td>
-                                    <td class="text-center">{{$itemValue->prof_nom}} {{$itemValue->prof_prenoms}}</td>
-                                    <td class="text-center">
-                                        <form action="{{ route('horaire.destroy', $itemValue->horaire_id) }}" method="POST" class='table-del-btn'>
-                                            <input type="hidden" name="_method" value="DELETE">
-                                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                        {!! Form::submit('Retirer du programme', array('class' => 'btn btn-warning')) !!}
-                                        </form>
-                                </tr>
-                            @endforeach
-                        @else
-                            <tr>
-                                <th rowspan="1">{{$jour}}</th>
-                                <th class="text-center"> - </th>
-                                <td class="text-center"> - </td>
-                                <td class="text-center"> - </td>
-                                <td class="text-center"> - </td>
-                            </tr>
-                        @endif
-                       
-                    @endforeach --}}
                 </tbody>
             </table>
         </div>

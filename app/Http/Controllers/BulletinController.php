@@ -108,16 +108,15 @@ class BulletinController extends Controller
             if (count($notesBrutes) > 0) {
                 $notesOrdonnes = $this->OrdonnerNotes($notesBrutes, $matEnseignees);
 
-                // Montrons la vue adéquate
                 if (session()->get('classe.estPrimaire') == 1) {
                     $bulletinview = 'dashboard.bulletins.b-primaire';
                 } else if (session()->get('classe.estCollege') == 1) {
                     $bulletinview = 'dashboard.bulletins.b-college';
                 }
-
                 return view($bulletinview, compact('eleve', 'notesOrdonnes'));
 
-            } else {
+            } 
+            else {
                 // TODO pour @Romeo : faire une vue pour afficher le message ci-dessous dedans
                 return ('Impossible de générer le bulletin car aucune note enregistrée pour ce trimestre');
             }
@@ -218,6 +217,193 @@ class BulletinController extends Controller
         }
 
         return $orderedNotes;
+    }
+
+    public function ShowFinal($matricule)
+    {
+        $notesByTrimestre = [];
+        $avgByTrimestreAndMatiere = [];
+        $trimestreAVG = []; 
+
+        $eleve = Inscription::with('eleve', 'classe')
+            ->where('id', $matricule)
+            ->first();
+        
+        if (!is_null($eleve)) {
+
+            // Filling $noteByTrimestre
+            for ($trimestre=1; $trimestre < 4; $trimestre++) 
+            { 
+                $notes = $this->getNotesByTrimestre($trimestre, $eleve->id);
+                $notesByTrimestre[$trimestre] = $notes;
+            }
+
+            // Filling $avgByTrimestreAndMatiere
+            // NB : $key correspond au numero du trimestre;
+            foreach ($notesByTrimestre as $key => $trimestreNoteArray) {
+                if ((!is_null($trimestreNoteArray)) || (count($trimestreNoteArray)> 0)) {
+                    $avgs = [];
+
+                    // Calculer la moyenne de devoir et d'interro
+                    foreach ($trimestreNoteArray as $tnaKey => $tnaValue) {
+                        // Moyenne Interrogation si eleve en college
+                        if ($eleve->classe->estCollege == 1) {
+                            $avgInterro = $this->getInterrogationAVG($tnaValue['notes']['interrogation']);
+                            $avgs[$tnaKey]['moyenne']['interrogation'] = $avgInterro;
+                        }
+                        // Insertion dans [ Matiere => ['details', 'moyenne'] ]
+                        $avgDevoir = $this->getDevoirsAVG($tnaValue['notes']['devoir']);
+                        $avgs[$tnaKey]['details'] = $tnaValue['details'];
+                        $avgs[$tnaKey]['moyenne']['devoir'] = $avgDevoir;
+                    }
+                    
+                    $avgByTrimestreAndMatiere[$key] = $avgs;
+
+                    // Moyenne générale par trimestre
+                    $trimestreAVG[$key] = $this->getFinalAVGBytrimestre($avgByTrimestreAndMatiere[$key]);
+                }
+            }
+        }
+        else {
+            $notesByTrimestre = null;
+            abort(403);
+        }
+        return $trimestreAVG;
+    }
+
+
+    /**
+     * Calcule la moyenne générale 
+     * à partir d'un lot de matière recu  en paramètre
+     *
+     * @param [array] $notesByTrimestreCollection
+     * @return int 
+     */
+    private function getFinalAVGBytrimestre($notesByTrimestreCollection)
+    {
+        // Fais le cumul des moyennes de devoir de chaque matière
+        // calcule la moyenne en fonction de ces notes
+        $sum = 0;
+
+        foreach ($notesByTrimestreCollection as $key => $value) {
+            $sum += $value['moyenne']['devoir'];
+        }
+
+        return $sum / count($notesByTrimestreCollection);
+    }
+
+    /**
+     * Retourne la moyenne des devoirs
+     * 
+     * @param [Collection] Collection de Note de devoir
+     * @return [float] $avg
+     */
+    private function getDevoirsAVG($devoirNotesCollection)
+    {
+        $avg = 0;
+        $sum = 0;
+
+        if (!is_null($devoirNotesCollection)) {
+            foreach ($devoirNotesCollection as $key => $noteModel) {
+                if (!is_null($noteModel->not_note)) {
+                    $sum += $noteModel->not_note;
+                }
+                else {
+                    $sum += 0;
+                }
+            }
+            $avg = $sum / count($devoirNotesCollection);            
+        }
+
+        return $avg;
+    }
+
+    /**
+     * Retourne la moyenne des interrogation
+     * 
+     * @param [Collection] Collection de Note d'interrogation
+     * @return [float] $avg
+     */
+    private function getInterrogationAVG($interroNotesCollection)
+    {
+        $avg = 0;
+        $sum = 0;
+
+        if (!is_null($interroNotesCollection)) {
+            foreach ($interroNotesCollection as $key => $noteModel) {
+                if (!is_null($noteModel->not_note)) {
+                    $sum += $noteModel->not_note;
+                }
+                else {
+                    $sum += 0;
+                }
+            }
+            $avg = $sum / count($interroNotesCollection);            
+        }
+
+        return $avg;
+    }
+
+
+    public function CalculerMoyenneGenerale()
+    {
+        
+    }
+
+
+    //////////////////////////////////////
+    // TODO: clone de ShowByTrimestre
+    // Mais adapté à autre chose
+    public function getNotesByTrimestre($idTrimestre, $matricule)
+    {
+        // le matricule est le numéro de l'élève dans la table inscription
+        $bulletinview = '';
+        $notesBrutes = [];
+        $notesOrdonnes = [];
+        $moyennesByMat = [];
+        $moyenneGenerale;
+
+        $eleve = Inscription::with('eleve')
+            ->where('id', $matricule)
+            ->first();
+
+        if ($eleve != null) {
+
+            // matière enseignées dans la classe
+            $matEnseignees = Enseigner::with('matiere', 'professeur')
+                ->where([
+                    ['classe_id', $eleve->classe_id],
+                    ['annee_scolaire_id', session()->get('anneescolaire.id')],
+                ])
+                ->get();
+
+            // les notes de chaque matière
+            foreach ($matEnseignees as $key => $m) {
+                $note = Note::where([
+                    ['annee_scolaire_id', $eleve->annee_scolaire_id],
+                    ['eleve_id', $eleve->eleve_id],
+                    ['classe_id', $eleve->classe_id],
+                    ['trimestre_id', $idTrimestre],
+                    ['matiere_id', $m['matiere_id']],
+                ])
+                    ->get();
+
+                if (count($note) > 0) {
+                    array_push($notesBrutes, $note);
+                }
+            }
+
+            if (count($notesBrutes) > 0) {
+                $notesOrdonnes = $this->OrdonnerNotes($notesBrutes, $matEnseignees);
+                return $notesOrdonnes;
+            } 
+            else {
+                return null;
+            }
+
+        } else {
+            abort(404);
+        }
     }
 
 }

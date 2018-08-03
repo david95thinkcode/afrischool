@@ -99,6 +99,8 @@ Route::prefix('dashboard')->group(function () {
         Route::get('{professeur}/diplome/create', 'DiplomeController@createFromProf')
             ->where('professeur', '[0-9]+')
             ->name('professeur.diplome.create');
+        Route::get('professeur/{id}/edit', 'ProfesseurController@edit')
+            ->name('professeur.edit');
     });
 
     Route::prefix('inscription-eleve')->group(function () {

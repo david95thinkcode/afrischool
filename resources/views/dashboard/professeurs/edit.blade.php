@@ -6,8 +6,7 @@
         <div class="x-content">
 
             {!! Form::model($prof, ['action' => ['ProfesseurController@update', $prof->id], 'method' => 'PUT']) !!}
-            @include('dashboard.professeurs.partials.form-create-edit')
-
+                @include('dashboard.professeurs.partials.form-create-edit')
             {!! Form::close() !!}
 
         </div>

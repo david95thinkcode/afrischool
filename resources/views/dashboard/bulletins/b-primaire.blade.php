@@ -3,8 +3,24 @@
 @section('section-title') Bulletin de {!! $eleve['eleve']->nom !!} {!! $eleve['eleve']->prenoms !!} @endsection
 @section('content')
 <div class="row">
-    <div class="col-sm-8">
-        
+    <div class="col-md-5">
+        <address class="col-md-8 col-md-offset-1">
+            <h5>Ministère Enseignements Secondaire, <br><span class="pl-2"> Technique et Professionnel</span></h5>
+            <div class="col-md-offset-2">
+                <strong>Bulletin du :</strong>  1 trimestre<br>
+                <strong>Nom :  ____ {!! $eleve['eleve']->nom !!}  ___</strong> <br>
+                <strong>Prénom(s) :  ____ {!! $eleve['eleve']->prenoms !!} ___</strong>
+            </div>
+        </address>
+    </div>
+    <div class="col-md-5 col-md-offset-2">
+        <address class="col-md-8 col-md-offset-4">
+            <h5>RÉPUBLIQUE BÉNINOISE</h5>
+            <div class="col-md-offset-1">
+                <strong>Classe :</strong> {!! Session::get('classe.cla_intitule') !!}  <br>
+                <strong>Effectif :</strong> 10
+            </div>
+        </address>
     </div>
 </div>
 <div class='row'>

@@ -20,6 +20,11 @@
                     <th>Actions</th>
                 </thead>
                 <tbody>
+                @php
+                    $ens = $ens->unique(function ($item) {
+                        return $item->prof_prenoms.$item->prof_nom;
+                    });
+                @endphp
                 @foreach ($ens as $e)
                     <tr>
                         <td>{{ $e->id }}</td>
@@ -34,10 +39,10 @@
                             <a href="{{ route('professeurs.show', ['id' => $e->professeur_id] ) }}" class="btn btn-sm btn-info">
                             Afficher
                             </a>
-                            <a href="{{ route('enseigner.edit', ['id' => $e->id] ) }}" class="btn btn-sm btn-primary">
+                            <a href="{{ route('professeur.edit', ['id' => $e->professeur_id] ) }}" class="btn btn-sm btn-primary">
                             Modifier
                             </a>
-                            <form action="{{ route('professeurs.destroy', $e->id) }}" method="POST" class='table-del-btn'>
+                            <form action="{{ route('professeurs.destroy', $e->professeur_id) }}" method="POST" class='table-del-btn'>
                                 <input type="hidden" name="_method" value="DELETE">
                                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                               {!! Form::submit('Retirer', array('class' => 'btn btn-sm btn-danger')) !!}

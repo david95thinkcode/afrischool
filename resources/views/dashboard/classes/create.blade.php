@@ -9,7 +9,7 @@
                 <div class="">
                 
                     {!! Form::open(['action' => ['ClasseController@store'], 'method' => 'POST']) !!}
-                        @include('dashboard.classes.partials.form-create-edit')
+                        @include('dashboard.classes.partials.form-create')
                     {!! Form::close() !!}
 
                 </div>

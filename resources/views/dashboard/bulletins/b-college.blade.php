@@ -8,7 +8,7 @@
     </div>
 </div>
 <div class='row'>
-    <div class="col-sm-offset-2 col-sm-8">
+    <div class="col-sm-offset-1 col-sm-10">
         <div class="table-responsive">
             <table class="table" id='bulletinTable'>
                 <thead>
@@ -26,6 +26,7 @@
                     <tr>
                         <td>{{ $matiere }}</td>
 
+                        {{-- {{ dd($item['notes']) }} --}}
                         @foreach ($item['notes'] as $typeEvaluation => $notes)
                             
                             {{-- Interrogations --}}
@@ -39,7 +40,7 @@
                                     @php
                                       $increment++;
                                       $variable +=  $note->not_note;
-                                    @endphp
+                                      @endphp
                                 @endforeach
                                 {{-- AVG --}}
                                 {!! $variable / $increment !!}
@@ -48,16 +49,16 @@
                                 <td class="b-interro">aucune note</td>
                             @endif
                             
-                            {{-- Les devoirs --}}
+                            {{-- Les devoirs --}}   
                             @if (($typeEvaluation == 'devoir') && (count($notes) == 0))
                                 <td class="b-devoir">aucune note</td>
                                 <td class="b-devoir">aucune note</td>
                             @elseif (($typeEvaluation == 'devoir') && (count($notes) == 1))
-                                <td class="b-devoir">{!! $notes->not_note !!}</td>
+                                <td class="b-devoir">{!! $notes[0]->not_note !!}</td>
                                 <td class="b-devoir">aucune note</td>
-                            @elseif (($typeEvaluation == 'devoir') && (count($notes) == 2))
-                                @foreach ($notes as $note)
-                                    <td class="b-devoir">{!! $note->not_note !!}</td>                                
+                            @elseif (($typeEvaluation == 'devoir') && (count($notes) == 2))                        
+                                @foreach ($notes as $note)                                
+                                    <td class="b-devoir">{!! $note->not_note !!}</td>
                                 @endforeach
                             @endif
 

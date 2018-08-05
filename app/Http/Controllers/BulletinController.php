@@ -244,6 +244,7 @@ class BulletinController extends Controller
             } else {
                 $moyEleve = $this->getTrimestreAvgFromOrderedNotes($notesOrdonnes, true);
             }
+            array_push($avgs, $moyEleve);
 
             $eleves = Inscription::with('eleve', 'classe')
                 ->where('classe_id', $eleve->classe_id)
@@ -260,6 +261,8 @@ class BulletinController extends Controller
             }
 
             $rang = $this->getRange($moyEleve, $avgs);
+            $effectif = $this->getEffectif($eleve->classe_id, $eleve->annee_scolaire_id);
+
             if ($eleve->classe->estPrimaire == 1) {
                 $bulletinview = 'dashboard.bulletins.b-primaire';
             } 
@@ -300,6 +303,7 @@ class BulletinController extends Controller
 
         $effectif = $this->getEffectif($eleve->classe_id, $eleve->annee_scolaire_id);
         $moyEleve = $this->ShowFinal($matricule);
+        array_push($avgs, $moyEleve);
         $rang = $this->getRange($moyEleve, $avgs);
         
         $toReturn = [
@@ -673,17 +677,14 @@ class BulletinController extends Controller
      * @return int
      */
     private function getRange($avg, $avgArray)
-    {
-        
+    {        
         $range = 1;
-        // $avgArray = [12, 15, 10, 18];
         
-        if (count($avgArray) > 0) 
-        {
-            // TODO: C'est la seule méthode qui reste à écrire pour finir mon travail
-
+        if (count($avgArray) > 0) {
+            sort($avgArray);
+            $range = array_search($avg, $avgArray);
         }
-
+        
         return $range;
     }
 

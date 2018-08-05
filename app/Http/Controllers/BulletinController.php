@@ -679,10 +679,11 @@ class BulletinController extends Controller
     private function getRange($avg, $avgArray)
     {        
         $range = 1;
-        
+
         if (count($avgArray) > 0) {
-            sort($avgArray);
+            rsort($avgArray);
             $range = array_search($avg, $avgArray);
+            $range ++; // important
         }
         
         return $range;

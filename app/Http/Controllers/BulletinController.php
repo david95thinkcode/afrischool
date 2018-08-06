@@ -65,7 +65,12 @@ class BulletinController extends Controller
         return view('dashboard.bulletins.step-3', compact('eleves', 'trimestres'));
     }
 
-    public function ShowByTrimestre($idTrimestre, $matricule)
+    /**
+     * Retourne des notes ordonnées d'un élève
+     * pour un trimestre donné
+     * 
+     */
+    public function GetOrdoredNotesByTrimestre($idTrimestre, $matricule)
     {
         // le matricule est le numéro de l'élève dans la table inscription
 
@@ -108,17 +113,15 @@ class BulletinController extends Controller
             if (count($notesBrutes) > 0) {
                 $notesOrdonnes = $this->OrdonnerNotes($notesBrutes, $matEnseignees);
 
-                if (session()->get('classe.estPrimaire') == 1) {
-                    $bulletinview = 'dashboard.bulletins.b-primaire';
-                } else if (session()->get('classe.estCollege') == 1) {
-                    $bulletinview = 'dashboard.bulletins.b-college';
-                }
-                return view($bulletinview, compact('eleve', 'notesOrdonnes'));
+                $toReturn = [
+                    "eleve" => $eleve,
+                    "notesOrdonnes" => $notesOrdonnes
+                ];
 
+                return $toReturn;
             } 
             else {
-                // TODO pour @Romeo : faire une vue pour afficher le message ci-dessous dedans
-                return ('Impossible de générer le bulletin car aucune note enregistrée pour ce trimestre');
+                return null;
             }
 
         } else {
@@ -219,12 +222,150 @@ class BulletinController extends Controller
         return $orderedNotes;
     }
 
+    /**
+     * Affiche le bulletin pour un trimestre donné
+     *
+     * @param int $idTrimestre
+     * @param int $matricule : numéro de l'élève dans la table inscription
+     * @return View
+     */
+    public function AvgByTrimestreWithRangeAndNumber($idTrimestre, $matricule)
+    {
+        $rang;
+        $avgs = [];
+        $effectif = 0;
+        $moyEleve = 0;
+        $results = $this->GetOrdoredNotesByTrimestre($idTrimestre, $matricule);
+        
+        if (!is_null($results)) {
+            $eleve = $results['eleve'];
+            $notesOrdonnes = $results['notesOrdonnes'];
+            
+            if ($eleve->classe->estPrimaire == 1) {
+                $moyEleve = $this->getTrimestreAvgFromOrderedNotes($notesOrdonnes, false);
+            } else {
+                $moyEleve = $this->getTrimestreAvgFromOrderedNotes($notesOrdonnes, true);
+            }
+            array_push($avgs, $moyEleve);
+
+            $eleves = Inscription::with('eleve', 'classe')
+                ->where('classe_id', $eleve->classe_id)
+                ->whereNotIn('id', [$matricule])->get(); 
+            
+            foreach ($eleves as $key => $InscriptionModel) {
+                $ordNotes = $this->GetOrdoredNotesByTrimestre($idTrimestre, $InscriptionModel->$matricule);
+                if ($InscriptionModel->classe->estPrimaire == 1) {
+                    $avg = $this->getTrimestreAvgFromOrderedNotes($ordNotes, false);
+                } else {
+                    $avg = $this->getTrimestreAvgFromOrderedNotes($ordNotes, true);
+                }
+                array_push($avgs, $avg);
+            }
+
+            $rang = $this->getRange($moyEleve, $avgs);
+            $effectif = $this->getEffectif($eleve->classe_id, $eleve->annee_scolaire_id);
+
+            if ($eleve->classe->estPrimaire == 1) {
+                $bulletinview = 'dashboard.bulletins.b-primaire';
+            } 
+            else {
+                $bulletinview = 'dashboard.bulletins.b-college';
+            }
+            
+            return view($bulletinview, compact('eleve', 'notesOrdonnes', 'rang', 'effectif'));
+
+        }
+        else {
+            return null;
+        }
+
+    }
+
+
+    /**
+     * Retourne le rang, l'effectif ainsi que les moyennes générales
+     * dans la classe de l'élève dont le matricule est indiqué.
+     *
+     * @param [type] $matricule
+     * @return void
+     */
+    public function FinalAvgWithRangeAndNumber($matricule)
+    {
+        $avgs = []; // Moyenne des autres éléèves de la classe
+
+        $eleve = Inscription::find($matricule)->first();
+        $eleves = Inscription::with('eleve')
+                ->where('classe_id', $eleve->classe_id)
+                ->whereNotIn('id', [$matricule])->get();        
+        
+        foreach ($eleves as $key => $InscriptionModel) {
+            $data = $this->ShowFinal($matricule);
+            array_push($avgs, $data['moyenneGenerale']);
+        }
+
+        $effectif = $this->getEffectif($eleve->classe_id, $eleve->annee_scolaire_id);
+        $moyEleve = $this->ShowFinal($matricule);
+        array_push($avgs, $moyEleve);
+        $rang = $this->getRange($moyEleve, $avgs);
+        
+        $toReturn = [
+            "rang" => $rang,
+            "effectif" => $effectif,
+            "moyennes" => $moyEleve
+        ];
+
+        return $toReturn;
+    }
+
+    /**
+     * Retourne un tableau concernant les moyennes de l'élève
+     * dont le matricule est reçu en paramètre
+     * 
+     * @param int $matricule
+     * @return void
+     */
     public function ShowFinal($matricule)
     {
-        $notesByTrimestre = [];
-        $avgByTrimestreAndMatiere = [];
+        /**
+         * $trimestreAVG : Cette variable contient la moyenne 
+         * générale par trimestre
+         * 
+         * NB: 
+         * $trimestreAVG[1] => moyenne générale du trimestre 1
+         * 
+         * $trimestreAVG[2] => moyenne générale du trimestre 2
+         * 
+         * $trimestreAVG[3] => moyenne générale du trimestre 3
+         * 
+         */
         $trimestreAVG = []; 
 
+        /**
+         * $avgByTrimestreAndMatiere : Cette variable contient la moyenne 
+         * de devoir et d'interro par trimestre
+         * 
+         * NB: 
+         * $avgByTrimestreAndMatiere[1] => moyennes d'interro et devoir du trimestre 1
+         * 
+         * $avgByTrimestreAndMatiere[1]['Informatique] =>  moyenne d'interro et 
+         * devoir du trimestre 1 en Informatique
+         * 
+         * $avgByTrimestreAndMatiere[1]['Informatique]['moyennes']['interrogation'] => 
+         * moyenne d'interro du trimestre 1
+         * 
+         * $avgByTrimestreAndMatiere[1]['Informatique]['moyennes']['devoir'] => 
+         * moyenne de devoir du trimestre 1
+         */
+        $avgByTrimestreAndMatiere = [];
+        
+        /**
+         * Tableau contenant la moyenne générale de chaque 
+         * matière à l'issue des 3 trimestres 
+         */
+        $finalAvgByMatiere = [];
+        $notesByTrimestre = [];
+        $toReturn;
+        
         $eleve = Inscription::with('eleve', 'classe')
             ->where('id', $matricule)
             ->first();
@@ -244,12 +385,14 @@ class BulletinController extends Controller
                 if ((!is_null($trimestreNoteArray)) || (count($trimestreNoteArray)> 0)) {
                     $avgs = [];
 
-                    // Calculer la moyenne de devoir et d'interro
+                    // Calcul moyenne de devoir et d'interro
                     foreach ($trimestreNoteArray as $tnaKey => $tnaValue) {
-                        // Moyenne Interrogation si eleve en college
-                        if ($eleve->classe->estCollege == 1) {
+                        // Eleve en college
+                        if ($eleve->classe->estCollege == 1) 
+                        {
                             $avgInterro = $this->getInterrogationAVG($tnaValue['notes']['interrogation']);
                             $avgs[$tnaKey]['moyenne']['interrogation'] = $avgInterro;
+                            $avgs[$tnaKey]['somme']['devoir'] = $this->getDevoirsSum($tnaValue['notes']['devoir']);
                         }
                         // Insertion dans [ Matiere => ['details', 'moyenne'] ]
                         $avgDevoir = $this->getDevoirsAVG($tnaValue['notes']['devoir']);
@@ -259,44 +402,224 @@ class BulletinController extends Controller
                     
                     $avgByTrimestreAndMatiere[$key] = $avgs;
 
-                    // Moyenne générale par trimestre
-                    $trimestreAVG[$key] = $this->getFinalAVGBytrimestre($avgByTrimestreAndMatiere[$key]);
+                    // Moyenne générale pour chaque trimestre ($key)
+                    if ($eleve->classe->estCollege == 1) {
+                        $trimestreAVG[$key] = $this->getTrimestreAvg($avgByTrimestreAndMatiere[$key], true);
+                    }
+                    else {
+                        $trimestreAVG[$key] = $this->getTrimestreAvg($avgByTrimestreAndMatiere[$key], false);    
+                    }
                 }
             }
+          
+            $finalAvgByMatiere = $this->getFinalAvgByMatiere($avgByTrimestreAndMatiere, $eleve->classe);
+            
+            // FINALISATION ...
+            $toReturn = [
+                "moyenneGenerale" => $this->CalculerMoyenneGenerale($trimestreAVG),
+                "moyenneParTrimestre" => $trimestreAVG,
+                "moyenneGeneraleParMatiere" => $finalAvgByMatiere 
+            ];
         }
         else {
-            $notesByTrimestre = null;
             abort(403);
         }
-        return $trimestreAVG;
+
+        return $toReturn;
     }
 
 
     /**
-     * Calcule la moyenne générale 
-     * à partir d'un lot de matière recu  en paramètre
+     * Moyenne finale de chaque matière
+     * à la fin de l'année
      *
-     * @param [array] $notesByTrimestreCollection
-     * @return int 
+     * @param [type] $moyenneMatiereParTrimestre
+     * @return mixed
      */
-    private function getFinalAVGBytrimestre($notesByTrimestreCollection)
+    private function getFinalAvgByMatiere($moyenneMatiereParTrimestre, $classe)
     {
-        // Fais le cumul des moyennes de devoir de chaque matière
-        // calcule la moyenne en fonction de ces notes
-        $sum = 0;
+        /**
+         * Moyenne générale finale de chaque matière.
+         * 
+         * Ne rien faire si les moyennes générale des matières par trimestre des  
+         * trois (3) trimestres ne sont pas fournies
+         * Lorsque les données sont fournies,
+         * créer un tableau avec pour indice les matieres,
+         * pour chaque tableau par exemple [GrandTableau]['Informatique'] = [],
+         * créer à l'intérieur l'attribut 'sum'.
+         * 'sum' sera actualisé à chaque fois qu'une moyenne est trouvée pour
+         * la matière 'Informatique' dans un autre trimestre.
+         * 
+         * Enfin, faire la division de la 'sum' par 3
+         * quand tous les trimestres ont été parcourus pour obtenir 
+         * la moyenne générale finale de cette matière. 
+         * 
+         * NB : 
+         * [GrandTableau]['matiere']['sum'] => Contient la sum des moyennes
+         * [GrandTableau]['matiere']['avg'] => Contient la moyenne générale de la matière
+         * [GrandTableau]['matiere']['details'] => Contient des détails sur la matière
+         * 
+         */
+        
+        $finalAvgs = [];
 
-        foreach ($notesByTrimestreCollection as $key => $value) {
-            $sum += $value['moyenne']['devoir'];
+        if (count($moyenneMatiereParTrimestre) > 0) 
+        {
+            $avgSum = [];
+            
+            foreach ($moyenneMatiereParTrimestre as $trimestre => $matieres) {
+                                
+                foreach ($matieres as $matKey => $matValue) {
+                    
+                    if (!isset($avgSum[$matKey])) { // Moyenne du trimestre 1 existe déjà dans $avgSum ?
+                        
+                        $avgSum[$matKey]['details'] = $matValue['details'];
+
+                        if ($classe->estCollege == 1) {
+                            $avgSum[$matKey]['sum'] = ( $matValue['moyenne']['interrogation'] + $matValue['somme']['devoir']) / 3;
+                        } else {
+                            $avgSum[$matKey]['sum'] = $matValue['moyenne']['devoir'];
+                        }
+                    } 
+                    else {
+
+                        if ($classe->estCollege == 1) {
+                            $avgSum[$matKey]['sum'] = ( $matValue['moyenne']['interrogation'] + $matValue['somme']['devoir']) / 3;
+                        } else {
+                            $avgSum[$matKey]['sum'] = $matValue['moyenne']['devoir'];
+                        }
+                    }                    
+                }
+            }
+            
+            // Trouvons les moyennes
+            foreach ($avgSum as $keyMat => $v) {
+                $finalAvgs[$keyMat] = $v;
+                $finalAvgs[$keyMat]['avg'] = $finalAvgs[$keyMat]['sum'] / 3;
+            }
+        } 
+        else {
+            $finalAvgs = null;
+        }
+        
+        return $finalAvgs;
+    }
+
+
+    /**
+     * Retourne la moyenne général d'un trimestre
+     *
+     * @param array $notesByTrimestreCollection
+     * @param boolean $isCollege
+     * @return float
+     */
+    private function getTrimestreAvg($matiereArray, $isCollege)
+    {
+        /**
+         * EN BREF,
+         * 
+         * DESCRIPTION
+         * Cette méthode fait la somme de toutes les moyennes 
+         * de chaque matière puis la divise par le nombre 
+         * de matière.
+         * 
+         * PARAMETRES
+         * $matiereArray est un tableau
+         * Chacun des éléments du tableau contient des données d'une matière
+         * pour un trimestre. Ce trimestre n'a pas besoin d'être renseigné
+         * dans cette méthode.
+         * 
+         * Chaque élément du tableau contient :
+         * $element['moyenne']['interrogation']
+         * $element['moyenne']['devoir']
+         * $element['somme']['devoir'] (uniquement s'il s'agit d'une matière
+         * du college)
+         * 
+         * LE PRIMAIRE
+         * La moyenne de chaque matière se trouve dans 
+         * $element['moyenne']['devoir']
+         * 
+         * LE COLLEGE
+         * Contrairement au cas du primaire, ici la moyenne 
+         * de chaque matière se calcule en diviant par 3 la somme 
+         * entre la moyenne d'interrogation et celle des notes de devoir
+         * 
+         */
+        
+        $avgsum = 0;
+        
+        if ($isCollege) {
+            foreach ($matiereArray as $key => $value) {
+                $avgsum += ($value['moyenne']['interrogation'] + $value['somme']['devoir']) / 3;
+            }
+        }
+        else {
+            foreach ($matiereArray as $key => $value) {
+                $avgsum += $value['moyenne']['devoir'];
+            }
         }
 
-        return $sum / count($notesByTrimestreCollection);
+        return $avgsum / count($matiereArray);
+    }
+
+    
+    private function getTrimestreAvgFromOrderedNotes($orderedNote, $isCollege)
+    {
+        $moy = 0;
+
+        foreach ($orderedNote as $key => $value) {
+            $n = $this->getDevoirsAVG($value['notes']['devoir']);
+            
+            if ($isCollege) {
+                $i = $this->getInterrogationAVG($value['notes']['interrogation']);
+                $u = $this->getDevoirsSum($value['notes']['devoir']);
+                $m = ($i + $u) / 3;
+            }
+            else {
+                $m = $n;
+            }
+            $moy += $m;
+        }
+
+        $moy = $moy / count($orderedNote);
+
+        return $moy;
+    }
+
+
+    /**
+     * Retourne la somme des notes de devoirs
+     * 
+     * @param Collection Collection de Note de devoir
+     * @return float $avg
+     */
+    private function getDevoirsSum($devoirNotesCollection)
+    {
+        $sum = 0;
+
+        if (!is_null($devoirNotesCollection)) {
+    
+            foreach ($devoirNotesCollection as $key => $noteModel) {
+
+                if (!is_null($noteModel->not_note)) {
+                    $sum += $noteModel->not_note;
+                }
+                else {
+                    $sum += 0;
+                }
+            }            
+        }
+
+        return $sum;
     }
 
     /**
      * Retourne la moyenne des devoirs
      * 
-     * @param [Collection] Collection de Note de devoir
-     * @return [float] $avg
+     * Utile uniquement pour les notes du primaire
+     * 
+     * @param Collection Collection de Note de devoir
+     * @return float $avg
      */
     private function getDevoirsAVG($devoirNotesCollection)
     {
@@ -319,10 +642,11 @@ class BulletinController extends Controller
     }
 
     /**
-     * Retourne la moyenne des interrogation
+     * Retourne la moyenne des interrogations
      * 
-     * @param [Collection] Collection de Note d'interrogation
-     * @return [float] $avg
+     * Utile pour les notes du primaires ainsi que pr le college
+     * @param Collection Collection de Note d'interrogation
+     * @return float $avg
      */
     private function getInterrogationAVG($interroNotesCollection)
     {
@@ -345,15 +669,55 @@ class BulletinController extends Controller
     }
 
 
-    public function CalculerMoyenneGenerale()
-    {
+    /**
+     * Retourne le rang correspondant à une
+     * moyenne reçue en paramètre dans un lot de
+     * moyennes
+     *
+     * @param float $avg 
+     * @param array $avgArray
+     * @return int
+     */
+    private function getRange($avg, $avgArray)
+    {        
+        $range = 1;
         
+        if (count($avgArray) > 0) {
+            sort($avgArray);
+            $range = array_search($avg, $avgArray);
+        }
+        
+        return $range;
+    }
+
+    /**
+     * Retourne l'effectif des élèves dans une classe
+     * pour une année scolaire donnée
+     *
+     * @param int $classeID
+     * @param int $intanneeScolaireID
+     * @return int
+     */
+    private function getEffectif($classeID, $anneeScolaireID)
+    {
+        $number = Inscription::where([
+            ['annee_scolaire_id', $anneeScolaireID],
+            ['classe_id', $classeID]
+        ])->count();
+
+        return $number;
     }
 
 
-    //////////////////////////////////////
-    // TODO: clone de ShowByTrimestre
+    // clone de GetOrdoredNotesByTrimestre
     // Mais adapté à autre chose
+    /**
+     * Retourne les moyennes d'un élève pour un trimestre
+     *
+     * @param [type] $idTrimestre
+     * @param [type] $matricule
+     * @return void
+     */
     public function getNotesByTrimestre($idTrimestre, $matricule)
     {
         // le matricule est le numéro de l'élève dans la table inscription
@@ -393,7 +757,8 @@ class BulletinController extends Controller
                 }
             }
 
-            if (count($notesBrutes) > 0) {
+            if (count($notesBrutes) > 0) 
+            {
                 $notesOrdonnes = $this->OrdonnerNotes($notesBrutes, $matEnseignees);
                 return $notesOrdonnes;
             } 
@@ -404,6 +769,28 @@ class BulletinController extends Controller
         } else {
             abort(404);
         }
+    }
+
+    /**
+     * Retourne une division par 3 
+     * de la somme des éléments du tableau recu en paramètre
+     *
+     * @param array $avgArray
+     * @return void
+     */
+    private function CalculerMoyenneGenerale($avgArray)
+    {
+        $m = 0;
+        $sum = 0;
+
+        if (count($avgArray) > 0) {
+            foreach ($avgArray as $key => $avg) {
+                $sum += $avg;
+            }
+            $m = $sum / 3;
+        }
+
+        return $m;
     }
 
 }

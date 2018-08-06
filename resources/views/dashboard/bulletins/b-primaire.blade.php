@@ -47,7 +47,7 @@
                                 <td class="b-devoir">aucune note</td>
                                 <td class="b-devoir">aucune note</td>
                             @elseif (($typeEvaluation == 'devoir') && (count($notes) == 1))
-                                <td class="b-devoir">{!! $notes->not_note !!}</td>
+                                <td class="b-devoir">{!! $notes[0]->not_note !!}</td>
                                 <td class="b-devoir">aucune note</td>
                             @elseif (($typeEvaluation == 'devoir') && (count($notes) == 2))
                                 @foreach ($notes as $note)

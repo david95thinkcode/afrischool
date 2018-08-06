@@ -30,11 +30,11 @@ Route::prefix('dashboard')->group(function () {
         Route::post('/', 'BulletinController@ListEleves')
             ->where('niveau', '[A-Za-z]+')
             ->name('bulletin.criteres.post');
-        Route::get('trimestre/{idtrimestre}/{matricule}', 'BulletinController@ShowByTrimestre')
+        Route::get('trimestre/{idtrimestre}/{matricule}', 'BulletinController@AvgByTrimestreWithRangeAndNumber')
             ->where('idtrimestre', '[0-9]')
             ->where('matricule', '[0-9]+')
             ->name('bulletin.showbytrimestre');
-        Route::get('final/{matricule}', 'BulletinController@ShowFinal')
+        Route::get('final/{matricule}', 'BulletinController@FinalAvgWithRangeAndNumber')
             ->where('matricule', '[0-9]+')
             ->name('bulletin.final');
     });

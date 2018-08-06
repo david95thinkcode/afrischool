@@ -59,7 +59,7 @@
                         @endif
                     </div>
                     <div>
-                        <input type="submit" class="btn btn-default submit" value="Se connecter">
+                        <input type="submit" class="btn btn-default btn-lg submit" value="Se connecter">
                         <a class="reset_pass" href="#">Mot de passe oublié?</a>
                     </div>
 
@@ -67,7 +67,7 @@
 
                     <div class="separator">
                         <p class="change_link mb-2">Nouveau sur le site?
-                            <a href="{{route('register')}}" class="to_register"> S'inscrire</a>
+                            <a href="{{route('register')}}" class="to_register"> <strong>S'inscrire</strong> </a>
                         </p>
 
                         <div>

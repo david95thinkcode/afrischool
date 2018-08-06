@@ -43,7 +43,7 @@ class RegisterController extends Controller
             'password' => bcrypt($req->password),
         ]);
 
-        Flashy::success('Votre compte sera bientôt activé par l\'administrateur');
+        Flashy::success('Votre compte a été créé avec succès');
         return redirect()->route('login');
     }
 }

@@ -13,7 +13,7 @@
 
 Route::get('/', 'PublicPagesController@index')->name('home');
 
-Route::prefix('dashboard')->group(function () {
+Route::group(['prefix' => 'dashboard', 'middleware' => ['auth']], function () {
     Route::get('/', 'DashboardController@Home')->name('dashboard.home');
     Route::resource('etablissements', 'EtablissementController');
     Route::resource('professeurs', 'ProfesseurController');
@@ -160,7 +160,7 @@ Route::prefix('dashboard')->group(function () {
 /**
  * Consultation des détails sur les enfants par les parents
  */
-Route::prefix('consultation')->group(function(){
+Route::group(['prefix' => 'consultation', 'middleware' => ['auth']], function(){
     Route::get('/', 'ConsultationController@choose')->name('consultation.choix');
     Route::get('enfant/{ideleve}', 'ConsultationController@home')->name('consultation.index');
 });

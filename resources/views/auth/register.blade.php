@@ -79,15 +79,15 @@
                         <input id="password-confirm" type="password" class="form-control"
                                placeholder="Confirmer mot de passe" name="password_confirmation" required>
                     </div>
-                    <div>
-                        <input type="submit" class="btn btn-default submit" value="S'inscrire">
+                    <div class="col-md-offset-3 col-xs-offset-3">
+                        <input type="submit" class="btn btn-default btn-lg submit" value="S'inscrire">
                     </div>
 
                     <div class="clearfix"></div>
 
                     <div class="separator">
                         <p class="change_link mb-2">Déjà un compte ?
-                            <a href="{{route('login')}}" class="to_register">Se connecter</a>
+                            <a href="{{route('login')}}" class="to_register"> <strong>Se connecter</strong> </a>
                         </p>
 
                         <div>

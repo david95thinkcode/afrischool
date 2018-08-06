@@ -17,14 +17,15 @@
             text-align: center !important;
             background-color: transparent !important;
         }
+        .footer {
+            border-top: solid 1px #bfbfbf;
+        }
     </style>
     <link href="{{ asset('css/ie10-viewport-bug-workaround.css') }}" rel="stylesheet">
     <!--[if IE]>
-    <link href="{{asset('css/bootstrap-ie9.css')}}" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/g/html5shiv@3.7.3"></script>
     <![endif]-->
     <!--[if lt IE 9]>
-    <link href="{{asset('css/bootstrap-ie8.css')}}" rel="stylesheet">
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
@@ -34,10 +35,23 @@
 
 <header class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
     <h5 class="my-0 mr-md-auto font-weight-normal">{!! env('APP_NAME') !!}</h5>
-    <nav class="my-2 my-md-0 mr-md-3">
-        <a class="p-2 text-dark" href="{{route('register')}}">Inscrption</a>
-    </nav>
-    <a class="btn btn-outline-info" href="{{route('login')}}">Connexion</a>
+
+    @if (Auth::guest())
+        <nav class="my-2 my-md-0 mr-md-3">
+            <a class="p-2 text-dark" href="{{route('register')}}">Inscrption</a>
+        </nav>
+        <a class="btn btn-outline-info" href="{{route('login')}}">Connexion</a>
+    @else
+        <a href="{{ route('logout') }}" class="btn btn-outline-info"
+           onclick="event.preventDefault();
+                    document.getElementById('logout-form').submit();">
+            <i class="fa fa-sign-out"></i>
+            Se deconnecter
+        </a>
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+            {{ csrf_field() }}
+        </form>
+    @endif
 </header>
 
 <main class="container-fluid">
@@ -66,8 +80,8 @@
             <div class="col-md-12 text-center">
                 <i class="fa fa-grav fa-4x text-info"></i>
             </div>
-            <h3 class="col-md-12 text-center">Un autre regard sur l'établissement</h3>
-            <p>
+            <h3 class="text-center">Un autre regard sur l'établissement</h3>
+            <p class="col-md-12">
                 Avec AfrikaSchool chacun est conduit à porter un autre regard sur l'établissement. En premier lieu les
                 personnels, administratifs ou enseignants, qui, grâce à de nombreux tableaux de bord
                 disposent en un clic d'informations crucials. Les parents peuvent prendre
@@ -94,8 +108,10 @@
     </div>
 </main>
 
-<footer>
-
+<footer class="footer pt-2 pb-1">
+    <div class="container">
+        <p class="wrap"><i class="fa fa-graduation-cap"></i> Afrikaschool | © Copyright 2018</p>
+    </div>
 </footer>
 
 <!-- Bootstrap core JavaScript

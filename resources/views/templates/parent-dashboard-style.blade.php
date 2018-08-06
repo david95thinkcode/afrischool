@@ -12,20 +12,49 @@
         {!! Html::style('bootstrap-4.1.1/dist/css/bootstrap.min.css') !!}
         {!! Html::style('css/parent-dashboard.css') !!}
         @yield('custom-css')
+        {!! Html::style('css/parent-dashboard.css') !!}
+        <style>
+            .footer {
+                border-top: solid 1px #bfbfbf;
+            }
+        </style>
+        <link href="{{ asset('css/ie10-viewport-bug-workaround.css') }}" rel="stylesheet">
+        <!--[if IE]>
+        <script src="https://cdn.jsdelivr.net/g/html5shiv@3.7.3"></script>
+        <![endif]-->
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
     </head>
 
     <body>
 
         <header class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
             <h5 class="my-0 mr-md-auto font-weight-normal">{!! env('APP_NAME') !!}</h5>
-            <nav class="my-2 my-md-0 mr-md-3">
-                <a class="p-2 text-dark" href="#">Mes enfants</a>
-            </nav>
-            <a class="btn btn-outline-primary" href="#">Connexion</a>
+            @if (Auth::guest())
+                <nav class="my-2 my-md-0 mr-md-3">
+                    <a class="p-2 text-dark" href="{{route('register')}}">Inscrption</a>
+                </nav>
+                <a class="btn btn-outline-info" href="{{route('login')}}">Connexion</a>
+            @else
+                <nav class="my-2 my-md-0 mr-md-3">
+                    <a class="p-2 text-dark" href="{{route('consultation.choix')}}">Mes enfants</a>
+                </nav>
+                <a href="{{ route('logout') }}" class="btn btn-outline-info"
+                   onclick="event.preventDefault();
+                    document.getElementById('logout-form').submit();">
+                    <i class="fa fa-sign-out"></i>
+                    Se deconnecter
+                </a>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                    {{ csrf_field() }}
+                </form>
+            @endif
         </header>
 
         <div class="container-fluid">
-            <div class="row">                
+            <div class="row">
                 <div class="col-sm-12">
                     <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
                         <h1 class="display-4 main-title">@yield('main-title')</h1>
@@ -35,6 +64,12 @@
                 </div>                
             </div>        
         </div>
+        <br><br><br>
+        <footer class="footer pt-2 pb-1 mt-5">
+            <div class="container">
+                <p class="wrap"><i class="fa fa-graduation-cap"></i> Afrikaschool | © Copyright 2018</p>
+            </div>
+        </footer>
         
         <!-- Bootstrap core JavaScript
         ================================================== -->

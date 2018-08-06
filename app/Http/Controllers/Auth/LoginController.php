@@ -7,13 +7,14 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Flashy;
+use Illuminate\Support\Facades\Redirect;
 
 class LoginController extends Controller
 {
 
     use AuthenticatesUsers;
 
-    protected $redirectTo = '/';
+    protected $redirectTo = '/consultation';
 
     public function __construct()
     {
@@ -34,8 +35,8 @@ class LoginController extends Controller
         }
 
         if ($this->attemptLogin($request)) {
-            flashy()->success('Bienvenu '.Auth::user()->firstname);
-            return $this->sendLoginResponse($request);
+            flashy()->success('Bienvenu '.Auth::user()->name);
+            return redirect('consultation');
         }
 
         $this->incrementLoginAttempts($request);
@@ -45,6 +46,11 @@ class LoginController extends Controller
         return $this->sendFailedLoginResponse($request);
     }
 
+    protected function authenticated(Request $request, $user)
+    {
+        return Redirect::route('consultation.choix');
+    }
+
 
     public function redirectPath()
     {
@@ -52,7 +58,7 @@ class LoginController extends Controller
             return $this->redirectTo();
         }
 
-        return property_exists($this, 'redirectTo') ? $this->redirectTo : '/';
+        return property_exists($this, 'redirectTo') ? $this->redirectTo : '/consultation';
     }
 
     public function username()

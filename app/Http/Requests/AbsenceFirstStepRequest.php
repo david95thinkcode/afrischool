@@ -26,7 +26,7 @@ class AbsenceFirstStepRequest extends FormRequest
         return [
             'anneeScolaire' =>  'required|integer',
             'classe'        =>  'required|integer',
-            'date'          =>  'required|date'
+            'date'          =>  'required|date|before_or_equal:' . date('Y-m-d')
         ];
     }
 }

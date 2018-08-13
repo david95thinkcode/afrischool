@@ -131,20 +131,33 @@ class HoraireController extends Controller
      */
     public function store(StoreHoraireRequest $request)
     {   
-        // TODO: finir le controle de doublon et désactiver les comment marks
-        // Controle doublon
-        $action;
-            
-            $h = new Horaire();
-            $h->debut = $request->debut;
-            $h->fin = $request->fin;
-            $h->jour_id = $request->jour;
-            $h->enseigner_id = $request->enseigner;
-            $h->save();
-            $action = Redirect::route('emploi-du-temps.afficher', ['classe' => $request->classe])->with('status', 'Ajouté avec succès !');
+        // On vérifie que l'horaire en cours d'enregistrement
+        // n'interfère pas ou ne s'infiltre pas dans une plage horaire
+        // déjà attribuée.
+        // Ex : 
+        // On ne peut pas enregistrer une matière le jeudi qui commence
+        // de 8h à 11h alors qu'il y a déjà une matière qui occupait la plage de
+        // 10h à 12 le jeudi
 
+        $horairesAtribues = Horaire::where('jour_id', $request->jour)->get();
+        foreach ($horairesAtribues as $key => $horaire) {        
+            if (!(((strtotime($request->debut)) >= (strtotime($horaire->fin))) 
+            || ((strtotime($request->fin)) <= (strtotime($horaire->debut))))) 
+            {
+                $msg = "Horaire non atribuable car cette plage horaire interfère avec celle d'une autre matière";
+                return Redirect::route('horaire.second-step.go')->with('warning', $msg);
+            }
+        }
+        
+        $h = new Horaire();
+        $h->debut = $request->debut;
+        $h->fin = $request->fin;
+        $h->jour_id = $request->jour;
+        $h->enseigner_id = $request->enseigner;
+        $h->save();
 
-        return $action;
+        return Redirect::route('emploi-du-temps.afficher', ['classe' => $request->classe])
+            ->with('status', 'Ajouté avec succès !');
     }
 
     /**

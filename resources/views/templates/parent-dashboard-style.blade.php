@@ -31,7 +31,7 @@
     <body>
 
         <header class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
-            <h5 class="my-0 mr-md-auto font-weight-normal">{!! env('APP_NAME') !!}</h5>
+            <h5 class="my-0 mr-md-auto font-weight-normal">Les Champions De Demain</h5>
             @if (Auth::guest())
                 <nav class="my-2 my-md-0 mr-md-3">
                     <a class="p-2 text-dark" href="{{route('register')}}">Inscrption</a>
@@ -65,9 +65,17 @@
             </div>        
         </div>
         <br><br><br>
-        <footer class="footer pt-2 pb-1 mt-5">
-            <div class="container">
-                <p class="wrap"><i class="fa fa-graduation-cap"></i> Afrikaschool | © Copyright 2018</p>
+        <footer class="container-fluid mt-4">
+            <div class="row pt-5">
+                <div class="col-md-6">
+                    <p class="pull-left">
+                        <i class="fa fa-graduation-cap"></i>
+                        Les Champions De Demain | © Copyright 2018
+                    </p>
+                </div>
+                <div class="col-md-6">
+                    <p class="pull-right text-info">By AfrikaSchool</p>
+                </div>
             </div>
         </footer>
         

@@ -33,8 +33,8 @@
 
 <body>
 
-<header class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
-    <h5 class="my-0 mr-md-auto font-weight-normal">{!! env('APP_NAME') !!}</h5>
+<header class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 bg-white border-bottom box-shadow">
+    <h5 class="my-0 mr-md-auto text-info font-weight-normal">Les Champions De Demain</h5>
 
     @if (Auth::guest())
         <nav class="my-2 my-md-0 mr-md-3">
@@ -54,23 +54,67 @@
     @endif
 </header>
 
-<main class="container-fluid">
-    <div class="jumbotron text-center">
-        <h1 class="text-info font-weight-bold">
-            <i class="fa fa-graduation-cap"></i>
-            AfrikaSchool
-        </h1>
-        <p class="lead mx-auto">AfrikaSchool est un logiciel de gestion d'école sur internet & intranet </p>
-        <p><a class="btn btn-lg btn-outline-info" href="{{route('login')}}" role="button"> Se connecter </a></p>
+
+<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+    <ol class="carousel-indicators">
+        <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+        <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+        <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+    </ol>
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <img style="height: 500px; width: 100%;" src="{{asset('images/photo1.jpg')}}" alt="First slide">
+            <div class="carousel-caption d-none d-md-block">
+                <h1 class="text-info font-weight-bold">
+                    <i class="fa fa-graduation-cap"></i>
+                    Les Champions De Demain
+                </h1>
+                <p class="lead mx-auto text-info font-weight-bold">AfrikaSchool est un logiciel de gestion d'école sur internet & intranet </p>
+                <p><a class="btn btn-lg btn-outline-info" href="{{route('login')}}" role="button"> Se connecter </a></p>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <img style="height: 500px; width: 100%;" src="{{asset('images/photo2.jpg')}}" alt="Second slide">
+            <div class="carousel-caption d-none d-md-block">
+                <h1 class="text-info font-weight-bold">
+                    <i class="fa fa-graduation-cap"></i>
+                    {!! env('APP_NAME') !!}
+                </h1>
+                <p class="lead mx-auto text-info font-weight-bold">AfrikaSchool est un logiciel de gestion d'école sur internet & intranet </p>
+                <p><a class="btn btn-lg btn-outline-info" href="{{route('login')}}" role="button"> Se connecter </a></p>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <img style="height: 500px; width: 100%;" src="{{asset('images/photo3.jpg')}}" alt="Third slide">
+            <div class="carousel-caption d-none d-md-block">
+                <h1 class="text-info font-weight-bold">
+                    <i class="fa fa-graduation-cap"></i>
+                    {!! env('APP_NAME') !!}
+                </h1>
+                <p class="lead mx-auto text-info font-weight-bold">AfrikaSchool est un logiciel de gestion d'école sur internet & intranet </p>
+                <p><a class="btn btn-lg btn-outline-info" href="{{route('login')}}" role="button"> Se connecter </a></p>
+            </div>
+        </div>
     </div>
-    <div class="row">
+    <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+    </a>
+</div>
+
+<main class="container-fluid">
+    <div class="row mt-2 pt-5">
         <div class="col-md-4">
             <div class="col-md-12 text-center">
                 <i class="fa fa-laptop fa-4x text-info"></i>
             </div>
             <h3 class="col-md-12 text-center">Une application complètement en ligne</h3>
             <p>
-                AfrikaSchool AfrikaSchool est une application web se composant d'un site web disponibe à tous les
+                AfrikaSchool est une application web se composant d'un site web disponibe à tous les
                 internautes, véritable vitrine pour votre école et un site à accès restreint pour les parents les
                 enseignants et le personnel de l'école, disponible 24h/24 et 7j/7. Un véritable environnement de partage
                 et d'échange autour de la vie scolaire
@@ -107,10 +151,18 @@
         </div>
     </div>
 </main>
-
-<footer class="footer pt-2 pb-1">
-    <div class="container">
-        <p class="wrap"><i class="fa fa-graduation-cap"></i> Afrikaschool | © Copyright 2018</p>
+<br><br><br>
+<footer class="container-fluid">
+    <div class="row pt-5">
+        <div class="col-md-6">
+            <p class="pull-left">
+                <i class="fa fa-graduation-cap"></i>
+                Les Champions De Demain | © Copyright 2018
+            </p>
+        </div>
+        <div class="col-md-6">
+            <p class="pull-right text-info">By AfrikaSchool</p>
+        </div>
     </div>
 </footer>
 

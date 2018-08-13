@@ -5,7 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimal-ui" />
-  <title>@yield('title') | Afrischool</title>
+  <title>404 | Afrischool</title>
   <link rel="icon" href="#">
   <!-- CSRF Token -->
   <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -16,26 +16,6 @@
   <link href="{{mix('css/app.css')}}" rel="stylesheet">
   <link href="{{asset('css/jquery.mCustomScrollbar.min.css')}}" rel="stylesheet">
   <link href="{{asset('css/custom.min.css')}}" rel="stylesheet">
-  @yield('custom-css')
-  <link href="{{asset('css/ie10-viewport-bug-workaround.css')}}" rel="stylesheet">
-  <!--[if IE]>
-  <link href="{{asset('css/bootstrap-ie9.css')}}" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/g/html5shiv@3.7.3"></script>
-  <![endif]-->
-  <!--[if lt IE 9]>
-  <link href="{{asset('css/bootstrap-ie8.css')}}" rel="stylesheet">
-  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-  <![endif]-->
-  <style>
-    .table-del-btn {
-      display: inline;
-    }
-    span.required{
-      color: red;
-      font-size: 16px;
-    }
-  </style>
 </head>
   <body class="nav-md">
     <div class="container body">
@@ -45,8 +25,8 @@
           <div class="col-middle">
             <div class="text-center text-center">
               <h1 class="error-number">404</h1>
-              <h2>Sorry but we couldn't find this page</h2>
-              <p>This page you are looking for does not exist <a href="#">Report this?</a>
+              <h2>Désolé mais nous n'avons pas trouvé cette page</h2>
+              <p>Cette page que vous recherchez n'existe pas <a href="#">Report this?</a>
               </p>
               <div class="mid_center">
                 <h3>Search</h3>

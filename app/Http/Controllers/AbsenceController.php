@@ -15,6 +15,7 @@ use App\Http\Requests\AbsenceLastStepRequest;
 use App\Http\Requests\AbsenceSecondStepRequest;
 use App\Http\Requests\AbsenceFirstStepRequest;
 use App\Models\Absence;
+use App\Http\Requests\SearchAbsenceRequest;
 
 class AbsenceController extends Controller
 {
@@ -23,14 +24,70 @@ class AbsenceController extends Controller
     {
         return view('dashboard.absences.index');
     }
+
+    public function search()
+    {
+        $classes = Classe::all();
+
+        return view('dashboard.absences.search', compact('classes'));
+    }
     
 
-    public function show(Request $req)
+    /**
+     * Retourne les absences d'une période donnée
+     * dans une classe donnée
+     *
+     * @param SearchAbsenceRequest $req
+     * @return void
+     */
+    public function show(SearchAbsenceRequest $req)
     {
-        dd($req);
+        $classe;
+        $filtredAbsences = [];
+        $absences = Absence::with('horaire')->where('date', $req->date)->get();
         
-        return view('dashboard.absences.show');
+        foreach ($absences as $key => $aValue) {
+            
+            // Est-ce que de l'horaire est comprise dans la plage 
+            // de la période sélectionné ?
+            if ((strtotime($aValue->horaire->debut)) >= ((strtotime($req->from_time))) 
+                && ((strtotime($aValue->horaire->fin)) <= (strtotime($req->to_time)))) 
+            {
+                // matière enseignée à l'horaire de l'absence en cours
+                $mEnseigner = Enseigner::with('classe', 'matiere')
+                    ->where('id', $aValue->horaire->enseigner_id)
+                    ->first();
+    
+                // la matière est-elle enseignée dans la classe sélectionnée ?
+                if ($mEnseigner->classe_id == $req->classe) 
+                {
+                    $eleve = Inscription::with('eleve')
+                        ->where('id', $aValue->inscription_id)
+                        ->first();
+                    $data = [
+                        'horaire'       =>  $aValue,
+                        'enseigner'     =>  $mEnseigner,
+                        'inscription'   =>  $eleve
+                    ];
+                    array_push($filtredAbsences, $data);
+                    
+                    // Nécessaire pour détails de la vue 
+                    if ((!isset($classe)) || (is_null($classe))) {
+                        $classe = $mEnseigner->classe;
+                    }
+                }
+            }
+        }
+
+        $details = [
+            'date'    => Carbon::parse($req->date)->format('d-m-Y'),
+            'classe'  => $classe,
+            'periode' => $req->from_time . ' - '. $req->to_time,
+        ]; 
+        
+        return view('dashboard.absences.show', compact('filtredAbsences', 'details'));
     }
+
     
     public function selectDateAndClasse()
     {
@@ -39,6 +96,7 @@ class AbsenceController extends Controller
 
         return view('dashboard.absences.create-first-step', compact('anneeScolaires', 'classes'));
     }
+
 
     public function selectMatiere(AbsenceFirstStepRequest $req)
     {        
@@ -52,6 +110,8 @@ class AbsenceController extends Controller
             
         if ($matieres->isNotEmpty()) {
             session(['absences.jourID' => $jourID]);
+            session(['absences.date' => $req->date]);
+
             foreach ($matieres as $key => $value) {
                 $horaires = Horaire::where('enseigner_id', $value->id)->get();                
                 
@@ -99,9 +159,17 @@ class AbsenceController extends Controller
             
     }
 
+
+    /**
+     * Store Absence Model inside DB
+     *
+     * @param AbsenceLastStepRequest $req
+     * @return void
+     */
     public function store(AbsenceLastStepRequest $req)
     {
         $j = session()->get('absences.jourID');
+        $d = session()->get('absences.date');
         $e = session()->get('absences.enseignerID');
         $concernedHoraire = Horaire::where([
             [ 'enseigner_id', $e],
@@ -113,6 +181,7 @@ class AbsenceController extends Controller
                 $a = new Absence();
                 $a->horaire_id = $concernedHoraire->id;
                 $a->inscription_id = $matricule;
+                $a->date = $d;
                 $a->save();
             }
             $this->clearUsedSessionVariables();
@@ -129,6 +198,8 @@ class AbsenceController extends Controller
     {
 
     }
+
+    // PRIVATE METHODS
     
     private function areEqualDays($date, Horaire $horaire)
     {

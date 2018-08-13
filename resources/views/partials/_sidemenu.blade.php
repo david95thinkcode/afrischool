@@ -86,13 +86,18 @@
                     </ul>
                 </li>
                 <li>
+                    <a><i class="fa fa-hashtag"></i>Absence <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                        <li><a href="{{ route('absences.steps.first') }}">Reporter</a></li>
+                        <li><a href="{{ route('absences.index') }}">Consulter</a></li>
+                        <li><a href="#">#</a></li>
+                    </ul>
+                </li>
+                <li>
                     <a><i class="fa fa-file-text-o"></i> Examens
                     <span class="label label-success pull-right">Coming Soon</span></a>
                 </li>
-                <li>
-                    <a><i class="fa fa-hashtag"></i> Absence
-                    <span class="label label-success pull-right">Coming Soon</span></a>
-                </li>
+                
             </ul>
         </div>
         </div>

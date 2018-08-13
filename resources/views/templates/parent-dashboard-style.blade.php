@@ -31,7 +31,7 @@
     <body>
 
         <header class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
-            <h5 class="my-0 mr-md-auto font-weight-normal">Les Champions De Demain</h5>
+            <h5 class="my-0 mr-md-auto font-weight-normal">Jean Piaget</h5>
             @if (Auth::guest())
                 <nav class="my-2 my-md-0 mr-md-3">
                     <a class="p-2 text-dark" href="{{route('register')}}">Inscrption</a>
@@ -70,7 +70,7 @@
                 <div class="col-md-6">
                     <p class="pull-left">
                         <i class="fa fa-graduation-cap"></i>
-                        Les Champions De Demain | © Copyright 2018
+                        Jean Piaget | © Copyright 2018
                     </p>
                 </div>
                 <div class="col-md-6">

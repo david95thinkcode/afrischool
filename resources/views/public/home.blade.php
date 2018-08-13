@@ -34,7 +34,7 @@
 <body>
 
 <header class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 bg-white border-bottom box-shadow">
-    <h5 class="my-0 mr-md-auto text-info font-weight-normal">Les Champions De Demain</h5>
+    <h5 class="my-0 mr-md-auto text-info font-weight-normal">Jean Piaget</h5>
 
     @if (Auth::guest())
         <nav class="my-2 my-md-0 mr-md-3">
@@ -67,7 +67,7 @@
             <div class="carousel-caption d-none d-md-block">
                 <h1 class="text-info font-weight-bold">
                     <i class="fa fa-graduation-cap"></i>
-                    Les Champions De Demain
+                    Jean Piaget
                 </h1>
                 <p class="lead mx-auto text-info font-weight-bold">AfrikaSchool est un logiciel de gestion d'école sur internet & intranet </p>
                 <p><a class="btn btn-lg btn-outline-info" href="{{route('login')}}" role="button"> Se connecter </a></p>
@@ -157,7 +157,7 @@
         <div class="col-md-6">
             <p class="pull-left">
                 <i class="fa fa-graduation-cap"></i>
-                Les Champions De Demain | © Copyright 2018
+                Jean Piaget | © Copyright 2018
             </p>
         </div>
         <div class="col-md-6">

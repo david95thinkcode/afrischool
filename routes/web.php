@@ -21,6 +21,18 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['auth']], function () {
     Route::resource('matieres', 'MatiereController');
     Route::resource('enseigner', 'EnseignerController');
 
+    //Les absences
+    Route::prefix('absences')->group(function () {
+        Route::get('/', 'AbsenceController@index')->name('absences.index');
+        Route::get('ajouter', 'AbsenceController@selectDateAndClasse')->name('absences.steps.first');
+        
+        Route::post('/', 'AbsenceController@show')->name('absences.show');
+        Route::post('ajouter', 'AbsenceController@store')->name('absences.store');
+        Route::post('ajouter/mat', 'AbsenceController@selectMatiere')->name('absences.steps.second');
+        Route::post('ajouter/el', 'AbsenceController@selectAbsence')->name('absences.steps.last');
+
+    });
+
     // bulletins
     Route::prefix('bulletins')->group(function () {
         Route::get('/', 'BulletinController@index')->name('bulletin.index');

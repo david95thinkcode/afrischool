@@ -24,11 +24,11 @@ class StoreHoraireRequest extends FormRequest
     public function rules()
     {
         return [
-            'debut' => 'required|',
-            'fin' => 'required|',            
-            'jour' => 'required|integer',
+            'debut'     => 'required|',
+            'fin'       => 'required|',            
+            'jour'      => 'required|integer',
             'enseigner' => 'required|integer',
-            'classe' => 'required|integer'
+            'classe'    => 'required|integer'
         ];
     }
 }

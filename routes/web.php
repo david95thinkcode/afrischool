@@ -24,6 +24,7 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['auth']], function () {
     //Les absences
     Route::prefix('absences')->group(function () {
         Route::get('/', 'AbsenceController@index')->name('absences.index');
+        Route::get('search', 'AbsenceController@search')->name('absences.search');
         Route::get('ajouter', 'AbsenceController@selectDateAndClasse')->name('absences.steps.first');
         
         Route::post('/', 'AbsenceController@show')->name('absences.show');

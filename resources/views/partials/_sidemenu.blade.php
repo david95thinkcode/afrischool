@@ -89,7 +89,7 @@
                     <a><i class="fa fa-hashtag"></i>Absence <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                         <li><a href="{{ route('absences.steps.first') }}">Reporter</a></li>
-                        <li><a href="{{ route('absences.index') }}">Consulter</a></li>
+                        <li><a href="{{ route('absences.search') }}">Consulter</a></li>
                         <li><a href="#">#</a></li>
                     </ul>
                 </li>

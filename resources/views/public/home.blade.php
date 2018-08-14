@@ -63,7 +63,7 @@
     </ol>
     <div class="carousel-inner">
         <div class="carousel-item active">
-            <img style="height: 500px; width: 100%;" src="{{asset('images/photo1.jpg')}}" alt="First slide">
+            <img style="height: 500px; width: 100%;" src="{{asset('images/photo1.png')}}" alt="First slide">
             <div class="carousel-caption d-none d-md-block">
                 <h1 class="text-info font-weight-bold">
                     <i class="fa fa-graduation-cap"></i>
@@ -78,7 +78,7 @@
             <div class="carousel-caption d-none d-md-block">
                 <h1 class="text-info font-weight-bold">
                     <i class="fa fa-graduation-cap"></i>
-                    {!! env('APP_NAME') !!}
+                    Jean Piaget
                 </h1>
                 <p class="lead mx-auto text-info font-weight-bold">AfrikaSchool est un logiciel de gestion d'école sur internet & intranet </p>
                 <p><a class="btn btn-lg btn-outline-info" href="{{route('login')}}" role="button"> Se connecter </a></p>
@@ -89,7 +89,7 @@
             <div class="carousel-caption d-none d-md-block">
                 <h1 class="text-info font-weight-bold">
                     <i class="fa fa-graduation-cap"></i>
-                    {!! env('APP_NAME') !!}
+                    Jean Piaget
                 </h1>
                 <p class="lead mx-auto text-info font-weight-bold">AfrikaSchool est un logiciel de gestion d'école sur internet & intranet </p>
                 <p><a class="btn btn-lg btn-outline-info" href="{{route('login')}}" role="button"> Se connecter </a></p>

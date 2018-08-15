@@ -42,7 +42,7 @@ class AbsenceController extends Controller
      */
     public function show(SearchAbsenceRequest $req)
     {
-        $classe;
+        $classe = null;
         $filtredAbsences = [];
         $absences = Absence::with('horaire')->where('date', $req->date)->get();
         
@@ -77,6 +77,10 @@ class AbsenceController extends Controller
                     }
                 }
             }
+        }
+
+        if (is_null($classe)) {
+            $classe = Classe::find($req->classe)->first();
         }
 
         $details = [

@@ -35,6 +35,14 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
+        
+        'fondateur' => [
+            
+        ],
+
+        'admin' => [
+
+        ],
 
         'api' => [
             'throttle:60,1',
@@ -50,8 +58,15 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
-        'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
-        'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
+        'auth'                  =>  \Illuminate\Auth\Middleware\Authenticate::class,
+        'auth.basic'            =>  \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
+        'auth.admin'            =>  \App\Http\Middleware\VerifyIfAdministratorUser::class,
+        'auth.directeur'        =>  \App\Http\Middleware\VerifyIfDirecteurUser::class,
+        'auth.fondateur'        =>  \App\Http\Middleware\VerifyIfFondateurUser::class,
+        'auth.comptable'        =>  \App\Http\Middleware\VerifyIfComptableUser::class,
+        'auth.secretaire'       =>  \App\Http\Middleware\VerifyIfSecretaireUser::class,
+        'auth.censeur'          =>  \App\Http\Middleware\VerifyIfCenseurUser::class,
+
         'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,

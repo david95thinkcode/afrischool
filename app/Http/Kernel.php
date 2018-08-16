@@ -36,8 +36,9 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
         
-        'fondateur' => [
-            
+        'direction' => [
+            \App\Http\Middleware\VerifyIfDirecteurUser::class,
+            \App\Http\Middleware\VerifyIfFondateurUser::class,
         ],
 
         'admin' => [
@@ -59,14 +60,15 @@ class Kernel extends HttpKernel
      */
     protected $routeMiddleware = [
         'auth'                  =>  \Illuminate\Auth\Middleware\Authenticate::class,
+        'auth.role'             =>  \App\Http\Middleware\CheckRole::class,
         'auth.basic'            =>  \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'auth.admin'            =>  \App\Http\Middleware\VerifyIfAdministratorUser::class,
+        'auth.censeur'          =>  \App\Http\Middleware\VerifyIfCenseurUser::class,
         'auth.directeur'        =>  \App\Http\Middleware\VerifyIfDirecteurUser::class,
         'auth.fondateur'        =>  \App\Http\Middleware\VerifyIfFondateurUser::class,
         'auth.comptable'        =>  \App\Http\Middleware\VerifyIfComptableUser::class,
-        'auth.secretaire'       =>  \App\Http\Middleware\VerifyIfSecretaireUser::class,
-        'auth.censeur'          =>  \App\Http\Middleware\VerifyIfCenseurUser::class,
 
+        'auth.secretaire'       =>  \App\Http\Middleware\VerifyIfSecretaireUser::class,
         'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,

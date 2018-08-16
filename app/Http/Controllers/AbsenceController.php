@@ -20,6 +20,14 @@ use App\Http\Requests\SearchAbsenceRequest;
 class AbsenceController extends Controller
 {
 
+    public function __construct() 
+    {
+        // $this->middleware("auth.role('surveillant')");
+
+        // $this->middleware('direction')
+        //     ->except('selectDateAndClasse');
+    }
+
     public function index()
     {
         return view('dashboard.absences.index');
@@ -42,7 +50,7 @@ class AbsenceController extends Controller
      */
     public function show(SearchAbsenceRequest $req)
     {
-        $classe;
+        $classe = null;
         $filtredAbsences = [];
         $absences = Absence::with('horaire')->where('date', $req->date)->get();
         
@@ -79,6 +87,10 @@ class AbsenceController extends Controller
             }
         }
 
+        if (is_null($classe)) {
+            $classe = Classe::find($req->classe)->first();
+        }
+
         $details = [
             'date'    => Carbon::parse($req->date)->format('d-m-Y'),
             'classe'  => $classe,
@@ -88,7 +100,7 @@ class AbsenceController extends Controller
         return view('dashboard.absences.show', compact('filtredAbsences', 'details'));
     }
 
-    
+    // step 1
     public function selectDateAndClasse()
     {
         $anneeScolaires = AnneeScolaire::all();

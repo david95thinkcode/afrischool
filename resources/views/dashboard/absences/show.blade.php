@@ -10,7 +10,7 @@
         <div class="panel panel-default mx-auto">
             <div class="panel-body">
                 <div class="x-content">
-                    <div class="col-md-6"><strong>Classe :</strong> {!! $details['classe']->cla_intitule !!} trimestre</div>
+                    <div class="col-md-6"><strong>Classe :</strong> {!! $details['classe']->cla_intitule !!}</div>
                     <div class="col-md-6"><strong>Date :</strong> {!! $details['date'] !!}</div>
                     <div class="col-md-6"><strong>Période :</strong> {!! $details['periode'] !!}</div>
                 </div>

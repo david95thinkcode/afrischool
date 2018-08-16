@@ -28,9 +28,11 @@
                         <td>{{$debiteur->montant_scolarite}} <strong>fcfa</strong></td>
                         <td>{{$debiteur->reste}} <strong>fcfa</strong></td>
                         <td class="text-center">
+                            @if (Auth::user()->hasRole('comptable'))                                
                             <a href="{{route('eleve.solder.scolarite', [$debiteur->id, $debiteur->eleve->id])}}" class="btn btn-xs btn-success">
                                 Solder scolarité
                             </a>
+                            @endif
                         </td>
                     </tr>
                 @empty

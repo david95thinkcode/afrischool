@@ -20,6 +20,14 @@ use App\Http\Requests\SearchAbsenceRequest;
 class AbsenceController extends Controller
 {
 
+    public function __construct() 
+    {
+        // $this->middleware("auth.role('surveillant')");
+
+        // $this->middleware('direction')
+        //     ->except('selectDateAndClasse');
+    }
+
     public function index()
     {
         return view('dashboard.absences.index');
@@ -92,7 +100,7 @@ class AbsenceController extends Controller
         return view('dashboard.absences.show', compact('filtredAbsences', 'details'));
     }
 
-    
+    // step 1
     public function selectDateAndClasse()
     {
         $anneeScolaires = AnneeScolaire::all();

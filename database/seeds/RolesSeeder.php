@@ -28,6 +28,7 @@ class RolesSeeder extends Seeder
             ['name' => 'comptable'],
             ['name' => 'censeur'],
             ['name' => 'secretaire'],
+            ['name' => 'surveillant'],
             ['name' => 'parent'],
         ];
 

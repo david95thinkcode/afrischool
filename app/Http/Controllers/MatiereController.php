@@ -15,6 +15,12 @@ use App\Http\Requests\SearchEnseignerClasseRequest;
 
 class MatiereController extends Controller
 {
+
+    public function __construct()
+    {
+        // $this->middleware('auth.censeur');
+    }
+
     /**
      * Display a listing of the resource.
      *

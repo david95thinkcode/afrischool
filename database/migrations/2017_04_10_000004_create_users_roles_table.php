@@ -19,7 +19,8 @@ class CreateUsersRolesTable extends Migration
         Schema::create('users_roles', function (Blueprint $table) {
             $table->integer('user_id')->unsigned();
             $table->integer('role_id')->unsigned();
-
+            $table->date('desactivation_date')->nullable();
+            
             /*
              * Add Foreign/Unique/Index
              */

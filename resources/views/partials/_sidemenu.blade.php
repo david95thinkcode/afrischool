@@ -17,8 +17,11 @@
                 <li><a><i class="fa fa-street-view"></i>Personnel
                     <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                        <li><a href="#">Créer</a></li>
-                        <li><a href="#">...........</a></li>
+                        @if (!Auth::user()->hasRole('secretaire'))  
+                        <li><a href="{!! route('personnel.create') !!}">Créer</a></li>
+                        <li><a href="{!! route('personnel.role.create') !!}">Confier un rôle à une secrétaire</a></li>
+                        @endif
+                        <li><a href="{!! route('personnel.index') !!}">Liste complète</a></li>
                     </ul>
                 </li>            
                 <li><a><i class="fa fa-users"></i> Élèves 

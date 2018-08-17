@@ -21,6 +21,16 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['auth']], function () {
     Route::resource('matieres', 'MatiereController');
     Route::resource('enseigner', 'EnseignerController');
 
+    // Personnel
+    Route::prefix('personnel')->group(function () {
+        Route::get('/', 'PersonnelController@index')->name('personnel.index');
+        Route::get('create', 'PersonnelController@create')->name('personnel.create');
+        Route::get('role', 'PersonnelController@createUserRole')->name('personnel.role.create');
+        
+        Route::post('create', 'PersonnelController@store')->name('personnel.store');
+        Route::post('role', 'PersonnelController@addRoletoUser')->name('personnel.role.store');
+    });
+
     //Les absences
     Route::prefix('absences')->group(function () {
         Route::get('/', 'AbsenceController@index')->name('absences.index');

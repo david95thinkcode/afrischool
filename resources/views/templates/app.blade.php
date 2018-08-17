@@ -38,6 +38,9 @@
             color: red;
             font-size: 16px;
         }
+        .badge-success {
+            background-color: #29c88a !important;
+        }
     </style>
 </head>
 

@@ -36,7 +36,7 @@ class LoginController extends Controller
 
         if ($this->attemptLogin($request)) {
             flashy()->success('Bienvenu '.Auth::user()->name);
-            return redirect('consultation');
+            return Redirect::route('home');
         }
 
         $this->incrementLoginAttempts($request);
@@ -48,7 +48,7 @@ class LoginController extends Controller
 
     protected function authenticated(Request $request, $user)
     {
-        return Redirect::route('consultation.choix');
+        return Redirect::route('home');
     }
 
 

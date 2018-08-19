@@ -1,11 +1,11 @@
-!.gitkeep
+#!.gitkeep
 
 data/
 
 # Laravel, nodeJS, Bower, Gulp exclusions, Composer exclusions
 .htaccess
-vendor/
-vendor/composer/
+vendor
+#vendor/composer/
 node_modules/
 npm-shrinkwrap.json
 bower_components/

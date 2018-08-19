@@ -1,28 +1,27 @@
 !.gitkeep
-
-data/
+# /data/
 
 # Laravel, nodeJS, Bower, Gulp exclusions, Composer exclusions
 .htaccess
 /vendor
-node_modules/
+/node_modules
+/bower_components/
+/bootstrap/compiled.php
+/bootstrap/cache/
 npm-shrinkwrap.json
-bower_components/
-bootstrap/compiled.php
-bootstrap/cache/
 npm-debug.log
 yarn-error.log
 
-storage/
-storage/debugbar/
-storage/framework/views/
-storage/framework/sessions/
+/storage/
+/storage/debugbar/
+/storage/framework/views/
+/storage/framework/sessions/
 
 composer.phar
 composer.lock
 phpunit.phar
 
-public/mix-manifest.json
+/public/mix-manifest.json
 
 .env
 .env.*.php

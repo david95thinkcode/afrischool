@@ -17,7 +17,7 @@
                         </select>
                     </div>
                     <div class="col-md-4 col-xs-12 form-group mb-1{{ $errors->has('role') ? ' has-error' : '' }}">
-                        <label class="control-label col-md-12 col-sm-12 col-xs-12" for="classe">Selectionnez son role</label>
+                        <label class="control-label col-md-12 col-sm-12 col-xs-12" for="classe">Sélectionnez son role</label>
                         <select class="col-md-12 col-sm-12 col-xs-12{{ $errors->has('role') ? ' has-error' : '' }}" id="role" name="role">
                             @foreach($roles as $role)
                                 <option value="{{$role->id}}">{{$role->name}}</option>
@@ -26,7 +26,7 @@
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
-                            {!! Form::label('disableDate', "Date de désactivation ") !!}
+                            {!! Form::label('disableDate', "Jusqu'à ") !!}
                             {!! Form::date('disableDate', old('disableDate'), ['class' => 'form-control', 'required' => '']) !!}
                         </div>
                     </div>

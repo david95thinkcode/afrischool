@@ -39,10 +39,10 @@
                         <td>
                             @if ($user->active)
                                 @if (!$user->hasRole('administrator'))
-                                <button class="btn btn-sm btn-danger">Désactiver</button>
+                                <button class="btn btn-sm btn-danger">Désactiver le compte</button>
                                 @endif
                             @else 
-                                <button class="btn btn-sm btn-success">Activer</button>
+                                <button class="btn btn-sm btn-success">Activer le compte</button>
                             @endif
                             {{-- <a href="{{ route('matieres.show', ['id' => $m->id]) }}" class="btn btn-sm btn-info">Afficher</a>
                             <a href="{{ route('matieres.edit', ['id' => $m->id]) }}" class="btn btn-sm btn-warning">Modifier</a> --}}

@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Carbon\Carbon as Carbon;
 
 class AddRoleToUserRequest extends FormRequest
 {
@@ -26,7 +27,14 @@ class AddRoleToUserRequest extends FormRequest
         return [
             'user'          =>  'required|integer',
             'role'          =>  'required|integer',
-            'disableDate'   =>  ''
+            'disableDate'   =>  'required|date|after_or_equal:' . Carbon::today()
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'disableDate.after_or_equal'    =>  "La date de désactivation ne doit pas précéder la date d'aujourd'hui",
         ];
     }
 }

@@ -21,6 +21,29 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['auth']], function () {
     Route::resource('matieres', 'MatiereController');
     Route::resource('enseigner', 'EnseignerController');
 
+    // Personnel
+    Route::prefix('personnel')->group(function () {
+        Route::get('/', 'PersonnelController@index')->name('personnel.index');
+        Route::get('create', 'PersonnelController@create')->name('personnel.create');
+        Route::get('role', 'PersonnelController@createUserRole')->name('personnel.role.create');
+        
+        Route::post('create', 'PersonnelController@store')->name('personnel.store');
+        Route::post('role', 'PersonnelController@addRoletoUser')->name('personnel.role.store');
+    });
+
+    //Les absences
+    Route::prefix('absences')->group(function () {
+        Route::get('/', 'AbsenceController@index')->name('absences.index');
+        Route::get('search', 'AbsenceController@search')->name('absences.search');
+        Route::get('ajouter', 'AbsenceController@selectDateAndClasse')->name('absences.steps.first');
+        
+        Route::post('/', 'AbsenceController@show')->name('absences.show');
+        Route::post('ajouter', 'AbsenceController@store')->name('absences.store');
+        Route::post('ajouter/mat', 'AbsenceController@selectMatiere')->name('absences.steps.second');
+        Route::post('ajouter/el', 'AbsenceController@selectAbsence')->name('absences.steps.last');
+
+    });
+
     // bulletins
     Route::prefix('bulletins')->group(function () {
         Route::get('/', 'BulletinController@index')->name('bulletin.index');

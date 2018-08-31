@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreHoraireRequest extends FormRequest
+class SearchAbsenceRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,11 +24,10 @@ class StoreHoraireRequest extends FormRequest
     public function rules()
     {
         return [
-            'debut'     => 'required|',
-            'fin'       => 'required|',            
-            'jour'      => 'required|integer',
-            'enseigner' => 'required|integer',
-            'classe'    => 'required|integer'
+            'from_time'     =>   ['required', 'regex:^(([0-1][0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?)$^'],
+            'to_time'       =>   ['required', 'regex:^(([0-1][0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?)$^'],
+            'classe'        =>  'required|integer',
+            'date'          =>  'required|date'
         ];
     }
 }

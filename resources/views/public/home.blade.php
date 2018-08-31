@@ -11,12 +11,19 @@
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
           integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     {!! Html::style('bootstrap-4.1.1/dist/css/bootstrap.min.css') !!}
-    {!! Html::style('css/parent-dashboard.css') !!}
+    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
     <style>
         .jumbotron {
             text-align: center !important;
-            background-color: transparent !important;
+            width: 100% !important;
+            height: 500px;
+            background-image: url("/images/photo.png");
+            background-color: rgba(21, 20, 33, .5);
+            background-repeat: no-repeat;
+            background-size: contain;
+            background-size: 100% 100%;
         }
+
         .footer {
             border-top: solid 1px #bfbfbf;
         }
@@ -32,137 +39,137 @@
 </head>
 
 <body>
+<header class="site-header">
+    <div class="top-header-bar">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 col-lg-6 d-none d-md-flex flex-wrap justify-content-center justify-content-lg-start mb-3 mb-lg-0">
+                    <div class="header-bar-email d-flex align-items-center">
+                        <i class="fa fa-envelope"></i><a href="#">tuanna.design@gmail.com</a>
+                    </div><!-- .header-bar-email -->
 
-<header class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 bg-white border-bottom box-shadow">
-    <h5 class="my-0 mr-md-auto text-info font-weight-normal">Jean Piaget</h5>
+                    <div class="header-bar-text lg-flex align-items-center">
+                        <p><i class="fa fa-phone"></i>001-1234-88888 </p>
+                    </div><!-- .header-bar-text -->
+                </div><!-- .col -->
 
-    @if (Auth::guest())
-        <nav class="my-2 my-md-0 mr-md-3">
-            <a class="p-2 text-dark" href="{{route('register')}}">Inscrption</a>
-        </nav>
-        <a class="btn btn-outline-info" href="{{route('login')}}">Connexion</a>
-    @else
-        <a href="{{ route('logout') }}" class="btn btn-outline-info"
-           onclick="event.preventDefault();
+                <div class="col-12 col-lg-6 d-flex flex-wrap justify-content-center justify-content-lg-end align-items-center">
+                    @if (Auth::guest())
+                        <nav class="my-2 my-md-0 mr-md-3">
+                            <a class="p-2 text-dark" href="{{route('register')}}">Inscrption</a>
+                        </nav>
+                        <a class="btn btn-outline-info" href="{{route('login')}}">Connexion</a>
+                    @else
+                        <a href="{{ route('logout') }}" class="btn btn-outline-info"
+                           onclick="event.preventDefault();
                     document.getElementById('logout-form').submit();">
-            <i class="fa fa-sign-out"></i>
-            Se deconnecter
-        </a>
-        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-            {{ csrf_field() }}
-        </form>
-    @endif
+                            <i class="fa fa-sign-out"></i>
+                            Se deconnecter
+                        </a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            {{ csrf_field() }}
+                        </form>
+                    @endif
+                </div><!-- .col -->
+            </div><!-- .row -->
+        </div><!-- .container-fluid -->
+    </div><!-- .top-header-bar -->
+
+    <nav class="navbar navbar-light navbar-expand-sm border-bottom bg-transparent">
+        <div class="navbar-brand">
+            <div class="site-branding">
+                <h1 class="site-title">
+                    <a href="{{route('home')}}" rel="home">
+                        AU<span>PIAIRE</span>
+                    </a>
+                </h1>
+            </div>
+        </div>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span style="font-size:20px;cursor:pointer;color:#d67118 !important;">&#9776; Menu</span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item px-2">
+                    <a class="nav-link font-weight-bold" href="#agence">Mes enfants</a>
+                </li>
+                <li class="nav-item px-2">
+                    <a class="nav-link font-weight-bold" href="#agence">les fournitures</a>
+                </li>
+                <li class="nav-item px-2">
+                    <a class="nav-link font-weight-bold text-18" href="#service">Nous contacter</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
 </header>
 
-
-<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-    <ol class="carousel-indicators">
-        <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-        <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-        <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-    </ol>
-    <div class="carousel-inner">
-        <div class="carousel-item active">
-            <img style="height: 500px; width: 100%;" src="{{asset('images/photo1.png')}}" alt="First slide">
-            <div class="carousel-caption d-none d-md-block">
-                <h1 class="text-info font-weight-bold">
-                    <i class="fa fa-graduation-cap"></i>
-                    Jean Piaget
-                </h1>
-                <p class="lead mx-auto text-info font-weight-bold">AfrikaSchool est un logiciel de gestion d'école sur internet & intranet </p>
-                <p><a class="btn btn-lg btn-outline-info" href="{{route('login')}}" role="button"> Se connecter </a></p>
-            </div>
-        </div>
-        <div class="carousel-item">
-            <img style="height: 500px; width: 100%;" src="{{asset('images/photo2.jpg')}}" alt="Second slide">
-            <div class="carousel-caption d-none d-md-block">
-                <h1 class="text-info font-weight-bold">
-                    <i class="fa fa-graduation-cap"></i>
-                    Jean Piaget
-                </h1>
-                <p class="lead mx-auto text-info font-weight-bold">AfrikaSchool est un logiciel de gestion d'école sur internet & intranet </p>
-                <p><a class="btn btn-lg btn-outline-info" href="{{route('login')}}" role="button"> Se connecter </a></p>
-            </div>
-        </div>
-        <div class="carousel-item">
-            <img style="height: 500px; width: 100%;" src="{{asset('images/photo3.jpg')}}" alt="Third slide">
-            <div class="carousel-caption d-none d-md-block">
-                <h1 class="text-info font-weight-bold">
-                    <i class="fa fa-graduation-cap"></i>
-                    Jean Piaget
-                </h1>
-                <p class="lead mx-auto text-info font-weight-bold">AfrikaSchool est un logiciel de gestion d'école sur internet & intranet </p>
-                <p><a class="btn btn-lg btn-outline-info" href="{{route('login')}}" role="button"> Se connecter </a></p>
-            </div>
-        </div>
+<div class="content-overlay">
+    <div class="jumbotron text-center">
+        <h1 class="text-info font-weight-bold mt-5 pt-5">
+            <i class="fa fa-graduation-cap"></i>
+            AfrikaSchool
+        </h1>
+        <p class="lead mx-auto">AfrikaSchool est un logiciel de gestion d'école sur internet & intranet </p>
+        <p><a class="btn btn-lg btn-outline-info" href="{{route('login')}}" role="button"> Se connecter </a></p>
     </div>
-    <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="sr-only">Previous</span>
-    </a>
-    <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="sr-only">Next</span>
-    </a>
 </div>
 
-<main class="container-fluid">
-    <div class="row mt-2 pt-5">
+<main class="container">
+    <div class="row">
         <div class="col-md-4">
-            <div class="col-md-12 text-center">
-                <i class="fa fa-laptop fa-4x text-info"></i>
+            <div class="card align-items-center" style="background: #ff4500; top: -80px;">
+                <div class="card-header">
+                    <img class="card-img-top" src="{{asset('images/slide-bottom-01.png')}}" alt="Card image cap">
+                </div>
+                <div class="card-body">
+                    <h4>Professeurs certifiés</h4>
+                </div>
             </div>
-            <h3 class="col-md-12 text-center">Une application complètement en ligne</h3>
-            <p>
-                AfrikaSchool est une application web se composant d'un site web disponibe à tous les
-                internautes, véritable vitrine pour votre école et un site à accès restreint pour les parents les
-                enseignants et le personnel de l'école, disponible 24h/24 et 7j/7. Un véritable environnement de partage
-                et d'échange autour de la vie scolaire
-            </p>
         </div>
         <div class="col-md-4">
-            <div class="col-md-12 text-center">
-                <i class="fa fa-grav fa-4x text-info"></i>
+            <div class="card align-items-center" style="background: #007fac; top: -80px;">
+                <div class="card-header">
+                    <img class="card-img-top" src="{{asset('images/slide-bottom-02.png')}}" alt="Card image cap">
+                </div>
+                <div class="card-body">
+                    <h4>Information en ligne</h4>
+                </div>
             </div>
-            <h3 class="text-center">Un autre regard sur l'établissement</h3>
-            <p class="col-md-12">
-                Avec AfrikaSchool chacun est conduit à porter un autre regard sur l'établissement. En premier lieu les
-                personnels, administratifs ou enseignants, qui, grâce à de nombreux tableaux de bord
-                disposent en un clic d'informations crucials. Les parents peuvent prendre
-                chaque jour, la mesure de tout le travail accompli par l'ensemble des personnels, enseignants ou
-                personnels de surveillance. A travers le carnet de liaison électronique, ils restent au plus près du
-                suivi de leur enfant
-            </p>
         </div>
         <div class="col-md-4">
-            <div class="col-md-12 text-center">
-                <i class="fa fa-pie-chart fa-4x text-info"></i>
+            <div class="card align-items-center" style="background: #ffa63d; top: -80px;">
+                <div class="card-header">
+                    <img class="card-img-top" src="{{asset('images/slide-bottom-03.png')}}" alt="Card image cap">
+                </div>
+                <div class="card-body bg-orange">
+                    <h4>Information en ligne</h4>
+                </div>
             </div>
-            <h3 class="col-md-12 text-center">Une solution économique et rentable</h3>
-            <p>
-                En permettant l'acquisition d'un site web vitrine et d'une application en ligne de suivie de la
-                scolarité, en offrant des interfaces qui ne nécessitent pratiquement aucune formation, en rendant
-                possible l'intercation avec les parents par le biais de AfrikaSchool, en produisant une même solution
-                pour
-                tout type d'établissement, AfrikaSchool réduit considérablement le coût par an et par élève de la
-                gestion de
-                leur suivi.
-            </p>
         </div>
     </div>
 </main>
-<br><br><br>
-<footer class="container-fluid">
-    <div class="row pt-5">
+
+<div class="container">
+    <div class="row">
         <div class="col-md-6">
-            <p class="pull-left">
-                <i class="fa fa-graduation-cap"></i>
-                Jean Piaget | © Copyright 2018
+            <h1>Bienvenu à AUPIAIRE</h1>
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium ex excepturi illo ipsum nisi.
+                Cumque harum ipsa libero temporibus ullam. Beatae consequatur corporis cupiditate dicta dolor eos est
+                necessitatibus nesciunt!
             </p>
         </div>
         <div class="col-md-6">
-            <p class="pull-right text-info">By AfrikaSchool</p>
+            <img src="{{asset("images/photo3.jpg")}}" class="img-fluid" alt="">
         </div>
+    </div>
+</div>
+
+<footer class="footer pt-2 pb-1">
+    <div class="container">
+        <p class="wrap"><i class="fa fa-graduation-cap"></i> Afrikaschool | © Copyright 2018</p>
     </div>
 </footer>
 

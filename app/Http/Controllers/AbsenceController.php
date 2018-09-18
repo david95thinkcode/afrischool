@@ -139,7 +139,8 @@ class AbsenceController extends Controller
             return view('dashboard.absences.create-second-step', compact('mats'));
         }
         else {
-            abort(404);
+            flashy()->error("Impossible de continuer car aucune matière n'est enseignée dans cette classe.");
+            return back();
         }
         
     }

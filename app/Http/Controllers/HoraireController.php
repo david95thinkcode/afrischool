@@ -131,21 +131,27 @@ class HoraireController extends Controller
      */
     public function store(StoreHoraireRequest $request)
     {   
-        // On vérifie que l'horaire en cours d'enregistrement
+        // On vérifie que l'horaire en cours d'enregistrement...
         // n'interfère pas ou ne s'infiltre pas dans une plage horaire
         // déjà attribuée.
-        // Ex : 
+        // Par exemple : 
         // On ne peut pas enregistrer une matière le jeudi qui commence
         // de 8h à 11h alors qu'il y a déjà une matière qui occupait la plage de
-        // 10h à 12 le jeudi
+        // 10h à 12 le jeudi dans cette même classe
 
-        $horairesAtribues = Horaire::where('jour_id', $request->jour)->get();
-        foreach ($horairesAtribues as $key => $horaire) {        
-            if (!(((strtotime($request->debut)) >= (strtotime($horaire->fin))) 
-            || ((strtotime($request->fin)) <= (strtotime($horaire->debut))))) 
-            {
-                $msg = "Horaire non atribuable car cette plage horaire interfère avec celle d'une autre matière";
-                return Redirect::route('horaire.second-step.go')->with('warning', $msg);
+        $detailedEnseigner = Enseigner::findOrFail($request->enseigner);
+        $horairesAtribues = Horaire::with('enseigner')->where('jour_id', $request->jour)->get();
+        
+        foreach ($horairesAtribues as $key => $horaire) {
+
+            if ($horaire->enseigner->classe_id == $detailedEnseigner->classe_id) {
+                
+                if (!(((strtotime($request->debut)) >= (strtotime($horaire->fin))) 
+                || ((strtotime($request->fin)) <= (strtotime($horaire->debut))))) 
+                {
+                    $msg = "Horaire non atribuable car cette plage horaire interfère avec celle d'une autre matière";
+                    return Redirect::route('horaire.second-step.go')->with('warning', $msg);
+                }
             }
         }
         

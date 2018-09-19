@@ -157,18 +157,17 @@ class AbsenceController extends Controller
             ->where([
                 ['classe_id', $classe],
                 ['annee_scolaire_id', $year],
-            ])
-            ->get();
+            ])->get();
         
         if ($eleves->isEmpty()) {
-            return ('Aucun éléve inscrit dans cette classe');
+            flashy()->error("Impossible de continuer car aucun éléve n'est inscrit dans cette classe");
         }
         else {
             $classe = session()->get('absences.classe');   
             session(['absences.enseignerID' => $req->enseignerID]);
-
-            return view('dashboard.absences.create-last-step', compact('eleves'));
         }
+        
+        return view('dashboard.absences.create-last-step', compact('eleves'));
             
     }
 

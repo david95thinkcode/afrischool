@@ -8,7 +8,7 @@
                 <div class="panel-body">
                     <div class="x-content">
                         @if (count($mats) == 0)
-                            <h2>Aucune métière n'est enseignée ce jour dans cette classe.</h2>
+                            <h5 class="text-center">Impossible de continuer car aucune matière n'est enseignée dans cette classe ce jour.</h5>
                         @else                        
                         {!! Form::open(['route' => ['absences.steps.last'], 'method' => 'POST']) !!}                        
                             @foreach ($mats as $m)
@@ -31,11 +31,20 @@
             </div>
         </div>
     </div>
-@endsection
 
-@section('custom-css')
-    
-@endsection
-@section('custom-js')
-   
+    <div class="row">
+        <div class="col-sm-offset-2 col-sm-8">
+            <div class="alert alert-info alert-dismissible text-center" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <strong>Il semblerait que vous êtes perdu !</strong> 
+                <p>
+                    Afin de pouvoir enregistrer des absences, il est obligatoire d'avoir préalablement renseigner entièrement l'emploi du temps.
+                </p>
+                <p>Renseignez l'emploi du temps en utilisant le bouton ci-dessous</p>
+                <p class="text-center">
+                    <a href="{!! route('absences.steps.first') !!}" class="btn btn-primary">Ajouter un horaire à l'emploi du temps</a>
+                </p>
+            </div>
+        </div>
+    </div>
 @endsection

@@ -12,6 +12,7 @@
         $url2 = "http://oceanicsms.com/api/http/sendmsg.php?user=$user&password=$password&from=Vroomiste&to=$mobile&text=$text2&api=14265";
         
         $this->CallUrl($url2);
+        
     }
     
     protected function senderParent($ecole, $numero, $message)
@@ -51,6 +52,11 @@
     }
   
     function CallUrl($url){
-      return file_get_contents($url);
+        try {
+            return file_get_contents($url);
+        }
+        catch (\Exception $e) {
+            // Exception levée
+        }
     }
  }

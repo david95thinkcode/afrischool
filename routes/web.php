@@ -12,8 +12,12 @@
 */
 
 Route::get('/', 'PublicPagesController@index')->name('home');
+//Fourniture scolaire
+Route::resource('fourniture', 'FournitureController', ['only' => [
+    'index', 'create', 'store', 'update', 'edit', 'destroy'
+]]);
 
-Route::group(['prefix' => 'dashboard', 'middleware' => ['auth']], function () {
+Route::group(['prefix' => 'dashboard', 'middleware' => ['auth', 'auth.admin']], function () {
     Route::get('/', 'DashboardController@Home')->name('dashboard.home');
     Route::resource('etablissements', 'EtablissementController');
     Route::resource('professeurs', 'ProfesseurController');
@@ -29,7 +33,8 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['auth']], function () {
         
         Route::post('create', 'PersonnelController@store')->name('personnel.store');
         Route::post('role', 'PersonnelController@addRoletoUser')->name('personnel.role.store');
-    });
+        Route::post('users/lock/{id}/{action}', 'UserController@lock')->name('lockuser');
+     });
 
     //Les absences
     Route::prefix('absences')->group(function () {
@@ -195,6 +200,10 @@ Route::prefix('ajax')->group(function () {
     Route::get('pays', 'PublicResourcesController@getPays');
 });
 
+//contact
+Route::get('contact', 'HomeController@index')->name('contact.index');
+Route::post('contact', 'HomeController@post')->name('contact.post');
+
 // Authentication Routes...
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
 Route::post('login', 'Auth\LoginController@login')->name('login.req');
@@ -208,3 +217,39 @@ Route::post('register', 'Auth\RegisterController@create')->name('register.req');
 Route::get('reinitialiser-mot-de-passe', 'Auth\ResetPasswordController@index')->name('password.request');
 Route::post('reinitialiser-mot-de-passe', 'Auth\ResetPasswordController@resetPassword')->name('password.tel');
 Route::post('reinitialisation-mot-de-passe', 'Auth\ResetPasswordController@requestPassword')->name('password.requeste');
+
+
+/*
+* Maintenance pour le système
+*/
+
+/*
+//Clear Cache facade value:
+Route::get('/clear-cache', function() {
+    $exitCode = Artisan::call('cache:clear');
+    return '<h1>Cache facade value cleared</h1>';
+});
+
+//Reoptimized class loader:
+Route::get('/optimize', function() {
+    $exitCode = Artisan::call('optimize');
+    return '<h1>Reoptimized class loader</h1>';
+});
+
+//Route cache:
+Route::get('/route-cache', function() {
+    $exitCode = Artisan::call('route:cache');
+    return '<h1>Routes cached</h1>';
+});
+
+//Clear Route cache:
+Route::get('/route-clear', function() {
+    $exitCode = Artisan::call('route:clear');
+    return '<h1>Route cache cleared</h1>';
+});
+
+//Clear View cache:
+Route::get('/view-clear', function() {
+    $exitCode = Artisan::call('view:clear');
+    return '<h1>View cache cleared</h1>';
+});*/

@@ -14,51 +14,39 @@ class LoginController extends Controller
 
     use AuthenticatesUsers;
 
-    protected $redirectTo = '/consultation';
+
+    protected function authenticated(Request $request, $user)
+    {
+        if (Auth::check()) {
+            if (!$user->hasRole('authenticated'))
+            {
+                return Redirect::route('dashboard.home');
+            }
+            else
+            {
+                return Redirect::route('consultation.choix');;
+            }
+        }
+        else {
+            return view('public/home');
+        }
+    }
 
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
     }
 
-    public function login(Request $request)
+    protected function sendLoginResponse(Request $request)
     {
-        $this->validateLogin($request);
+        $request->session()->regenerate();
 
-        // If the class is using the ThrottlesLogins trait, we can automatically throttle
-        // the login attempts for this application. We'll key this by the username and
-        // the IP address of the client making these requests into this application.
-        if ($this->hasTooManyLoginAttempts($request)) {
-            $this->fireLockoutEvent($request);
+        $this->clearLoginAttempts($request);
 
-            return $this->sendLockoutResponse($request);
-        }
+        flashy()->success('Bienvenu '.Auth::user()->name);
 
-        if ($this->attemptLogin($request)) {
-            flashy()->success('Bienvenu '.Auth::user()->name);
-            return redirect('consultation');
-        }
-
-        $this->incrementLoginAttempts($request);
-
-        flashy()->error(trans('auth.failed'));
-
-        return $this->sendFailedLoginResponse($request);
-    }
-
-    protected function authenticated(Request $request, $user)
-    {
-        return Redirect::route('consultation.choix');
-    }
-
-
-    public function redirectPath()
-    {
-        if (method_exists($this, 'redirectTo')) {
-            return $this->redirectTo();
-        }
-
-        return property_exists($this, 'redirectTo') ? $this->redirectTo : '/consultation';
+        return $this->authenticated($request, $this->guard()->user())
+            ?: redirect()->intended($this->redirectPath());
     }
 
     public function username()

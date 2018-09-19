@@ -22,7 +22,7 @@ class VerifyIfDirecteurUser
                         
         }
         else {
-            abort(403);
+            return redirect()->route('home');
         }
     }
 }

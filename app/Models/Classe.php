@@ -57,4 +57,10 @@ class Classe extends Model
     {
         return $this->belongsToMany(Eleve::class, 'notes', 'classe_id', 'eleve_id');
     }
+
+    //fourniture pas class
+    public function fournitures()
+    {
+        return $this->hasMany(Fourniture::class);
+    }
 }

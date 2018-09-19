@@ -22,9 +22,7 @@ class VerifyIfComptableUser
                         
         }
         else {
-
-            abort(403);
-
+            return redirect()->route('home');
         }
 
     }

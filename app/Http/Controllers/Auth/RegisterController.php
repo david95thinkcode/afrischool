@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
+use App\Models\UserRole;
 use Flashy;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -35,12 +36,18 @@ class RegisterController extends Controller
             'password' => 'required|string|min:6|confirmed',
         ]);
 
-        User::create([
+        $user = User::create([
             'name' => $req->name,
             'username' => $req->username,
             'email' => $req->email,
-            'active' => false,
+            'active' => true,
             'password' => bcrypt($req->password),
+        ]);
+
+        UserRole::create([
+            'user_id' =>$user->id,
+            'role_id' => 2,
+            'is_active' => true
         ]);
 
         Flashy::success('Votre compte a été créé avec succès');

@@ -12,6 +12,7 @@ use App\Http\Requests\StorePersonnelRequest;
 use Illuminate\Support\Facades\Redirect;
 use App\Models\UserRole;
 use App\Http\Requests\AddRoleToUserRequest;
+use App\Http\Requests\ActivateUserRoleRequest;
 
 class PersonnelController extends Controller
 {
@@ -40,12 +41,12 @@ class PersonnelController extends Controller
     public function index()
     {        
         $users = User::all();
-
+        // TODO: afficher les users dont les users_roles sont activés
         return view('dashboard.personnel.index', compact('users'));
     }
 
     /**
-     * permet de créer un compte utilisateur
+     * permet d'afficher la vue pour créer un compte utilisateur
      * du personnel de l'école
      *
      * @return void
@@ -74,9 +75,9 @@ class PersonnelController extends Controller
         }
         elseif (Auth::user()->hasRole(self::$roles['fon']))
         {
-            $roles = Role::where('name', '!=', self::$roles['admin'])
-                ->orWhere('name', '!=', self::$roles['auth'])
-                ->orWhere('name', '!=', self::$roles['par'])
+            $roles = Role::where('name', '<>', self::$roles['admin'])
+                ->where('name', '<>', self::$roles['auth'])
+                ->where('name', '<>', self::$roles['par'])
                 ->get();
         }
         elseif (Auth::user()->hasRole(self::$roles['cen']))
@@ -103,10 +104,34 @@ class PersonnelController extends Controller
      */
     public function createUserRole()
     {
-        $users = User::all();
-        $roles = Role::where('name', Auth::user()->roles[0]->name)
+
+        $users = User::where('id', '<>', Auth::user()->id)->get();
+        $roles = null;
+
+        if (Auth::user()->hasRole(self::$roles['admin']))
+        {
+            $roles = Role::all();
+        }
+        elseif (Auth::user()->hasRole(self::$roles['fon']))
+        {
+            $roles = Role::where('name', '<>', self::$roles['admin'])
+                ->where('name', '<>', self::$roles['auth'])
+                ->where('name', '<>', self::$roles['par'])
+                ->get();
+        }
+        elseif (Auth::user()->hasRole(self::$roles['cen']))
+        {
+            $roles = Role::where('name', 'like', self::$roles['cen'])
+                ->orWhere('name', 'like', self::$roles['sec'])
+                ->orWhere('name', 'like', self::$roles['sur'])
+                ->get();
+        }
+        else
+        {
+            $roles = Role::where('name', Auth::user()->roles[0]->name)
                 ->orWhere('name', self::$roles['sec'])
                 ->get();
+        }
 
         return view('dashboard.personnel.add-role', compact('roles', 'users'));
     }
@@ -122,24 +147,43 @@ class PersonnelController extends Controller
         $u->active = true;
         $u->save();
         
-        $ur = $this->storeUserRole($u->id, $req->role, null);
+        $this->storeUserRole($u->id, $req->role, null);
 
         Flashy::success('Ce compte a été créé avec succès');
         
         return Redirect::route('personnel.index');
     }
 
-
+    /**
+     * Enregistre une nouvelle occurance du model UserRole
+     * dans la base de données si elle n'existe pas
+     * Si ce role est existant pour ce user, 
+     * mettre à jour le tuple dans la bdd
+     */
     public function addRoletoUser(AddRoleToUserRequest $req)
-    {
-        $results = $this->storeUserRole($req->user, $req->role, $req->disableDate);
+    {        
+        $u = UserRole::where([
+            ['user_id', $req->user],
+            ['role_id', $req->role],
+        ])->first();
 
-        if ($results) {
-            Flashy::success('Enregistré avec succès');
-            
-            return Redirect::route('personnel.index');
+        if (!is_null($u)) {
+            UserRole::where([
+                ['user_id', $req->user],
+                ['role_id', $req->role]
+            ])
+            ->update([
+                'desactivation_date' => $req->disableDate,
+                'updated_by' => Auth::user()->id,
+                'is_active' => true,
+            ]);
+        } else {
+            $this->storeUserRole($req->user, $req->role, $req->disableDate);
         }
-        Flashy::error("Une erreur s'est produite ! Rééssayez ");
+
+        Flashy::success('Enregistré avec succès !');
+        
+        return Redirect::route('personnel.index');
     }
 
     /**
@@ -154,17 +198,15 @@ class PersonnelController extends Controller
         // TODO
     }
 
-    public function activateUser($userId, $desactivationDate)
-    {
-        // TODO
-    }
-
+    // PRIVATE FUNCTIONS
     private function storeUserRole($userID, $roleID, $desactivationDate)
     {
         $userRole = new UserRole();
         $userRole->user_id = $userID;
         $userRole->role_id = $roleID;
-        $userRole->desactivation_date = $desactivationDate;            
+        $userRole->desactivation_date = $desactivationDate;
+        $userRole->created_by = Auth::user()->id;
+        $userRole->is_active = true;
         $userRole->save();
     
         return $userRole;

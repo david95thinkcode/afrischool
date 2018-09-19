@@ -11,13 +11,13 @@ class PublicPagesController extends Controller
     public function index()
     {
         if (Auth::check()) {
-            if (Auth::user()->hasRole('parent')) 
-            {
-                return Redirect::route('consultation.choix');
-            }
-            else 
+            if (!Auth::user()->hasRole('authenticated'))
             {
                 return Redirect::route('dashboard.home');
+            }
+            else
+            {
+                return Redirect::route('consultation.choix');
             }
         }
         else {

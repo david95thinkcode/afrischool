@@ -22,7 +22,7 @@ class VerifyIfCenseurUser
                         
         }
         else {
-            abort(403);
+            return redirect()->route('home');
         }
     }
 }

@@ -41,7 +41,7 @@ class Enseigner extends Model
 
     public function horaires()
     {
-        return $this->hasMany('App\Models\Horaire');
+        return $this->hasMany(Horaire::class);
     }
     
 }

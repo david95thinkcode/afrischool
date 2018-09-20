@@ -23,12 +23,14 @@
                         @endif
                         <li><a href="{!! route('personnel.index') !!}">Liste complète</a></li>
                     </ul>
-                </li>            
+                </li>
+                @endif         
+
                 <li><a><i class="fa fa-users"></i> Élèves 
                     <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
 
-                        @if (Auth::user()->hasRole('comptable'))                            
+                        @if ((Auth::user()->hasRole('comptable')) || (Auth::user()->hasRole('secretaire')))                         
                         <li><a href="{{ route('inscriptions.create') }}">Inscrire</a></li>
                         @endif
                         
@@ -36,8 +38,7 @@
                         <li><a href="{{route('eleve.reste.versement')}}">Paiement scolarité</a></li>
                         <li><a href="#">...........</a></li>
                     </ul>
-                </li>
-                @endif
+                </li>               
 
                 @if ((Auth::user()->hasRole('censeur')) || (Auth::user()->hasRole('fondateur')) || (Auth::user()->hasRole('directeur')))
                 {{-- PROFESSEURS --}}

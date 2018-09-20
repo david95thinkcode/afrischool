@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Role;
 use Illuminate\Http\Request;
+use Flashy;
 
 class UserController extends Controller
 {
@@ -17,6 +18,16 @@ class UserController extends Controller
     public function show(User $user)
     {
         return view('dashboard.users.show', ['user' => $user]);
+    }
+
+    public function activateOrDeactivate($user)
+    {
+        $u = User::findOrFail($user);
+        $u->active = !$u->active;
+        $u->save();
+
+        Flashy::success("Effectué avec succès.");
+        return back();
     }
 
     public function edit(User $user)

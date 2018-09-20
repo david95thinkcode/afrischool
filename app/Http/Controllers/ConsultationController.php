@@ -11,17 +11,13 @@ use App\Models\Trimestre;
 use App\Models\Matiere;
 use App\Models\Enseigner;
 use App\Models\AnneeScolaire;
+use Illuminate\Support\Facades\Auth;
 
 class ConsultationController extends Controller
 {
     public function choose()
     {
-        // Appelée après connexion du parent
-        // Affiche ses enfants
-        // TODO: Gérer l'authentification du parent
-        // TODO: Récupérer l'identifiant du parent connecté
-
-        $parent = ParentEleve::findOrFail(1); // par défaut en attendant fin du TODO
+        $parent = ParentEleve::where('user_id', Auth::user()->id)->first();
         $enfants = Eleve::where('parent_id', $parent->id)->get();
 
         return view('parents-dashboard.index', compact('enfants'));

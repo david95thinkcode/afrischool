@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Redirect;
 use App\Models\Classe;
 use App\Models\Professeur;
 use App\Http\Requests\SearchProfesseurAboutClasseRequest;
+use App\Models\Enseigner;
 
 class ProfesseurController extends Controller
 {
@@ -61,9 +62,14 @@ class ProfesseurController extends Controller
      */
     public function show($id)
     {
-        $p = Professeur::findOrFail($id);
+        $p = Professeur::with('diplomes')
+            ->where('id', $id)
+            ->first();
+        $enseigner = Enseigner::with('classe')
+            ->where('professeur_id', $p->id)
+            ->get();
 
-        return view('dashboard.professeurs.show', compact('p'));
+        return view('dashboard.professeurs.show', compact('p', 'enseigner'));
     }
 
     /**

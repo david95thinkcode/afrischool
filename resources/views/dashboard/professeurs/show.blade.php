@@ -13,15 +13,74 @@
     <div class="col-sm-12">
         <div>
             <div class="row">
-                <div class="col-sm-offset-1 col-sm-10">
-                    <span class="lead">Ses dîplomes</span>
-                    <a href="{{ route('professeur.diplome.create', ['id' => $p->id]) }}" class="btn btn-success pull-right">Ajouter un diplome</a>
+                <div class="col-sm-6">
+                    <div class="panel panel-default mx-auto">
+                        <div class="panel-heading"><span class="lead">Détails personnels</span></div>
+                        <table class="table table-hover">
+                            <tbody>
+                                <tr>
+                                    <th>Code : </th>
+                                    <td>{!! $p->id !!}</td>
+                                </tr>
+                                <tr>
+                                    <th>Nom : </th>
+                                    <td>{!! $p->prof_nom !!}</td>
+                                </tr>
+                                <tr>
+                                    <th>Prénom(s) : </th>
+                                    <td>{!! $p->prof_prenoms !!}</td>
+                                </tr>
+                                <tr>
+                                    <th>Téléphone : </th>
+                                    <td>{!! $p->prof_tel !!}</td>
+                                </tr>
+                                <tr>
+                                    <th>Adresse mail : </th>
+                                    <td>{!! $p->prof_email !!}</td>
+                                </tr>
+                                <tr>
+                                    <th>Age : </th>
+                                    <td>{!! $p->age !!} ans</td>
+                                </tr>
+                                <tr>
+                                    <th>Nationalité : </th>
+                                    <td>{!! $p->prof_nationalite !!}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="panel panel-default mx-auto">
+                        <div class="panel-heading">
+                            <span class="lead">Matières enseignées 
+                                <span class="badge">{!! count($p->enseigner) !!}
+                                </span>
+                            </span> 
+                        </div>
+                        <table class="table table-hover">
+                            <tbody>
+                                @foreach ($enseigner as $ens)
+                                    <tr>
+                                        <th>{!! $ens->matiere->intitule !!}</th>
+                                        <td class="text-center">enseignée en classe de </td>
+                                        <th>{!! $ens->classe->cla_intitule !!}</th>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
+
             <div class="row">
-                <div class="col-sm-offset-1 col-sm-10">
-                    <div class="table-responsive">
-                        <table class="table table-bordered">
+                <div class="col-sm-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <span class="lead">Les dîplomes</span>
+                            <a href="{{ route('professeur.diplome.create', ['id' => $p->id]) }}" class="btn btn-success pull-right">Ajouter un diplome</a>
+                        </div>
+                        <table class="table table-hover">
                             <thead>
                                 <th>#</th>
                                 <th>Intitule</th>
@@ -37,8 +96,8 @@
                                     <td>{{ $d->id }}</td>
                                     <td>{{ $d->dip_intitule }}</td>
                                     <td>{{ $d->dip_specialite }}</td>
-                                    <td>{{ $d->dip_ecole }}</td>
                                     <td>{{ $d->dip_niveau }}</td>
+                                    <td>{{ $d->dip_ecole }}</td>
                                     <td>{{ $d->dip_date_obtention }}</td>
                                     <td>
                                         <a href="{{ route('diplomes.show', ['id' => $d->id] ) }}" class="btn btn-sm btn-info">
@@ -57,9 +116,14 @@
                             @endforeach
                             </tbody>
                         </table>
+
                     </div>
+                    {{-- <div class="table-responsive">
+                    </div> --}}
                 </div>
             </div>
+
+            
             
         </div>
         

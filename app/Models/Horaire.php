@@ -13,11 +13,11 @@ class Horaire extends Model
 
     public function enseigner()
     {
-        return $this->belongsTo('App\Models\Enseigner', 'enseigner_id');
+        return $this->belongsTo(Enseigner::class, 'enseigner_id');
     }
 
     public function jour()
     {
-        return $this->belongsTo('App\Models\Jour', 'jour_id');
+        return $this->belongsTo(Jour::class, 'jour_id');
     }
 }

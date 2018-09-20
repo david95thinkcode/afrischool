@@ -7,6 +7,9 @@
             <div class="panel panel-default">
                 <div class="panel-body">
                     <div class="x-content">
+                        @if ($eleves->isEmpty())
+                        <h5 class="text-center">Impossible de continuer car aucun éléve n'est inscrit dans cette classe.</h5>
+                        @else 
                         {!! Form::open(['route' => ['absences.store'], 'method' => 'POST']) !!}
                         @foreach ($eleves as $e)
                         <div class="form-group">
@@ -22,16 +25,10 @@
                             <input type="submit" class="btn btn-success" value="Enregistrer">
                         </div>
                         {!! Form::close() !!}
+                        @endif
                     </div>
                 </div>
             </div>
         </div>
     </div>
-@endsection
-
-@section('custom-css')
-    
-@endsection
-@section('custom-js')
-   
 @endsection

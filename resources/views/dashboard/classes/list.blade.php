@@ -11,6 +11,7 @@
                     <th>Intitulé</th>
                     <th>Description</th>
                     <th>Niveau</th>
+                    <th>Actions rapides</th>
                     <th>Actions</th>
                 </thead>
                 <tbody>
@@ -25,11 +26,25 @@
                             Collège @else Université @endif
                         </td>
                         <td>
-                           <a href="{{ route('classe.edit', ['id' => $c->id]) }}" class="btn btn-sm btn-warning">Modifier</a>
-                           <form action="{{ route('classe.destroy', $c->id) }}" method="POST" class='table-del-btn'>
+                            <div class="btn-group" role="group">
+                                <a href="{!! route('matiere.show.classe', ['classe' => $c->id]) !!}" class="btn btn-success">
+                                    <i class="fa fa-book"></i> Matières enseignées
+                                </a>
+                                <a href="{!! route('emploi-du-temps.afficher', ['classe' => $c->id]) !!}" class="btn btn-info">
+                                     Emploi du temps
+                                </a>
+                                <a href="{!! route('inscriptions.classe.show', ['classe' => $c->id]) !!}" class="btn btn-primary">
+                                    <i class="fa fa-users"></i> Elèves inscrits
+                                </a>
+
+                            </div>
+                        </td>
+                        <td>
+                            <a href="{{ route('classe.edit', ['id' => $c->id]) }}" class="btn btn-sm btn-warning">Modifier</a>
+                            <form action="{{ route('classe.destroy', $c->id) }}" method="POST" class='table-del-btn'>
                                 <input type="hidden" name="_method" value="DELETE">
                                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                              {!! Form::submit('Supprimer', array('class' => 'btn btn-sm btn-danger')) !!}
+                                {!! Form::submit('Supprimer', array('class' => 'btn btn-sm btn-danger')) !!}
                             </form>
                         </td>
                     </tr>

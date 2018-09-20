@@ -11,11 +11,21 @@ class Professeur extends Model
     public $timestamps = true;
 
     /**
+     * Age accessor
+     */
+    public function getAgeAttribute()
+    {
+        $t = strtotime($this->attributes['prof_date_naissance']);
+
+        return date('Y') - date('Y', $t);
+    }
+
+    /**
      * Un professeur enseigne plusieurs matières
      */
     public function enseigner()
     {
-        return $this->hasMany('App\Models\Enseigner');
+        return $this->hasMany(Enseigner::class);
     }
 
     /*
@@ -23,7 +33,7 @@ class Professeur extends Model
     */
     public function diplomes()
     {
-        return $this->hasMany('App\Models\Diplome', 'professeur_id');
+        return $this->hasMany(Diplome::class, 'professeur_id');
     }
 
     /**

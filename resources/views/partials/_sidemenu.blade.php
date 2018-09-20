@@ -40,7 +40,7 @@
                     </ul>
                 </li>               
 
-                @if ((Auth::user()->hasRole('censeur')) || (Auth::user()->hasRole('fondateur')) || (Auth::user()->hasRole('directeur')))
+                @if ((Auth::user()->hasRole('surveillant')) || (Auth::user()->hasRole('censeur')) || (Auth::user()->hasRole('fondateur')) || (Auth::user()->hasRole('directeur')))
                 {{-- PROFESSEURS --}}
                 <li>
                     <a><i class="fa fa-user-secret"></i> Professeurs
@@ -77,7 +77,7 @@
                         <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                         
-                        @if (Auth::user()->hasRole('censeur'))                            
+                        @if ((Auth::user()->hasRole('censeur')) || (Auth::user()->hasRole('surveillant')))                           
                         <li><a href="{{ route('matieres.create') }}">Créer</a></li>
                         <li><a href="{{ route('enseigner.create') }}">Ajouter une matière à une classe </a></li>
                         @endif

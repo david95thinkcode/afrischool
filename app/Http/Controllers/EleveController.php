@@ -62,7 +62,6 @@ class EleveController extends Controller
     public function listeInsolder()
     {
         $debiteurs = Inscription::with('eleve')->where('est_solder', false)->get();
-
         return view('scolarite.eleve_non_solde', compact('debiteurs'));
     }
 

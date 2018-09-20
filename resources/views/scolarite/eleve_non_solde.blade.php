@@ -8,7 +8,7 @@
                 <thead>
                 <tr>
                     <th>N°</th>
-                    <th>Nom prénom(s)</th>
+                    <th>Nom & prénom(s)</th>
                     <th>Téléphone parent</th>
                     <th>Scolarité</th>
                     <th>Reste à solder</th>
@@ -16,15 +16,18 @@
                 </tr>
                 </thead>
                 <tbody>
-                    @php $i = 0; @endphp
-                    @forelse($debiteurs as $debiteur)
-                    @php $i++; @endphp
+                    @if ($debiteurs->isEmpty())
+                        <tr class="text-center my-5 py-5">
+                        Pas de scolarité non soldée !
+                        </tr>
+                    @else
+                    @foreach ($debiteurs as $debiteur)
                     <tr>
-                        <td class="text-center">{{$i}}</td>
+                        <td class="text-center">{{$loop->iteration}}</td>
                         <td>
-                            {{$debiteur->eleve->prenoms}} {{$debiteur->eleve->nom}}
+                            {{$debiteur->eleve->full_name}}
                         </td>
-                        <td>{{$debiteur->eleve->parents->par_tel}}</td>
+                        <td>{{$debiteur->eleve->parent->par_tel}}</td>
                         <td>{{$debiteur->montant_scolarite}} <strong>fcfa</strong></td>
                         <td>{{$debiteur->reste}} <strong>fcfa</strong></td>
                         <td class="text-center">
@@ -34,12 +37,9 @@
                             </a>
                             @endif
                         </td>
-                    </tr>
-                @empty
-                    <tr class="text-center my-5 py-5">
-                        Pas de scolarité non soldé
-                    </tr>
-                @endforelse
+                    </tr>    
+                    @endforeach                        
+                    @endif
                 </tbody>
             </table>
         </div>

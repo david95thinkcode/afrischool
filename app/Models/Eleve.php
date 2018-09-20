@@ -39,4 +39,9 @@ class Eleve extends Model
         return $this->belongsToMany(Eleve::class, 'notes', 'classe_id', 'eleve_id');
     }
 
+    public function getFullNameAttribute()
+    {
+        return $this->attributes['prenoms'] . ' ' . $this->attributes['nom'];
+    }
+
 }

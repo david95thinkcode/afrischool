@@ -325,8 +325,8 @@ class InscriptionController extends Controller
         $inscription->eleve_id = $eleve;
         $inscription->classe_id = $classe;
         $inscription->annee_scolaire_id = $anne_scolaire;
-        $inscription->montant_scolarite = $scolarite;
-        $inscription->montant_verse = $verser;
+        $inscription->montant_scolarite = (is_null($scolarite))?0:$scolarite;
+        $inscription->montant_verse = (is_null($verser))?0:$verser;
         $inscription->reste = $scolarite - $verser;
         $inscription->date_inscription = $date_inscription;
 

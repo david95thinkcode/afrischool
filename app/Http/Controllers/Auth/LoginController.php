@@ -14,24 +14,6 @@ class LoginController extends Controller
 
     use AuthenticatesUsers;
 
-
-    protected function authenticated(Request $request, $user)
-    {
-        if (Auth::check()) {
-            if (!$user->hasRole('authenticated'))
-            {
-                return Redirect::route('dashboard.home');
-            }
-            else
-            {
-                return Redirect::route('consultation.choix');;
-            }
-        }
-        else {
-            return view('public/home');
-        }
-    }
-
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
@@ -47,6 +29,20 @@ class LoginController extends Controller
 
         return $this->authenticated($request, $this->guard()->user())
             ?: redirect()->intended($this->redirectPath());
+    }
+
+
+    protected function authenticated(Request $request, $user)
+    {
+        if ($user->hasRole('authenticated'))
+        {
+            return Redirect::route('consultation.choix');
+        }
+        else
+        {
+            return Redirect::route('dashboard.home');
+        }
+
     }
 
     public function username()

@@ -1,8 +1,6 @@
 <?php
  namespace App\Traits;
-
  trait TraitSms{
-
     protected function sendSms($mobile, $message)
     {
         $messageF =  $this->removeAccent($message);
@@ -12,6 +10,7 @@
         $url2 = "http://oceanicsms.com/api/http/sendmsg.php?user=$user&password=$password&from=Vroomiste&to=$mobile&text=$text2&api=14265";
         
         $this->CallUrl($url2);
+        
     }
     
     protected function senderParent($ecole, $numero, $message)
@@ -26,7 +25,6 @@
         
         $this->CallUrl($url2);
     }
-
     function removeAccent($str)
     {
         if (($length=mb_strlen($str, "UTF-8"))<strlen($str)) {
@@ -51,6 +49,11 @@
     }
   
     function CallUrl($url){
-      return file_get_contents($url);
+        try {
+            return file_get_contents($url);
+        }
+        catch (\Exception $e) {
+            // Exception levée
+        }
     }
  }

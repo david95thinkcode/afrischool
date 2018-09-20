@@ -206,13 +206,7 @@ class AbsenceController extends Controller
         }
     }
 
-    public function list(Request $req)
-    {
-
-    }
-
     // PRIVATE METHODS
-    
     private function areEqualDays($date, Horaire $horaire)
     {
         try {

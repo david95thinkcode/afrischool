@@ -21,7 +21,7 @@
             <a href="{!! route('consultation.index', ['ideleve' => $e->id]) !!}" class='no-link'>
             <div class="card mb-4 box-shadow">
               <div class="card-body">
-                <h3 class="card-title pricing-card-title">#{!! $loop->iteration !!}. {!! $e->prenoms !!} {!! $e->nom !!}</h3>
+                <h3 class="card-title pricing-card-title">#{!! $loop->iteration !!}. {!! $e->full_name !!}</h3>
               </div>
             </div>
             </a>

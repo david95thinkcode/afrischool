@@ -7,6 +7,10 @@
     {!! Form::text('cla_description', old('cla_description'), ['class' => 'form-control', 'placeholder' => 'Ex: Troisième D',]) !!}
 </div>
 <div class="form-group">
+    {!! Form::label('mt_scolarite', 'Montant de la scolarité') !!}
+    {!! Form::number('mt_scolarite', old('mt_scolarite'), ['class' => 'form-control',]) !!}
+</div>
+<div class="form-group">
     {!! Form::label('niveau', 'Niveau') !!}
     <select class="form-control" name="niveau" id='niveau' required>
         <option value="">-- Sélectionner --</option>

@@ -78,7 +78,10 @@ class InscriptionController extends Controller
     public function indexScolarite()
     {
         $annee_scolaires =  AnneeScolaire::all();
-        return view('inscriptions.scolarite', compact('annee_scolaires'));
+        $classe = (int) session('eleve.classe');
+        $montant_scolarite = Classe::findOrFail($classe)->mt_scolarite;
+
+        return view('inscriptions.scolarite', compact('annee_scolaires', 'montant_scolarite'));
     }
 
     public function sessionScolarite(ScoolariteRequest $req)
@@ -106,7 +109,8 @@ class InscriptionController extends Controller
         $ecole = env('SCHOOL_NAME', 'AfrikaSchool');
         $this->senderParent($ecole, $numero, $message);
 
-        return Redirect::route('inscriptions.create')->with('status', 'Elève inscrit avec succès !');
+        return Redirect::route('inscriptions.show', ['inscription' => $inscription->id])
+            ->with('status', 'Elève inscrit avec succès !');
     }
 
     /**
@@ -145,7 +149,8 @@ class InscriptionController extends Controller
         $ecole = env('SCHOOL_NAME', 'AfrikaSchool');
         $this->senderParent($ecole, $numero, $message);
 
-        return Redirect::route('inscriptions.create')->with('status', 'Elève inscrit avec succès !');
+        return Redirect::route('inscriptions.show', ['inscription' => $inscription->id])
+            ->with('status', 'Elève inscrit avec succès !');
     }
 
     /**
@@ -183,7 +188,7 @@ class InscriptionController extends Controller
      */
     public function show($id)
     {
-      $inscription = DB::table('inscriptions')
+        $inscription = DB::table('inscriptions')
             ->where('inscriptions.id', '=', $id)
             ->join('classes', 'inscriptions.classe_id', '=', 'classes.id')
             ->join('eleves', 'inscriptions.eleve_id', '=', 'eleves.id')

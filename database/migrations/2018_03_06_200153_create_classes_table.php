@@ -17,6 +17,7 @@ class CreateClassesTable extends Migration
             $table->increments('id');
             $table->string('cla_intitule');
             $table->string('cla_description')->nullable();
+            $table->integer('mt_scolarite')->default(0)->comments('Montant de la scolarité');
             $table->boolean('estPrimaire')->default(false);
             $table->boolean('estCollege')->default(false);
             $table->boolean('estUniversite')->default(false);

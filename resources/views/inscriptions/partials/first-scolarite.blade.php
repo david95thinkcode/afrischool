@@ -2,7 +2,7 @@
     <div class="col-md-6 col-xs-12">
         <div class="form-group{{ $errors->has('montant_scolarite') ? ' has-error' : '' }}">
             {!! Form::label('montant_scolarite', "Montant de la scolarité") !!}
-            {!! Form::text('montant_scolarite', old('montant_scolarite'), ['class' => 'form-control']) !!}
+            {!! Form::number('montant_scolarite', $montant_scolarite, ['class' => 'form-control', 'readonly' => '']) !!}
         </div>
     </div>
 

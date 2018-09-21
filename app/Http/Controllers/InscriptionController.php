@@ -78,7 +78,9 @@ class InscriptionController extends Controller
     public function indexScolarite()
     {
         $annee_scolaires =  AnneeScolaire::all();
-        return view('inscriptions.scolarite', compact('annee_scolaires'));
+        $montant_scolarite = Classe::find(session('eleve.classe'))->first()->mt_scolarite;
+        
+        return view('inscriptions.scolarite', compact('annee_scolaires', 'montant_scolarite'));
     }
 
     public function sessionScolarite(ScoolariteRequest $req)

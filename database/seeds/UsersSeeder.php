@@ -39,6 +39,15 @@ class UsersSeeder extends Seeder
                 'active' => true,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
+            ],
+            [
+                'name' => 'Backend',
+                'username' => 'dav',
+                'email' => 'dav@labs.com',
+                'password' => bcrypt('dav'),
+                'active' => true,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
             ]
         ];
 

@@ -10,7 +10,7 @@
         <link href="https://fonts.googleapis.com/css?family=Raleway|Roboto" rel="stylesheet">
         <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
         {!! Html::style('bootstrap-4.1.1/dist/css/bootstrap.min.css') !!}
-        {!! Html::style('css/parent-dashboard.css') !!}
+        {!! Html::style('css/style.css') !!}
         @yield('custom-css')
         {!! Html::style('css/parent-dashboard.css') !!}
         <style>
@@ -29,40 +29,20 @@
     </head>
 
     <body>
-
-        <header class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
-            <h5 class="my-0 mr-md-auto font-weight-normal">{!! env('APP_NAME') !!}</h5>
-            @if (Auth::guest())
-                <nav class="my-2 my-md-0 mr-md-3">
-                    <a class="p-2 text-dark" href="{{route('register')}}">Inscrption</a>
-                </nav>
-                <a class="btn btn-outline-info" href="{{route('login')}}">Connexion</a>
-            @else
-                <nav class="my-2 my-md-0 mr-md-3">
-                    <a class="p-2 text-dark" href="{{route('consultation.choix')}}">Mes enfants</a>
-                </nav>
-                <a href="{{ route('logout') }}" class="btn btn-outline-info"
-                   onclick="event.preventDefault();
-                    document.getElementById('logout-form').submit();">
-                    <i class="fa fa-sign-out"></i>
-                    Se deconnecter
-                </a>
-                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                    {{ csrf_field() }}
-                </form>
-            @endif
-        </header>
+        @include('partials.header')
 
         <div class="container-fluid">
             <div class="row">
-                <div class="col-sm-12">
-                    <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
-                        <h1 class="display-4 main-title">@yield('main-title')</h1>
+                <div class="col-sm-12 mt-5 pt-5">
+                    <div class="pricing-header pt-md-5 pb-md-4 mx-auto text-center">
+                        <h1 class="display-4" style="color: #19c880;">
+                            @yield('main-title')
+                        </h1>
                         <p class="lead">@yield('main-descriptive-text')</p>
                     </div>
                     @yield('content')
-                </div>                
-            </div>        
+                </div>
+            </div>
         </div>
         <br><br><br>
         <footer class="footer pt-2 pb-1 mt-5">
@@ -70,14 +50,16 @@
                 <p class="wrap"><i class="fa fa-graduation-cap"></i> Afrikaschool | © Copyright 2018</p>
             </div>
         </footer>
-        
+
         <!-- Bootstrap core JavaScript
         ================================================== -->
         <!-- Placed at the end of the document so the pages load faster -->
-        {!! Html::script('js/jquery-3.2.1.min.js') !!}
-        {!! Html::script('js/popper.min.js') !!}
-        {!! Html::script('bootstrap-4.1.1/dist/js/bootstrap.min.js') !!}
+        <script type="text/javascript" language="javascript"
+                src="https://code.jquery.com/jquery-3.3.1.js"></script>
         @yield('custom-js')
+        {!! Html::script('bootstrap-4.1.1/dist/js/bootstrap.min.js') !!}
+        {!! Html::script('js/popper.min.js') !!}
+        @include('flashy::message')
 
     </body>
 

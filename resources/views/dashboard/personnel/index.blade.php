@@ -36,16 +36,31 @@
                         {{-- Notification --}}
                         <td></td>
                         {{-- Actions --}}
-                        <td>
-                            @if ($user->active)
-                                @if (!$user->hasRole('administrator'))
-                                <a class="btn btn-sm btn-danger" href="{!! route('users.activation', ['user' => $user->id]) !!}"> Désactiver</a>
+                        <td class="text-center">
+                            @if (Auth::user()->hasRole('administrator') || Auth::user()->hasRole('fondateur'))
+                                @if ($user->active)
+                                    <form action="{{route('lockuser', ['id' => $user->id,'action'=>'lock'])}}"
+                                          method="post"
+                                          onsubmit="return confirm('Etes vous sûr de vouloir bloquer cet utilisateur?');">
+                                        {{csrf_field()}}
+                                        <button class="btn btn-sm btn-danger">
+                                            <span class=" glyphicon glyphicon-lock"></span>
+                                            Désactiver le compte
+                                        </button>
+                                    </form>
+                                @else
+
+                                    <form action="{{route('lockuser', ['id' => $user->id,'action'=>'unlock'])}}"
+                                          method="post"
+                                          onsubmit="return confirm('Etes vous sûr de vouloir activer cet utilisateur?');">
+                                        {{csrf_field()}}
+                                        <button class="btn btn-sm btn-success">
+                                            <span class=" glyphicon glyphicon-lock"></span>
+                                            Activer le compte
+                                        </button>
+                                    </form>
                                 @endif
-                            @else 
-                                <a class="btn btn-sm btn-success" href="{!! route('users.activation', ['user' => $user->id]) !!}">Activer</a>
                             @endif
-                            {{-- <a href="{{ route('matieres.show', ['id' => $m->id]) }}" class="btn btn-sm btn-info">Afficher</a>
-                            <a href="{{ route('matieres.edit', ['id' => $m->id]) }}" class="btn btn-sm btn-warning">Modifier</a> --}}
                         </td>
                     </tr>
                 @endforeach

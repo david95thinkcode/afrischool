@@ -20,7 +20,7 @@ class VerifyIfFondateurUser
             return $next($request);                        
         }
         else {
-            abort(403);
+            return redirect()->route('home');
         }
     }
 }

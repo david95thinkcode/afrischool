@@ -50,7 +50,7 @@
     </div>
 </div>
 @endsection
- @fore
+
 @section('custom-css')
     <link rel="stylesheet" href="{{asset('css/dataTables.bootstrap.min.css')}}">
     <style>

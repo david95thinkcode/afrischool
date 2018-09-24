@@ -8,5 +8,9 @@ class UserRole extends Model
 {
     protected $table = 'users_roles';
 
-    public $timestamps = false;
+    protected $fillable = [
+        'user_id', 'role_id', 'desactivation_date', 'is_active'
+    ];
+
+    public $timestamps = true;
 }

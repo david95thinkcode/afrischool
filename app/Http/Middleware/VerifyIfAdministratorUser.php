@@ -16,11 +16,10 @@ class VerifyIfAdministratorUser
      */
     public function handle($request, Closure $next)
     {
-        if (Auth::user()->hasRole('administrator')) {            
-            return $next($request);                        
+        if (!Auth::user()->hasRole('authenticated')) {
+            return $next($request);
         }
-        else {
-            abort(403);
-        }
+
+        return redirect('/');
     }
 }

@@ -207,7 +207,6 @@ class AbsenceController extends Controller
     }
 
     // PRIVATE METHODS
-    
     private function areEqualDays($date, Horaire $horaire)
     {
         try {

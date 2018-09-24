@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Role;
 use Illuminate\Http\Request;
-use Flashy;
+use MercurySeries\Flashy\Flashy;
+
 
 class UserController extends Controller
 {
@@ -76,5 +77,17 @@ class UserController extends Controller
         }
 
         return redirect()->intended(route('dashboard.users'));
+    }
+
+    public function lock($id,$action){
+        if(($action)=='lock'){
+            user::whereid($id)->update(['active'=>false]);
+            Flashy::success('Utilisateur bloqué avec succès');
+            return redirect()->back();
+        }else{
+            user::whereid($id)->update(['active'=>true]);
+            Flashy::success('Utilisateur débloqué avec succès');
+            return redirect()->back();
+        }
     }
 }

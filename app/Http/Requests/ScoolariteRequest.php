@@ -25,7 +25,7 @@ class ScoolariteRequest extends FormRequest
     {
         return [
             'montant_scolarite' => 'required|numeric|min:1',
-            'montant_verser' => 'required|numeric|min:1',
+            'montant_verser' => 'nullable|numeric',
             'date_inscription' => 'required|date',
             'annee_scolaire' => 'required'
         ];

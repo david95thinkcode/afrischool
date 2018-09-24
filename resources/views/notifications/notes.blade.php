@@ -24,7 +24,7 @@
                             Selectionnez la classe
                             <span class="required">*</span>
                         </label>
-                        <
+
                         <select class="col-md-12 col-sm-12 col-xs-12{{ $errors->has('classe') ? ' has-error' : '' }}" id="classe" name="classe">
                             @foreach($classes as $class)
                                 <option value="{{$class->id}}">{{$class->cla_intitule}}</option>

@@ -10,19 +10,6 @@ class PublicPagesController extends Controller
 {
     public function index()
     {
-        if (Auth::check()) {
-            if (Auth::user()->hasRole('parent')) 
-            {
-                return Redirect::route('consultation.choix');
-            }
-            else 
-            {
-                return Redirect::route('dashboard.home');
-            }
-        }
-        else {
-            return view('public/home');
-        }
-        
+        return view('public/home');
     }
 }

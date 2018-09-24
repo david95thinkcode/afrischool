@@ -1,8 +1,6 @@
 <?php
  namespace App\Traits;
-
  trait TraitSms{
-
     protected function sendSms($mobile, $message)
     {
         $messageF =  $this->removeAccent($message);
@@ -27,7 +25,6 @@
         
         $this->CallUrl($url2);
     }
-
     function removeAccent($str)
     {
         if (($length=mb_strlen($str, "UTF-8"))<strlen($str)) {

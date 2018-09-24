@@ -11,6 +11,7 @@
                     <th>Intitulé</th>
                     <th>Description</th>
                     <th>Niveau</th>
+                    <th>Montant scolarité</th>
                     <th>Actions rapides</th>
                     <th>Actions</th>
                 </thead>
@@ -25,6 +26,7 @@
                             Primaire @elseif($c->estCollege)
                             Collège @else Université @endif
                         </td>
+                        <td>{{ $c->mt_scolarite }}</td>
                         <td>
                             <div class="btn-group" role="group">
                                 <a href="{!! route('matiere.show.classe', ['classe' => $c->id]) !!}" class="btn btn-success">

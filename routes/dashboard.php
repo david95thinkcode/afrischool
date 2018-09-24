@@ -148,6 +148,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('users', 'UserController@index')->name('users');
         Route::get('users/{user}', 'UserController@show')->name('users.show');
         Route::get('users/{user}/edit', 'UserController@edit')->name('users.edit');
+        Route::get('users/activation/{user}', 'UserController@activateOrDeactivate')->name('users.activation');
         Route::put('users/{user}', 'UserController@update')->name('users.update');
     });
     //Notifications

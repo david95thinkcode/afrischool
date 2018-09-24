@@ -20,7 +20,13 @@ class CreateParentsTable extends Migration
             $table->string('par_sexe')->nullable();
             $table->string('par_tel');
             $table->string('par_email')->nullable();
+            $table->unsignedInteger('user_id')->nullable();
             $table->timestamps();
+
+            $table->foreign('user_id')
+                    ->references('id')
+                    ->on('users')
+                    ->onDelete('cascade');
         });
     }
 

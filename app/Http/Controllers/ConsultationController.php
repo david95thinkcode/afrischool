@@ -17,7 +17,8 @@ class ConsultationController extends Controller
 {
     public function choose()
     {
-        $enfants = Eleve::where('parent_id', Auth::user()->id)->get();
+        $parent = ParentEleve::where('user_id', Auth::user()->id)->first();
+        $enfants = Eleve::where('parent_id', $parent->id)->get();
 
         return view('parents-dashboard.index', compact('enfants'));
     }

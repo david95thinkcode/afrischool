@@ -5,7 +5,7 @@
 @endsection
 
 @section('main-descriptive-text')
-    Enfant : {!! $enfant->prenoms !!} {!! $enfant->nom !!}
+    Enfant : {!! $enfant->full_name !!}
     <nav class="nav nav-pills mb-3 nav-fill" id='pills-tab' role='tablist'>
         <a class="nav-item nav-link active" id="notes-tab" data-toggle="pill" href="#notes" role="tab" aria-controls="notes" aria-selected="true">Les notes</a>
         <a class="nav-item nav-link" id="scolarite-tab" data-toggle="pill" href="#scolarite" role="tab" aria-controls="scolarite" aria-selected="false">Scolarité</a>

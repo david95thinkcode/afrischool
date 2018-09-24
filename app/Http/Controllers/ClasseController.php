@@ -42,6 +42,7 @@ class ClasseController extends Controller
         $classe = new Classe();
         $classe->cla_intitule = $request->cla_intitule;
         $classe->cla_description = $request->cla_description;
+        $classe->mt_scolarite = $request->mt_scolarite;
         switch ($request->niveau) {
             case self::PRIMAIRE_ID:
                 $classe->estPrimaire = true;
@@ -103,6 +104,8 @@ class ClasseController extends Controller
         $classe = Classe::find($id);
         $classe->cla_intitule = $request->cla_intitule;
         $classe->cla_description = $request->cla_description;
+        $classe->mt_scolarite = $request->mt_scolarite;
+
         switch ($request->niveau) {
             case self::PRIMAIRE_ID:
                 $classe->estPrimaire = true;

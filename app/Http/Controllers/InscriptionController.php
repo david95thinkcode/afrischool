@@ -162,20 +162,20 @@ class InscriptionController extends Controller
     }
 
     /**
-     * Retourne sur une collection d'inscription pour une classe donnée
+     * Retourne une collection d'inscription pour une classe donnée
+     * @param integer $classe_id
      */
     public function showForClasse($classe_id)
     {
-        $inscriptions = Inscription::where('classe_id', $classe_id)->get();
+        $inscriptions = Inscription::with('classe', 'eleve')
+            ->where('classe_id', $classe_id)->get();
 
-        if ($inscriptions->count() != 0) {
-            $classes = Classe::all();
-
-            return view('inscriptions.show', compact('inscriptions', 'classes'));
+        if ($inscriptions->count() != 0) {            
+            $concernedClasse = $inscriptions[0]->classe;
+            return view('inscriptions.show', compact('inscriptions', 'concernedClasse'));
         }
         else {
             $classe = Classe::find($classe_id);
-
             return view('inscriptions.show-empty', compact('classe'));
         }
     }
@@ -196,6 +196,7 @@ class InscriptionController extends Controller
             ->get()
             ->first();
 
+            // dd($inscription);
         return view('inscriptions.eleve-detail', compact('inscription'));
     }
 

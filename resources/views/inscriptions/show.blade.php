@@ -41,7 +41,7 @@
                                     @if ($i->est_solder)
                                         <span class="badge badge-success">Soldé</span>
                                     @else
-                                        <strong>{!! $i->reste !!} FCFA</strong>
+                                        <strong>{!! $i->montant_restant !!} FCFA</strong>
                                     @endif
                                 </td>
                                 <td>

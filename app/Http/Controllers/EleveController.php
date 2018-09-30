@@ -8,6 +8,11 @@ use App\Models\Eleve;
 use App\Models\Inscription;
 use App\Traits\TraitSms;
 use Illuminate\Support\Facades\Redirect;
+use App\Models\TrancheScolarite;
+use App\Http\Requests\Scolarite\StorePaiementScolariteRequest;
+use App\Models\PaiementScolarite;
+use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class EleveController extends Controller
 {
@@ -72,49 +77,82 @@ class EleveController extends Controller
      */
     public function indexsolderScolarite($inscrit, $eleve)
     {
+        $tranches = TrancheScolarite::all();
+        $reste = Inscription::findOrFail($inscrit)->montant_restant;
+
         session()->forget('inscrit');
         session()->forget('eleve');
         session()->put('inscrit', $inscrit);
         session()->put('eleve', $eleve);
-        return view('scolarite.paiement');
+        return view('scolarite.paiement', compact('tranches', 'reste'));
     }
 
-    public function solderScolarite(Request $req)
+    public function solderScolarite(StorePaiementScolariteRequest $req)
     {
         $inscrit = Inscription::findOrFail(session('inscrit'));
+        $reste = $inscrit->montant_restant;
+        
+        if ($reste > 0) {
+            if (!($this->SamePaiyementIsAlreadyStoredToday($req->montant_verser, $req->tranche, $inscrit->id))) {
+                $paiement = $this->storePaiement($req->montant_verser, $req->tranche, $inscrit->id);
+            }
+            // Est-ce que la scolarité est entièrement payée ?
+            if ($inscrit->montant_restant == 0) {
+                $inscrit->est_solder = true;
+                $inscrit->save();
+            };
 
-        $rules = ['montant_verser' => "required|numeric|max:$inscrit->reste"];
-
-        $customMessages = [
-            'montant_verser.required' => 'Veuillez indiquez le mondant versé.',
-            'montant_verser.max' => "Le montant versé ne doit pas être supérieur au $inscrit->reste fcfa restant"
-        ];
-
-        $this->validate($req, $rules, $customMessages);
-
-        $reste = $inscrit->reste - $req->montant_verser;
-
-        $inscription = $this->storeScolarite($inscrit->eleve_id, $inscrit->classe_id,
-        $inscrit->annee_scolaire_id, $req->montant_verser, $inscrit->montant_scolarite,
-            $reste, $inscrit->date_inscription);
-
-        if($inscription->reste == 0)
-        {
-            $inscription->est_solder = true;
-            $inscription->save();
+            // Formation et expédition du message au parent
+            $eleve = Eleve::findOrFail(session('eleve'));
+            $message = $req->montant_verser.' fcfa ont été payé par '
+            .$eleve->nom.' '.$eleve->prenoms.". Reste: ". $reste . " fcfa";
+            $numero = '229' . $eleve->parent->par_tel;
+            $ecole = env('SCHOOL_NAME', 'AfrikaSchool');
+            $this->senderParent($ecole, $numero, $message);
+            
+            return Redirect::route('eleve.reste.versement')->with('status', 'Paiement enregistré avec succès !');
         }
+        else {
+            dd("Nous ne pouvons enregistrer ce paiement car n'avez rien a payer normalement");
+        }
+    }
 
-        $inscrit->est_solder = true;
-        $inscrit->save();
+    /**
+     * @param integer $montant
+     * @param integer $tranche
+     * @param integer $inscription
+     * @return \App\Models\PaiementScolarite;
+     */
+    private function storePaiement($montant, $tranche, $inscription)
+    {
+        $p = new PaiementScolarite();
+        $p->montant = $montant;
+        $p->tranche_scolarite_id = $tranche;
+        $p->inscription_id = $inscription;
+        $p->user_id = Auth::user()->id;
+        $p->save();
 
-        $eleve = Eleve::findOrFail(session('eleve'));
-        $message = $inscription->montant_verse.' fcfa a été payé par '
-        .$eleve->nom.' '.$eleve->prenoms." reste ".$inscription->reste." fcfa";
-        $numero = '229' . $eleve->parents->par_tel;
-        $ecole = env('SCHOOL_NAME', 'AfrikaSchool');
-        $this->senderParent($ecole, $numero, $message);
+        return $p;
+    }
 
-        return Redirect::route('eleve.reste.versement')->with('status', 'Scolarité soldé avec succès !');
+    /**
+     * Retourne true si ce paiemment a déjà été enregistré aujourd'hui
+     * @param integer $montant
+     * @param integer $tranche
+     * @param integer $inscription
+     * @return Boolean
+     */
+    private function SamePaiyementIsAlreadyStoredToday($montant, $tranche, $inscription)
+    {
+        $paid = PaiementScolarite::where([
+            ['montant', $montant],
+            ['tranche_scolarite_id', $tranche],
+            ['inscription_id', $inscription]
+        ])->first();
+        
+        if (is_null($paid)) return false;
+
+        return ((Carbon::today())->toDateString()) == ($paid->created_at->toDateString());
     }
 
     public function storeScolarite($eleve, $classe, $anne_scolaire, $verser, $scolarite, $reste, $date_inscription)
@@ -132,6 +170,7 @@ class EleveController extends Controller
 
         return $inscription;
     }
+
 
     public function show($id)
     {

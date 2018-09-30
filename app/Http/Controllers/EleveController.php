@@ -61,10 +61,15 @@ class EleveController extends Controller
 
     public function listeInsolder()
     {
-        $debiteurs = Inscription::with('eleve')->where('est_solder', false)->get();
+        $debiteurs = Inscription::with('eleve')->where('est_solder', false)->get();        
         return view('scolarite.eleve_non_solde', compact('debiteurs'));
     }
 
+    /**
+     * @param integer $inscrit [Représente le numéro d'inscription de l'élève]
+     * @param integer $eleve   [Id de l'élève dans la table eleves]
+     * @return 
+     */
     public function indexsolderScolarite($inscrit, $eleve)
     {
         session()->forget('inscrit');

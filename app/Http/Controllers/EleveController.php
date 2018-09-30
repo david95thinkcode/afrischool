@@ -78,13 +78,15 @@ class EleveController extends Controller
     public function indexsolderScolarite($inscrit, $eleve)
     {
         $tranches = TrancheScolarite::all();
-        $reste = Inscription::findOrFail($inscrit)->montant_restant;
+        $inscription = Inscription::findOrFail($inscrit);
+        $reste = $inscription->montant_restant;
+        $paiements = PaiementScolarite::where('inscription_id', $inscrit)->get();
 
         session()->forget('inscrit');
         session()->forget('eleve');
         session()->put('inscrit', $inscrit);
         session()->put('eleve', $eleve);
-        return view('scolarite.paiement', compact('tranches', 'reste'));
+        return view('scolarite.paiement', compact('tranches', 'reste', 'paiements', 'inscription'));
     }
 
     public function solderScolarite(StorePaiementScolariteRequest $req)

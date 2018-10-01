@@ -39,7 +39,7 @@
                 <form method="POST" action="{{ route('register.req') }}">
                     {{ csrf_field() }}
                     <h1>Inscription</h1>
-                    <div class="{{ $errors->has('username') ? ' has-error' : '' }}">
+                    {{-- <div class="{{ $errors->has('username') ? ' has-error' : '' }}">
                         <input type="text" name="username" class="form-control" value="{{ old('username') }}" placeholder="Username" required=""/>
 
                         @if ($errors->has('username'))
@@ -47,8 +47,8 @@
                                 <strong>{{ $errors->first('username') }}</strong>
                             </span>
                         @endif
-                    </div>
-                    <div class="{{ $errors->has('name') ? ' has-error' : '' }}">
+                    </div> --}}
+                    {{-- <div class="{{ $errors->has('name') ? ' has-error' : '' }}">
                         <input type="text" name="name" class="form-control" value="{{ old('name') }}" placeholder="Nom et Prénom(s)" required=""/>
 
                         @if ($errors->has('name'))
@@ -56,8 +56,27 @@
                                 <strong>{{ $errors->first('name') }}</strong>
                             </span>
                         @endif
+                    </div> --}}
+
+                    <div class="{{ $errors->has('secret_code') ? ' has-error' : '' }}">
+                        {{ Form::text('secret_code', old('secret_code'), ['class' => 'form-control', 'placeholder' => 'Code secret', 'required' => '']) }}
+                        @if ($errors->has('secret_code'))
+                            <span class="help-block">
+                                <strong>{{ $errors->first('secret_code') }}</strong>
+                            </span>
+                        @endif
                     </div>
-                    <div class="{{ $errors->has('email') ? ' has-error' : '' }}">
+
+                    <div class="{{ $errors->has('tel') ? ' has-error' : '' }}">
+                        {{ Form::text('tel', old('tel'), ['class' => 'form-control', 'placeholder' => 'Téléphone', 'required' => '']) }}
+                        @if ($errors->has('tel'))
+                            <span class="help-block">
+                                <strong>{{ $errors->first('tel') }}</strong>
+                            </span>
+                        @endif
+                    </div>
+
+                    {{-- <div class="{{ $errors->has('email') ? ' has-error' : '' }}">
                         <input type="email" name="email" class="form-control" value="{{ old('email') }}" placeholder="Email" required=""/>
 
                         @if ($errors->has('email'))
@@ -65,9 +84,9 @@
                                 <strong>{{ $errors->first('email') }}</strong>
                             </span>
                         @endif
-                    </div>
+                    </div> --}}
                     <div class="{{ $errors->has('password') ? ' has-error' : '' }}">
-                        <input type="password" name="password" class="form-control" placeholder="Password" required=""/>
+                        <input type="password" name="password" class="form-control" placeholder="Mot de passe" required=""/>
 
                         @if ($errors->has('password'))
                             <span class="help-block">

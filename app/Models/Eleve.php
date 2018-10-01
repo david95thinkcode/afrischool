@@ -13,9 +13,9 @@ class Eleve extends Model
     /**
      * Un elève a un parent
      */
-    public function parents()
+    public function parent()
     {
-        return $this->belongsTo('App\Models\ParentEleve', 'parent_id');
+        return $this->belongsTo(ParentEleve::class, 'parent_id');
     }
 
     /**
@@ -23,7 +23,7 @@ class Eleve extends Model
      */
     public function inscription()
     {
-        return $this->hasMany('App\Models\Inscription');
+        return $this->hasMany(Inscription::class);
     }
 
     public function inscriptionNonSolder()
@@ -37,6 +37,16 @@ class Eleve extends Model
     public function eleves()
     {
         return $this->belongsToMany(Eleve::class, 'notes', 'classe_id', 'eleve_id');
+    }
+
+    public function getFullNameAttribute()
+    {
+        return $this->attributes['prenoms'] . ' ' . $this->attributes['nom'];
+    }
+
+    public function getAgeAttribute()
+    {
+        return date('Y') - date('Y', strtotime($this->attributes['date_naissance'])) . ' ans ';
     }
 
 }

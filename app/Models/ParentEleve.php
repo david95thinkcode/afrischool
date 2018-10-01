@@ -19,6 +19,11 @@ class ParentEleve extends Model
      */
     public function eleves()
     {
-        $this->hasMany('App\Models\Eleves');
+        $this->hasMany(Eleves::class);
+    }
+
+    public function getFullNameAttribute()
+    {
+        return $this->attributes['par_prenoms'] . ' ' . $this->attributes['par_nom'];
     }
 }

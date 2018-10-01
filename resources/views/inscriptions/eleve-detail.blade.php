@@ -60,8 +60,26 @@
                                         {!! $inscription->date_inscription !!}
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td>Montant de la scolarité</td>
+                                    <td>{!! $inscription->montant_scolarite !!} FCFA</td>
+                                </tr>
+                                <tr>
+                                    <td>Montant payé</td>
+                                    <td>{!! $montants['payer'] !!} FCFA</td>
+                                </tr>
+                                <tr>
+                                    <td>Reste à payer</td>
+                                    <td><strong>{!! $montants['restant'] !!} FCFA</strong></td>
+                                </tr>    
                             </tbody>
                         </table>
+
+                        <div class="alert alert-success text-center">
+                            <h4 class="alert-heading text-uppercase">A transmettre au parent d'élève</h4>
+                            <h5>Le code secret à utiliser pour s'inscrire sur la plateforme est :</h5>
+                            <h1>{!! $inscription->id !!}</h1>
+                        </div>
                     </div>
                     <br>
                     <a href="route" class="btn btn-sm"></a>

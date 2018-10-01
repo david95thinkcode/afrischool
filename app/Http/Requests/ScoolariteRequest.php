@@ -36,7 +36,7 @@ class ScoolariteRequest extends FormRequest
         return [
             'date_inscription.required' => 'Précisez la date d\'insciption de l\'élève',
             'montant_verser.required' => "Veuillez indiquez le montant payé par l'élève",
-            'montant_scolarite.required' => "Veuillez indiquez le montant de ma scolarité",
+            'montant_scolarite.required' => "Veuillez indiquez le montant de la scolarité",
             'annee_scolaire.required' => "Veuillez indiquez l'année scolaire"
         ];
     }

@@ -340,9 +340,9 @@ class InscriptionController extends Controller
         $inscription->montant_scolarite = (is_null($scolarite))?0:$scolarite;
         $inscription->montant_verse = 0;
         $inscription->reste = 0;
-        $inscription->date_inscription = $date_inscription;        
+        $inscription->date_inscription = $date_inscription;
         $inscription->save();
-
+        
         // Store Paiement
         if (!is_null($verser)) {
             $paiement = new PaiementScolarite();
@@ -351,6 +351,12 @@ class InscriptionController extends Controller
             $paiement->user_id = Auth::user()->id;
             $paiement->inscription_id = $inscription->id;
             $paiement->save();
+        }
+        
+        // Un petit dernier contrôle
+        if ($paiement->montant == $inscription->montant_scolarite) {
+            $inscription->est_solder = true;
+            $inscription->save();
         }
 
         return $inscription;

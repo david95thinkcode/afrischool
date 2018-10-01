@@ -66,9 +66,16 @@ class RegisterController extends Controller
             $user = User::create([
                 'name' => $concernedParent->full_name,
                 'username' => $req->tel,
-                'active' => false,
+                'active' => true,
                 'password' => bcrypt($req->password),
             ]);
+
+            //add role parent to user
+            $role = 'parent';
+
+            $roles = \App\Models\Role::where('name', $role)->first();
+
+            $user->roles()->attach($roles);
             
             $concernedParent->user_id = $user->id;
             $concernedParent->save();
@@ -78,7 +85,7 @@ class RegisterController extends Controller
         }
         else {
             Flashy::error("Informations d'inscription non valides");
-            return back();
+            return redirect()->route('register');
         }
 
     }

@@ -88,7 +88,6 @@
     @yield('custom-js')
     @include('flashy::message')
     <script src="{{asset('js/ie10-viewport-bug-workaround.js')}}"></script>
-    <script src="{{ asset('js/app.js') }}"></script>
 </body>
 
 </html>

@@ -34,7 +34,7 @@ class LoginController extends Controller
 
     protected function authenticated(Request $request, $user)
     {
-        if ($user->hasRole('authenticated'))
+        if ($user->hasRole('parent'))
         {
             return Redirect::route('consultation.choix');
         }

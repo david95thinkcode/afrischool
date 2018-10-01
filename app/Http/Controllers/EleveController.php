@@ -64,10 +64,27 @@ class EleveController extends Controller
         //
     }
 
+    /**
+     * 
+     * @return view
+     */
     public function listeInsolder()
     {
-        $debiteurs = Inscription::with('eleve')->where('est_solder', false)->get();        
-        return view('scolarite.eleve_non_solde', compact('debiteurs'));
+        $debiteurs = Inscription::with('eleve')->where('est_solder', false)->get();     
+        $sorted = [];
+        
+        if ($debiteurs->isNotEmpty()) {            
+            foreach ($debiteurs as $key => $d) { // Classons les débiteurs par classe
+                if (!isset($sorted[$d->classe_id])) {
+                    $sorted[$d->classe_id] = [];
+                    $sorted[$d->classe_id]['debiteurs'] = [];
+                    $sorted[$d->classe_id]['classe'] = Classe::findOrFail($d->classe_id); 
+                }
+                array_push($sorted[$d->classe_id]['debiteurs'], $d);
+            }
+        }
+        
+        return view('scolarite.eleve_non_solde', compact('sorted'));
     }
 
     /**

@@ -44,4 +44,9 @@ class Eleve extends Model
         return $this->attributes['prenoms'] . ' ' . $this->attributes['nom'];
     }
 
+    public function getAgeAttribute()
+    {
+        return date('Y') - date('Y', strtotime($this->attributes['date_naissance'])) . ' ans ';
+    }
+
 }

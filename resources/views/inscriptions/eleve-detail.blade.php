@@ -59,7 +59,19 @@
                                     <td>
                                         {!! $inscription->date_inscription !!}
                                     </td>
-                                </tr>                                
+                                </tr>
+                                <tr>
+                                    <td>Montant de la scolarité</td>
+                                    <td>{!! $inscription->montant_scolarite !!} FCFA</td>
+                                </tr>
+                                <tr>
+                                    <td>Montant payé</td>
+                                    <td>{!! $montants['payer'] !!} FCFA</td>
+                                </tr>
+                                <tr>
+                                    <td>Reste à payer</td>
+                                    <td><strong>{!! $montants['restant'] !!} FCFA</strong></td>
+                                </tr>    
                             </tbody>
                         </table>
 

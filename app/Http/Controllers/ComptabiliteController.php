@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Depenses;
 use App\Models\Inscription;
 use Illuminate\Http\Request;
+use MercurySeries\Flashy\Flashy;
 
 class ComptabiliteController extends Controller
 {
@@ -32,19 +33,30 @@ class ComptabiliteController extends Controller
 
     public function storeDepenses(Request $req)
     {
-        $pk = $req->pk;
-        $colonne = $req->name;
-        $value = $req->value;
-        Depenses::where('id', $pk)->update([$colonne => $value]);
+        if ($req->ajax()) {
+            $pk = $req->pk;
+            $colonne = $req->name;
+            $value = $req->value;
+            Depenses::where('id', $pk)->update([$colonne => $value]);
+    
+            $dep = Depenses::orderBy('id', 'desc')->first();
+    
+            if($pk == $dep->id){
+                Depenses::create(['libelle' => 'saisir libelle', 'montant' => 0]);
+                return response()->json(['code' => 'new'], 200);
+            }
+    
+            return response()->json(['code' => 200], 200);
+        } 
+        else {
+            $d = new Depenses;
+            $d->libelle = $req->name;
+            $d->montant = $req->value;
+            $d->save();
 
-        $dep = Depenses::orderBy('id', 'desc')->first();
-
-        if($pk == $dep->id){
-            Depenses::create(['libelle' => 'saisir libelle', 'montant' => 0]);
-            return response()->json(['code' => 'new'], 200);
+            Flashy::success("Enregistré");
+            return back();
         }
-
-        return response()->json(['code' => 200], 200);
     }
 
     public function showDepense()

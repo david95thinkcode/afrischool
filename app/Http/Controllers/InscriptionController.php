@@ -17,6 +17,8 @@ use App\Models\Eleve;
 use App\Models\AnneeScolaire;
 use App\Models\Inscription;
 use Illuminate\Support\Facades\Redirect;
+use App\Models\PaiementScolarite;
+use Illuminate\Support\Facades\Auth;
 
 class InscriptionController extends Controller
 {
@@ -97,14 +99,16 @@ class InscriptionController extends Controller
             session('eleve.redoublant'), session('eleve.ecole_provenance'),
             session('parent.person_a_contacter_nom'), session('parent.person_a_contacter_tel'),
             session('parent.person_a_contacter_lien'));
-
+            
+        $mt_verser = (is_null($req->montant_verser)) ? 0 : $req->montant_verser;
+        
         $inscription = $this->storeScolarite($eleve->id, session('eleve.classe'), $req->annee_scolaire,
-            $req->montant_verser, $req->montant_scolarite, $req->date_inscription);
+            $mt_verser, $req->montant_scolarite, $req->date_inscription);
         $anneedebut = \Carbon\Carbon::parse($inscription->anneescolaire->an_date_debut)->format('Y');
         $anneefin = \Carbon\Carbon::parse($inscription->anneescolaire->an_date_fin)->format('Y');
-        $message = $inscription->montant_verse.' fcfa a été payé par '
+        $message = $mt_verser.' fcfa a été payé par '
             .$eleve->nom.' '.$eleve->prenoms." pour l'annee scolaire "
-            .$anneedebut.' - '.$anneefin.' reste '.$inscription->reste." fcfa";
+            .$anneedebut.' - '.$anneefin.' reste '.$inscription->montant_restant." fcfa";
         $numero =  '229'.$parent->par_tel;
         $ecole = env('SCHOOL_NAME', 'AfrikaSchool');
         $this->senderParent($ecole, $numero, $message);
@@ -130,11 +134,13 @@ class InscriptionController extends Controller
      */
     public function paiement(ReinsciptionRequest $req)
     {
+        $mt_verser = (is_null($req->montant_verser)) ? 0 : $req->montant_verser;
+        
         $eleve = Eleve::findOrFail(session('eleve'));
         $inscription = $this->storeScolarite($eleve->id, $req->classe, $req->annee_scolaire,
-            $req->montant_verser, $req->montant_scolarite, $req->date_inscription);
+            $mt_verser, $req->montant_scolarite, $req->date_inscription);
 
-        if($inscription->reste == 0)
+        if($inscription->montant_restant == 0)
         {
             $inscription->est_solder = true;
             $inscription->save();
@@ -142,7 +148,7 @@ class InscriptionController extends Controller
 
         $anneedebut = \Carbon\Carbon::parse($inscription->anneescolaire->an_date_debut)->format('Y');
         $anneefin = \Carbon\Carbon::parse($inscription->anneescolaire->an_date_fin)->format('Y');
-        $message = $inscription->montant_verse.' fcfa a été payé par '
+        $message = $mt_verser.' fcfa a été payé par '
             .$eleve->nom.' '.$eleve->prenoms." pour l'annee scolaire "
             .$anneedebut.' - '.$anneefin.' reste '.$inscription->reste." fcfa";
         $numero =  '229'.$eleve->parents->par_tel;
@@ -162,20 +168,20 @@ class InscriptionController extends Controller
     }
 
     /**
-     * Retourne sur une collection d'inscription pour une classe donnée
+     * Retourne une collection d'inscription pour une classe donnée
+     * @param integer $classe_id
      */
     public function showForClasse($classe_id)
     {
-        $inscriptions = Inscription::where('classe_id', $classe_id)->get();
+        $inscriptions = Inscription::with('classe', 'eleve')
+            ->where('classe_id', $classe_id)->get();
 
-        if ($inscriptions->count() != 0) {
-            $classes = Classe::all();
-
-            return view('inscriptions.show', compact('inscriptions', 'classes'));
+        if ($inscriptions->count() != 0) {            
+            $concernedClasse = $inscriptions[0]->classe;
+            return view('inscriptions.show', compact('inscriptions', 'concernedClasse'));
         }
         else {
             $classe = Classe::find($classe_id);
-
             return view('inscriptions.show-empty', compact('classe'));
         }
     }
@@ -196,7 +202,11 @@ class InscriptionController extends Controller
             ->get()
             ->first();
 
-        return view('inscriptions.eleve-detail', compact('inscription'));
+        $ins = Inscription::findOrFail($id);
+        $montants['payer'] = $ins->montant_paye;
+        $montants['restant'] = $ins->montant_scolarite - $montants['payer'];
+        // dd($montants);
+        return view('inscriptions.eleve-detail', compact('inscription', 'montants'));
     }
 
     /**
@@ -331,11 +341,26 @@ class InscriptionController extends Controller
         $inscription->classe_id = $classe;
         $inscription->annee_scolaire_id = $anne_scolaire;
         $inscription->montant_scolarite = (is_null($scolarite))?0:$scolarite;
-        $inscription->montant_verse = (is_null($verser))?0:$verser;
-        $inscription->reste = $scolarite - $verser;
+        $inscription->montant_verse = 0;
+        $inscription->reste = 0;
         $inscription->date_inscription = $date_inscription;
-
         $inscription->save();
+        
+        // Store Paiement
+        if (!is_null($verser)) {
+            $paiement = new PaiementScolarite();
+            $paiement->montant = $verser;
+            $paiement->tranche_scolarite_id = 1;
+            $paiement->user_id = Auth::user()->id;
+            $paiement->inscription_id = $inscription->id;
+            $paiement->save();
+        }
+        
+        // Un petit dernier contrôle
+        if ($paiement->montant == $inscription->montant_scolarite) {
+            $inscription->est_solder = true;
+            $inscription->save();
+        }
 
         return $inscription;
     }

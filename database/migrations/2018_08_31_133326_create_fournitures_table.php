@@ -21,7 +21,7 @@ class CreateFournituresTable extends Migration
             /*
              * Add Foreign/Unique/Index
              */
-            $table->foreign('classe_id', 'foreign_user')
+            $table->foreign('classe_id')
                 ->references('id')
                 ->on('classes')
                 ->onDelete('cascade');

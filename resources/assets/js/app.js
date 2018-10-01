@@ -5,5 +5,14 @@
  */
 
 require('./bootstrap');
+
+window.Vue = require('vue');
+
 require('./custom');
 require('./textwriting');
+
+Vue.component('example', require('./components/Example.vue'));
+
+const app = new Vue({
+    el: '#app'
+});

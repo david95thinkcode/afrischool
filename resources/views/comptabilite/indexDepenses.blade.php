@@ -2,8 +2,35 @@
 @section('title') Saisie des dépenses @endsection
 @section('section-title')Saisir les dépenses! @endsection
 @section('content')
+
+    <div class="row">
+        <div class="col-sm-offset-4 col-sm-4">
+            
+            <div class="panel panel-default mx-auto">
+                <div class="panel-body">
+                {!! Form::open(['action' => ['ComptabiliteController@storeDepenses'], 'method' => 'POST']) !!}
+                    <div class="form-group">
+                        {!! Form::label('name', 'Libellé de la dépense') !!}
+                        {!! Form::text('name', old('name'), ['class' => 'form-control', 'required' => '']) !!}
+                    </div>
+                    <div class="form-group">
+                        {!! Form::label('value', 'Montant de la dépense') !!}
+                        {!! Form::number('value', old('value'), ['class' => 'form-control', 'required' => '']) !!}
+                    </div>
+
+                    <div class='form-group mt-1'>
+                        {{ Form::submit("Enregistrer", array('class' => 'btn btn-success col-md-6 col-md-offset-3')) }}
+                    </div>
+                {!! Form::close() !!}
+            </div>
+        </div>
+
+        </div>
+    </div>
     <div class='row'>
         <div class="col-md-12 col-xs-12 mt-1">
+
+
             <table class="table table-bordered jambo_table" id="table_depense">
                 <thead>
                 <tr>

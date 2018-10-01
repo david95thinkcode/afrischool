@@ -45,7 +45,7 @@
 </head>
 
 <body class="nav-md">
-    <div class="container body">
+    <div class="container body" id="app">
         <div class="main_container">
             @include('partials._sidemenu')
 
@@ -88,6 +88,7 @@
     @yield('custom-js')
     @include('flashy::message')
     <script src="{{asset('js/ie10-viewport-bug-workaround.js')}}"></script>
+    <script src="{{ asset('js/app.js') }}"></script>
 </body>
 
 </html>

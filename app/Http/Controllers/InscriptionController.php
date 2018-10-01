@@ -202,8 +202,11 @@ class InscriptionController extends Controller
             ->get()
             ->first();
 
-            // dd($inscription);
-        return view('inscriptions.eleve-detail', compact('inscription'));
+        $ins = Inscription::findOrFail($id);
+        $montants['payer'] = $ins->montant_paye;
+        $montants['restant'] = $ins->montant_scolarite - $montants['payer'];
+        // dd($montants);
+        return view('inscriptions.eleve-detail', compact('inscription', 'montants'));
     }
 
     /**

@@ -310,9 +310,6 @@ class InscriptionController extends Controller
         $eleve->prenoms = $prenom;
         $eleve->sexe = $sexe;
         $eleve->date_naissance = $date;
-        $eleve->person_a_contacter_nom = $pac_nom;
-        $eleve->person_a_contacter_tel = $pac_tel;
-        $eleve->person_a_contacter_lien = $pac_lien;
         $eleve->parent_id = $parent_id;
 
         $eleve->save();

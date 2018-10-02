@@ -22,7 +22,7 @@ class ClasseController extends Controller
     ];
 
     public function index()
-    {
+    {        
         $numberOfClasses = [
             self::PRIMAIRE_ID => Classe::where('estPrimaire', true)->count(),
             self::COLLEGE_ID => Classe::where('estCollege', true)->count(),

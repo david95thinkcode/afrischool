@@ -86,10 +86,12 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('reload-table', 'NoteController@reload')->name('reload.note');
     });
     //gestion scolarité
-    route::prefix('scolarite')->group(function(){
-        route::get('/', 'EleveController@listeInsolder')->name('eleve.reste.versement');
-        route::get('paiement-scolarite/{inscrit}/{eleve}', 'EleveController@indexsolderScolarite')->name('eleve.solder.scolarite');
-        route::post('paiement-scolarite', 'EleveController@solderScolarite')->where('inscrit', '[0-9]+')->name('eleve.solder');
+    Route::prefix('scolarite')->group(function(){
+        Route::get('/', 'EleveController@listeInsolder')->name('eleve.reste.versement');
+        Route::get('paiement-scolarite/{inscrit}/{eleve}', 'EleveController@indexsolderScolarite')->name('eleve.solder.scolarite');
+        
+        Route::post('paiement-scolarite', 'EleveController@solderScolarite')->name('eleve.solder');
+        Route::post('paiement-scolarite/search/insolder', 'GestionScolarite\ScolariteController@listerInsolder')->name('scolarite.search.insolder');
     });
     //Matiere
     Route::prefix('matiere')->group(function () {

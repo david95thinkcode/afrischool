@@ -70,21 +70,9 @@ class EleveController extends Controller
      */
     public function listeInsolder()
     {
-        $debiteurs = Inscription::with('eleve')->where('est_solder', false)->get();     
-        $sorted = [];
+        $classes = Classe::all();
         
-        if ($debiteurs->isNotEmpty()) {            
-            foreach ($debiteurs as $key => $d) { // Classons les débiteurs par classe
-                if (!isset($sorted[$d->classe_id])) {
-                    $sorted[$d->classe_id] = [];
-                    $sorted[$d->classe_id]['debiteurs'] = [];
-                    $sorted[$d->classe_id]['classe'] = Classe::findOrFail($d->classe_id); 
-                }
-                array_push($sorted[$d->classe_id]['debiteurs'], $d);
-            }
-        }
-        
-        return view('scolarite.eleve_non_solde', compact('sorted'));
+        return view('scolarite.eleve_non_solde', compact('classes'));
     }
 
     /**
@@ -171,7 +159,7 @@ class EleveController extends Controller
         
         if (is_null($paid)) return false;
 
-        return ((Carbon::today())->toDateString()) == ($paid->created_at->toDateString());
+        return (Carbon::today()->toDateString()) == ($paid->created_at->toDateString());
     }
 
     public function storeScolarite($eleve, $classe, $anne_scolaire, $verser, $scolarite, $reste, $date_inscription)

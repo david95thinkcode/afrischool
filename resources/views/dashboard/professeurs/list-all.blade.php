@@ -6,10 +6,45 @@
     @if (isset($classe))
         Les professeurs de la classe de {{ $classe->cla_intitule }} 
     @else
-        Liste de tous les professeurs
+        Liste des professeurs enregistrés
     @endif
 @endsection
 @section('content')
+    <div class='row'>
+        <div class="col-sm-offset-3 col-sm-6 col-xs-12 my-2">
+            <div class="panel panel-default mx-auto">
+                <div class="panel-heading">
+                    <h5>Recherche un professeur</h5>
+                </div>
+                <div class="panel-body">
+                        {!! Form::open(['route' => ['professeurs.search.results'], 'method' => 'POST']) !!}
+                        <div class="row">
+                            <div class="col-sm-8{{ $errors->has('keyword') ? ' has-error' : '' }}">
+                                <label for="keyword">Nom ou prénom du professeur à rechercher</label>
+                                {{ Form::text('keyword', old('keyword'), ['class' => 'form-control', 'placeholder' => 'Nom ou extrait de nom du professeur', 'required' => '']) }}
+                            </div>
+                            <div class="col-sm-4 col-xs-12 form-group {{ $errors->has('classe') ? ' has-error' : '' }}">
+                                <label for="classe">Sélectionnez une classe</label>
+                                <select class="form-control {{ $errors->has('classe') ? ' has-error' : '' }}" id="classe" name="classe">
+                                    <option value="">Sélectionnez un classe</option>
+                                    @foreach($classes as $classe)
+                                        <option value="{{$classe->id}}">{{$classe->cla_intitule}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group text-center mt-1">
+                                <button type="submit" class="btn btn-sm btn-success">
+                                    Rechercher
+                                </button>
+                            </div>                            
+                        </div>
+                        {!! Form::close() !!}
+                </div>
+            </div>
+        </div>
+    </div>
 <div class='row'>
     <div class="col-sm-12">
         <div class="table-responsive">
@@ -17,6 +52,7 @@
                 <thead>
                     <th>#</th>
                     <th>Nom</th>
+                    <th>Age</th>
                     <th>Nationalité</th>
                     <th>Tel</th>
                     <th>Email</th>
@@ -26,7 +62,8 @@
                 @foreach ($professeurs as $p)
                     <tr>
                         <td>{{ $p->id }}</td>
-                        <td>{{ $p->prof_nom }} {{ $p->prof_prenoms }}</td>
+                        <td>{{ $p->full_name }}</td>
+                        <td>{{ $p->age }}</td>
                         <td> {{ $p->prof_nationalite }}</td>
                         <td>{{ $p->prof_tel }}</td>
                         <td>{{ $p->prof_email }}</td>

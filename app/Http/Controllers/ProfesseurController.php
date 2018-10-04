@@ -9,6 +9,7 @@ use App\Models\Classe;
 use App\Models\Professeur;
 use App\Http\Requests\SearchProfesseurAboutClasseRequest;
 use App\Models\Enseigner;
+use App\Http\Requests\SearchProfesseurRequest;
 
 class ProfesseurController extends Controller
 {
@@ -89,13 +90,33 @@ class ProfesseurController extends Controller
     }
 
     /**
+     * Affiche la liste des résultats d'une recherche 
+     * de professeur
+     */
+    public function searchResults(SearchProfesseurRequest $req)
+    {
+        $classes = Classe::all();
+
+        if (isset($req->classe)) {
+            // $professeurs = Professeur::where()
+        }
+        else {
+            $professeurs = Professeur::where('prof_nom', 'like', '%'.$req->keyword.'%')
+            ->orWhere('prof_prenoms', 'like', '%'. $req->keyword .'%')
+            ->get();
+        }
+        return view('dashboard.professeurs.list-all', compact('classes', 'professeurs'));
+    }
+
+    /**
      * Retourne tous les professeurs
      */
     public function listAll()
     {
         $professeurs = Professeur::all();
+        $classes = Classe::all();
 
-        return view('dashboard.professeurs.list-all', compact('professeurs'));
+        return view('dashboard.professeurs.list-all', compact('professeurs', 'classes'));
     }
 
     /**

@@ -109,6 +109,8 @@ Route::group(['middleware' => ['auth']], function () {
             ->name('professeurs.list');
         Route::post('par-classe', 'ProfesseurController@listProfesseur')
             ->name('classe.professeurs.list');
+        Route::post('search', 'ProfesseurController@searchResults')
+            ->name('professeurs.search.results');
 
         Route::resource('diplomes', 'DiplomeController');
         Route::get('{professeur}/diplome/create', 'DiplomeController@createFromProf')

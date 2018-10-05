@@ -15,7 +15,7 @@
                             </label>
                             <select class="col-md-12 col-sm-12 col-xs-12" id="classe" name="classe">
                                 @foreach($classes as $class)
-                                    <option value="{{$class['datas']->id}}">{{$class['datas']->cla_intitule}}</option>
+                                    <option value="{{$class->id}}">{{$class->cla_intitule}}</option>
                                 @endforeach
                             </select>
                         </div>

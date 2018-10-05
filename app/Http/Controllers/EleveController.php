@@ -13,6 +13,7 @@ use App\Http\Requests\Scolarite\StorePaiementScolariteRequest;
 use App\Models\PaiementScolarite;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use MercurySeries\Flashy\Flashy;
 
 class EleveController extends Controller
 {
@@ -117,7 +118,8 @@ class EleveController extends Controller
             $ecole = env('SCHOOL_NAME', 'AfrikaSchool');
             $this->senderParent($ecole, $numero, $message);
             
-            return Redirect::route('eleve.reste.versement')->with('status', 'Paiement enregistré avec succès !');
+            Flashy::success('Paiement enregistré avec succès !');
+            return Redirect::route('inscriptions.classe.show', ['classe' => $inscrit->classe_id]);
         }
         else {
             dd("Nous ne pouvons enregistrer ce paiement car n'avez rien a payer normalement");

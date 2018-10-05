@@ -74,38 +74,78 @@ class ProfesseurController extends Controller
     }
 
     /**
-     * Retourne une collection de professeurs pour une classe donnée
+     * Retourne les professeurs pour une classe donnée
+     * @param Request $req
+     * @return view
      */
     public function listProfesseur(SearchProfesseurAboutClasseRequest $req)
     {
+        $sorted = [];
         $classe = Classe::findOrFail($req->classe);
         $ens = DB::table('enseigner')
                 ->where('classe_id', '=', $classe->id)
                 ->join('professeurs', 'enseigner.professeur_id', '=', 'professeurs.id')
                 ->join('matieres', 'enseigner.matiere_id', '=', 'matieres.id')
-                ->select('enseigner.id', 'enseigner.professeur_id', 'professeurs.prof_nom', 'professeurs.prof_prenoms', 
-                    'professeurs.prof_tel', 'professeurs.prof_email', 'professeurs.prof_nationalite', 'matieres.intitule')
                 ->get();
-        return view('dashboard.professeurs.list', compact('classe', 'ens'));
+        
+        // CLASSONS UN PEU LE CONTENU DANS UN NOUVEAU TABLEAU 
+        foreach ($ens as $key => $row) {            
+            if (!isset($sorted[$row->professeur_id])) {
+                $m = [];
+                array_push($m, $row->intitule);
+                $sorted[$row->professeur_id] = [
+                    'id' => $row->professeur_id,
+                    'datas' => $row,
+                    'matieres' => $m
+                ];
+            } else {
+                array_push($sorted[$row->professeur_id]['matieres'], $row->intitule);
+            }
+        }
+        return view('dashboard.professeurs.list-with-matiere', compact('classe', 'sorted'));
     }
 
     /**
      * Affiche la liste des résultats d'une recherche 
      * de professeur
+     * @param 
+     * @return 
      */
     public function searchResults(SearchProfesseurRequest $req)
     {
         $classes = Classe::all();
+        $msg = 'Résultats des recherches';
 
         if (isset($req->classe)) {
-            // $professeurs = Professeur::where()
+            $professeurs = DB::table('enseigner')
+                ->where('classe_id', $req->classe)
+                ->join('classes', 'enseigner.classe_id', '=', 'classes.id')
+                ->join('professeurs', 'enseigner.professeur_id', '=', 'professeurs.id')
+                ->where('professeurs.prof_nom', 'like', '%'.$req->keyword.'%')
+                ->orWhere('professeurs.prof_prenoms', 'like', '%'.$req->keyword.'%')
+                ->get();            
         }
         else {
             $professeurs = Professeur::where('prof_nom', 'like', '%'.$req->keyword.'%')
-            ->orWhere('prof_prenoms', 'like', '%'. $req->keyword .'%')
-            ->get();
+                ->orWhere('prof_prenoms', 'like', '%'. $req->keyword .'%')
+                ->get();
         }
-        return view('dashboard.professeurs.list-all', compact('classes', 'professeurs'));
+
+        // TODO: géré les doubons
+        // suppression des doublons
+        // foreach ($professeurs as $key => $value) {
+            // if ($value->professeur_id ==)
+        // }
+
+        // Formation du message
+        if (count($professeurs)) {
+            $msg = $msg . ' - classe : '.$professeurs[0]->cla_intitule . ' ; ';
+            $msg = $msg . "professeur : ' ". $req->keyword . " '";
+        } else {
+            $msg = $msg . ' : AUCUN RESULTAT TROUVE';
+        }
+
+        return view('dashboard.professeurs.list-all', compact('msg', 'classes', 'professeurs'));
     }
 
     /**

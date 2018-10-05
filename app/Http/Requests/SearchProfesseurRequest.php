@@ -24,8 +24,8 @@ class SearchProfesseurRequest extends FormRequest
     public function rules()
     {
         return [
-            'classe' => '',
-            'keyword' => 'required|string'
+            'keyword' => 'string|required',
+            'classe' => ''
         ];
     }
 }

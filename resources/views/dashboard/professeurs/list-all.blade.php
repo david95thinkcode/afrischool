@@ -11,7 +11,7 @@
 @endsection
 @section('content')
     <div class='row'>
-        <div class="col-sm-offset-3 col-sm-6 col-xs-12 my-2">
+        <div class="col-sm-offset-3 col-sm-6 col-xs-12">
             <div class="panel panel-default mx-auto">
                 <div class="panel-heading">
                     <h5>Recherche un professeur</h5>
@@ -21,12 +21,12 @@
                         <div class="row">
                             <div class="col-sm-8{{ $errors->has('keyword') ? ' has-error' : '' }}">
                                 <label for="keyword">Nom ou prénom du professeur à rechercher</label>
-                                {{ Form::text('keyword', old('keyword'), ['class' => 'form-control', 'placeholder' => 'Nom ou extrait de nom du professeur', 'required' => '']) }}
+                                {{ Form::text('keyword', old('keyword'), ['class' => 'form-control', 'placeholder' => 'Nom du prof ou extrait', 'required' => '']) }}
                             </div>
                             <div class="col-sm-4 col-xs-12 form-group {{ $errors->has('classe') ? ' has-error' : '' }}">
                                 <label for="classe">Sélectionnez une classe</label>
                                 <select class="form-control {{ $errors->has('classe') ? ' has-error' : '' }}" id="classe" name="classe">
-                                    <option value="">Sélectionnez un classe</option>
+                                    <option value=""></option>
                                     @foreach($classes as $classe)
                                         <option value="{{$classe->id}}">{{$classe->cla_intitule}}</option>
                                     @endforeach
@@ -43,7 +43,12 @@
                         {!! Form::close() !!}
                 </div>
             </div>
+            @if ( isset($msg))
+                <div class="alert alert-success text-center">
+                    <h4 class="alert-alert-success">{!! $msg !!}</h4>
         </div>
+            @endif
+    </div>
     </div>
 <div class='row'>
     <div class="col-sm-12">
@@ -62,8 +67,8 @@
                 @foreach ($professeurs as $p)
                     <tr>
                         <td>{{ $p->id }}</td>
-                        <td>{{ $p->full_name }}</td>
-                        <td>{{ $p->age }}</td>
+                        <td>{!! isset($p->full_name) ? $p->full_name : $p->prof_prenoms.' '.$p->prof_nom !!}</td>
+                        <td>{!! isset($p->age) ? $p->age : date('Y') - date('Y', strtotime($p->prof_date_naissance)) . ' ans' !!}</td>
                         <td> {{ $p->prof_nationalite }}</td>
                         <td>{{ $p->prof_tel }}</td>
                         <td>{{ $p->prof_email }}</td>

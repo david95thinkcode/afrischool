@@ -13,6 +13,7 @@
                 <thead>
                     <th>#</th>
                     <th>Nom</th>
+                    <th>Age</th>
                     <th>Nationalité</th>
                     <th>Teléphone</th>
                     <th>Email</th>
@@ -20,29 +21,29 @@
                     <th>Actions</th>
                 </thead>
                 <tbody>
-                @php
-                    $ens = $ens->unique(function ($item) {
-                        return $item->prof_prenoms.$item->prof_nom;
-                    });
-                @endphp
-                @foreach ($ens as $e)
+                @foreach ($sorted as $e)
                     <tr>
-                        <td>{{ $e->id }}</td>
-                        <td>{{ $e->prof_nom }} {{ $e->prof_prenoms }}</td>
-                        <td>{{ $e->prof_nationalite }}</td>
-                        <td>{{ $e->prof_tel }}</td>
-                        <td>{{ $e->prof_email }}</td>
+                        <td>{{ $e['id'] }}</td>
+                        <td>{!! isset($e['datas']->full_name) ? $e['datas']->full_name : $e['datas']->prof_prenoms.' '.$e['datas']->prof_nom !!}</td>
+                        <td>{!! isset($e['datas']->age) ? $e['datas']->age : date('Y') - date('Y', strtotime($e['datas']->prof_date_naissance)) . ' ans' !!}</td>
+                        <td>{{ $e['datas']->prof_nationalite }}</td>
+                        <td>{{ $e['datas']->prof_tel }}</td>
+                        <td>{{ $e['datas']->prof_email }}</td>
                         <td>
-                            {{ $e->intitule }},
+                            @foreach ($e['matieres'] as $m)
+                            <li>
+                                {!! $m !!}
+                            </li>
+                            @endforeach
                         </td>
                         <td>
-                            <a href="{{ route('professeurs.show', ['id' => $e->professeur_id] ) }}" class="btn btn-sm btn-info">
+                            <a href="{{ route('professeurs.show', ['id' => $e['id']] ) }}" class="btn btn-sm btn-info">
                             Afficher
                             </a>
-                            <a href="{{ route('professeur.edit', ['id' => $e->professeur_id] ) }}" class="btn btn-sm btn-primary">
+                            <a href="{{ route('professeur.edit', ['id' => $e['id']] ) }}" class="btn btn-sm btn-primary">
                             Modifier
                             </a>
-                            <form action="{{ route('professeurs.destroy', $e->professeur_id) }}" method="POST" class='table-del-btn'>
+                            <form action="{{ route('professeurs.destroy', $e['id']) }}" method="POST" class='table-del-btn'>
                                 <input type="hidden" name="_method" value="DELETE">
                                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                               {!! Form::submit('Retirer', array('class' => 'btn btn-sm btn-danger')) !!}

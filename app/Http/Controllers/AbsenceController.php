@@ -110,6 +110,9 @@ class AbsenceController extends Controller
     }
 
 
+    /**
+     * Second Step
+     */
     public function selectMatiere(AbsenceFirstStepRequest $req)
     {        
         $mats = [];
@@ -136,13 +139,10 @@ class AbsenceController extends Controller
                     }                    
                 }    
             }
-            return view('dashboard.absences.create-second-step', compact('mats'));
         }
-        else {
-            flashy()->error("Impossible de continuer car aucune matière n'est enseignée dans cette classe.");
-            return back();
-        }
+        else { flashy()->error("Impossible de continuer car aucune matière n'est enseignée dans cette classe."); }
         
+        return view('dashboard.absences.create-second-step', compact('mats'));
     }
 
     public function selectAbsence(AbsenceSecondStepRequest $req)

@@ -11,9 +11,11 @@
                 <li role="presentation" class="">
                     <a href="#tab_content2" role="tab" id="profile-tab" data-toggle="tab" aria-expanded="false">Parent d'élève</a>
                 </li>
+                @if (!(Auth::user()->hasRole('comptable')))
                 <li role="presentation" class="">
                     <a href="{{ route('inscriptions.edit', ['id' => $inscription->eleve_id]) }}" role="tab">Modifier informations</a>
-                </li>
+                </li>                    
+                @endif
             </ul>
             <div id="myTabContent" class="tab-content">
                 <div role="tabpanel" class="tab-pane fade in active" id="tab_content1" aria-labelledby="home-tab">

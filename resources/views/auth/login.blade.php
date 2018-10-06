@@ -40,7 +40,7 @@
                     {{ csrf_field() }}
                     <h1>Connexion</h1>
                     <div class="{{ $errors->has('username') ? ' has-error' : '' }}">
-                        <input type="text" name="username" class="form-control" value="{{ old('username') }}" placeholder="Username" required=""/>
+                        <input type="text" name="username" class="form-control" value="{{ old('username') }}" placeholder="Votre nom d'utilisateur (téléphone ou email)" required=""/>
 
                         @if ($errors->has('username'))
                             <span class="help-block">

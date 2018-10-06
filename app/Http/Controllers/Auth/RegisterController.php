@@ -85,7 +85,7 @@ class RegisterController extends Controller
         }
         else {
             Flashy::error("Informations d'inscription non valides");
-            return back();
+            return redirect()->route('register');
         }
 
     }

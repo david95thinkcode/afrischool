@@ -65,7 +65,7 @@
     </div>
 </div>
 @endsection
- @fore
+
 @section('custom-css')
     <style>
         table {

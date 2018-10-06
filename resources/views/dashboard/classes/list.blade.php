@@ -43,9 +43,10 @@
                         </td>
                         <td>
                             <a href="{{ route('classe.edit', ['id' => $c->id]) }}" class="btn btn-sm btn-warning">Modifier</a>
-                            <form action="{{ route('classe.destroy', $c->id) }}" method="POST" class='table-del-btn'>
-                                <input type="hidden" name="_method" value="DELETE">
-                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+
+                            <form action="{{ route('classe.destroy', $c->id) }}" method="post" class='table-del-btn' onsubmit="return confirm('Cette action est irréversible. Etes vous sûr de vouloir supprimer cette classe?');">
+                                {{csrf_field()}}
+                                {{ method_field('DELETE') }}
                                 {!! Form::submit('Supprimer', array('class' => 'btn btn-sm btn-danger')) !!}
                             </form>
                         </td>

@@ -10,7 +10,6 @@ require('./bootstrap');
 require('./custom');
 require('./textwriting');
 
-
 Vue.component('example', require('./components/Example.vue'));
 Vue.component('absence-create', require('./components/gestion-absence/AbsenceCreate.vue'));
 

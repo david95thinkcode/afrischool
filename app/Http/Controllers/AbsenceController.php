@@ -16,6 +16,7 @@ use App\Http\Requests\AbsenceSecondStepRequest;
 use App\Http\Requests\AbsenceFirstStepRequest;
 use App\Models\Absence;
 use App\Http\Requests\SearchAbsenceRequest;
+use App\Http\Requests\StoreAbsenceFromAjax;
 
 class AbsenceController extends Controller
 {
@@ -169,6 +170,35 @@ class AbsenceController extends Controller
         
         return view('dashboard.absences.create-last-step', compact('eleves'));
             
+    }
+    
+    /**
+     * Enregistre les absences dans la DB pour les requêtes
+     * provenant de clients Http utilisant AJAX
+     * retourne une erreur 404 sinon
+     * 
+     * @return JSON
+     */
+    public function storeFromJsPost(StoreAbsenceFromAjax $req)
+    {
+        $concernedHoraire = Horaire::where([
+            [ 'enseigner_id', $req->enseigner ],
+            [ 'jour_id', Carbon::parse($req->date)->dayOfWeek]
+        ])->first();
+
+        if ($concernedHoraire != null) {
+            foreach ($req->eleves as $inscription) {
+                $a = new Absence();
+                $a->horaire_id = $concernedHoraire->id;
+                $a->inscription_id = $inscription;
+                $a->date = $req->date;
+                $a->save();
+            }
+            return response()->json($req, 200);
+        }
+        else {
+            abort(404);
+        }
     }
 
 

@@ -13,6 +13,8 @@ use App\Http\Requests\StoreEnseignerRequest;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\AbsenceFirstStepRequest;
 use Carbon\Carbon;
+use App\Http\Requests\FetchEnseignerCnD;
+use App\Models\Horaire;
 
 class EnseignerController extends Controller
 {
@@ -156,20 +158,40 @@ class EnseignerController extends Controller
     }
 
     /**
-     * Retournes les matieres enseignées
-     * dans une classe donnée à une date précisée
+     * Retournes les occurences de Enseigner (Matières enseignées)
+     * dans une classe donnée à une date donnée
      * 
      * @param AbsenceFirstRequest
      * @return JSON
      */
-    public function getForClasseAndDate(AbsenceFirstStepRequest $req)
+    public function getForClasseAndDate(FetchEnseignerCnD $req)
     {
-        $jourID = Carbon::parse($req->date)->dayOfWeek;
-        $matieres = Enseigner::with('matiere')->where([
-            [ 'annee_scolaire_id', $req->anneeScolaire ],
+        $a = isset($req->anneeScolaire) ? $req->annneeScolaire : AnneeScolaire::where('an_ouverte', true)->first()->id;
+        $j = Carbon::parse($req->date)->dayOfWeek;
+        $returnableEnseigner = [];
+        $ensID = [];
+
+        // Matieres enseignées
+        $me = Enseigner::with('matiere')->where([
+            [ 'annee_scolaire_id', $a],
             [ 'classe_id', $req->classe ]
         ])->get();
+            
+        // Récupérons les id de tous les enseigner à vérifier dans horaire
+        foreach ($me as $key => $e) { array_push($ensID, $e->id); }
+    
+        // Recherche des horaires pour les matières trouvées du jour $j
+        $concernedHoraire = Horaire::where('jour_id', $j)
+            ->whereIn('enseigner_id', $ensID)
+            ->get();
+        
+        // Trie des enseigner à retourner
+        foreach ($concernedHoraire as $hkey => $hvalue) {
+            foreach ($me as $ekey => $evalue) {
+                if ($hvalue->enseigner_id == $evalue->id) array_push($returnableEnseigner, $evalue);
+            }
+        }
 
-        return response()->json($matieres, 200);
+        return response()->json($returnableEnseigner, 200);
     }
 }

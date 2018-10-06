@@ -11,7 +11,7 @@ export const Routes = {
     },
     absenses: {
         post: {
-            store: '',
+            store: rootURI.concat('api/absences/store/'),
         }
     },
     classes: {

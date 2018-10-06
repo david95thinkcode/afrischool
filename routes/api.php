@@ -18,6 +18,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get('classes/fetch', 'ClasseController@fetch');
+Route::post('absences/store', 'AbsenceController@storeFromJsPost');
 
 Route::prefix('enseigner')->group(function () {
     Route::post('cnd', 'EnseignerController@getForClasseAndDate');

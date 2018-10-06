@@ -29,7 +29,7 @@ class StoreInscriptionRequest extends FormRequest
             'date_naissance' => 'required|date|before:today',
             'sexe' => 'required',
             
-            'ancien' => 'required',
+            // 'ancien' => 'required',
             'ecole_provenance' => '',
             'classe' => 'required',
             'redoublant' => ''

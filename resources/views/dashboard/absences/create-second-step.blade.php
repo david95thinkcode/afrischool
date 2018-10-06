@@ -3,7 +3,7 @@
 @section('section-title') Enregistrer une absence @endsection
 @section('content')
     <div class='row'>
-        <div class="col-md-5 col-md-offset-3 col-sm-6 col-sm-offset-3 col-xs-12">
+        <div class="col-sm-5 col-sm-offset-3 col-sm-6 col-xs-12">
             <div class="panel panel-default">
                 <div class="panel-body">
                     <div class="x-content">
@@ -38,7 +38,7 @@
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <strong>Il semblerait que vous êtes perdu !</strong> 
                 <p>
-                    Afin de pouvoir enregistrer des absences, il est obligatoire d'avoir préalablement renseigner entièrement l'emploi du temps.
+                    Afin de pouvoir enregistrer des absences, il est obligatoire d'avoir préalablement renseigné entièrement l'emploi du temps.
                 </p>
                 <p>Renseignez l'emploi du temps en utilisant le bouton ci-dessous</p>
                 <p class="text-center">

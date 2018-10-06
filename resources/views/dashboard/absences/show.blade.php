@@ -1,12 +1,7 @@
 @extends('templates.app') 
 @section('title') Absences @endsection
- 
-<<<<<<< HEAD
-@section('section-title') Liste des absences enregistrées !
-=======
-@section('section-title') Absences enregistrées !
->>>>>>> cc2cd749ecf57855510d5c51dcc1542d82004ff6
-@endsection
+
+@section('section-title') Absences enregistrées ! @endsection
  
 @section('content')
 <div class='row'>

@@ -67,7 +67,7 @@
                         </div>
                     </div>
 
-                    <div class="row">
+                    <div class="row" id='vue-app'>
                         @yield('content')
                     </div>
 

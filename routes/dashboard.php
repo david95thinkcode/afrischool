@@ -86,10 +86,12 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('reload-table', 'NoteController@reload')->name('reload.note');
     });
     //gestion scolarité
-    route::prefix('scolarite')->group(function(){
-        route::get('/', 'EleveController@listeInsolder')->name('eleve.reste.versement');
-        route::get('paiement-scolarite/{inscrit}/{eleve}', 'EleveController@indexsolderScolarite')->name('eleve.solder.scolarite');
-        route::post('paiement-scolarite', 'EleveController@solderScolarite')->where('inscrit', '[0-9]+')->name('eleve.solder');
+    Route::prefix('scolarite')->group(function(){
+        Route::get('/', 'EleveController@listeInsolder')->name('eleve.reste.versement');
+        Route::get('paiement-scolarite/{inscrit}/{eleve}', 'EleveController@indexsolderScolarite')->name('eleve.solder.scolarite');
+        
+        Route::post('paiement-scolarite', 'EleveController@solderScolarite')->name('eleve.solder');
+        Route::post('paiement-scolarite/search/insolder', 'GestionScolarite\ScolariteController@listerInsolder')->name('scolarite.search.insolder');
     });
     //Matiere
     Route::prefix('matiere')->group(function () {
@@ -107,6 +109,8 @@ Route::group(['middleware' => ['auth']], function () {
             ->name('professeurs.list');
         Route::post('par-classe', 'ProfesseurController@listProfesseur')
             ->name('classe.professeurs.list');
+        Route::post('search', 'ProfesseurController@searchResults')
+            ->name('professeurs.search.results');
 
         Route::resource('diplomes', 'DiplomeController');
         Route::get('{professeur}/diplome/create', 'DiplomeController@createFromProf')

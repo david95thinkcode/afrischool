@@ -3,7 +3,7 @@
         <div class="panel panel-default mx-auto">
             <div class="panel-body">
                 {{--  matières  --}}
-                <div class='col-md-12 col-xs-12 form-group'>
+                <div class='col-sm-12 col-xs-12 form-group'>
                     {!! Form::label('matiere', 'Matiere') !!}                    
                     <select name="enseigner" id="enseigner" class="form-control" required>
                         <option value=""></option>
@@ -13,7 +13,7 @@
                     </select>
                 </div>
                 {{--  jour  --}}
-                <div class="col-md-12 col-xs-12 form-group">
+                <div class="col-sm-12 col-xs-12 form-group">
                     {!! Form::label('jour', 'Jour de la semaine') !!}
                     <select name="jour" id="jour" class="form-control" required>
                         <option value=""></option>
@@ -22,15 +22,17 @@
                         @endforeach
                     </select>
                 </div>
-                 {{--  heure début  --}}
-                <div class="col-md-12 col-xs-12 form-group">
-                    {!! Form::label('debut', 'Heure de debut') !!}
-                    {!! Form::time('debut', old('debut'), ['class' => 'form-control', 'required' => '']) !!}
-                </div>
-                {{--  heure fin  --}}
-                <div class="col-md-12 col-xs-12 form-group">
-                    {!! Form::label('fin', 'Heure de fin') !!}
-                    {!! Form::time('fin', old('fin'), ['class' => 'form-control', 'required' => '']) !!}
+                <div class="form-group row">
+                    {{--  heure début  --}}
+                   <div class="col-sm-6 col-xs-12 form-group">
+                       {!! Form::label('debut', 'Heure de debut') !!}
+                       {!! Form::time('debut', old('debut'), ['class' => 'form-control', 'required' => '']) !!}
+                   </div>
+                   {{--  heure fin  --}}
+                   <div class="col-sm-6 col-xs-12 form-group">
+                       {!! Form::label('fin', 'Heure de fin') !!}
+                       {!! Form::time('fin', old('fin'), ['class' => 'form-control', 'required' => '']) !!}
+                   </div>
                 </div>
                 
                 {!! Form::hidden('classe', old('classe'), ['class' => 'form-control', 'required' => '']) !!}

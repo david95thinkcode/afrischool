@@ -187,6 +187,18 @@ class InscriptionController extends Controller
     }
 
     /**
+     * Retourne les élèves inscrit dans une classe
+     * 
+     * @param integer $classe
+     * @return Json
+     */
+    public function getForClasse($classe)
+    {
+        $inscriptions = Inscription::with('classe', 'eleve')->where('classe_id', $classe)->get();
+        return response()->json($inscriptions, 200);
+    }
+
+    /**
      * Display the specified resource.
      *
      * @param integer $id

@@ -16,3 +16,19 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('classes/fetch', 'ClasseController@fetch');
+
+Route::prefix('enseigner')->group(function () {
+    Route::post('cnd', 'EnseignerController@getForClasseAndDate');
+    Route::prefix('c')->group(function () {
+        Route::get('{classe}', 'EnseignerController@getForClasse');
+    });
+});
+
+Route::prefix('inscription')->group(function () {
+    Route::prefix('c')->group(function () {
+        Route::get('{classe}', 'InscriptionController@getForClasse');
+    });
+});
+

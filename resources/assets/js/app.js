@@ -11,7 +11,8 @@ require('./textwriting');
 window.Vue = require('vue');
 
 Vue.component('example', require('./components/Example.vue'));
+Vue.component('absence-create', require('./components/gestion-absence/AbsenceCreate.vue'));
 
 const app = new Vue({
-    el: '#app'
+    el: '#vue-app'
 });

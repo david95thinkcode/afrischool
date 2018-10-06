@@ -10,6 +10,9 @@ use App\Models\Classe;
 use App\Models\Enseigner;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Requests\StoreEnseignerRequest;
+use Illuminate\Support\Facades\DB;
+use App\Http\Requests\AbsenceFirstStepRequest;
+use Carbon\Carbon;
 
 class EnseignerController extends Controller
 {
@@ -131,5 +134,42 @@ class EnseignerController extends Controller
         }
 
         return $status;
+    }
+
+    /**
+     * Retourne la liste des matières pour une classe spécifiée
+     *
+     * @param integer $classe
+     * @return 
+     */
+    public function getForClasse($classe)
+    {
+        $enseigner = DB::table('enseigner')
+                    ->where('classe_id', '=', $classe)
+                    ->join('classes', 'enseigner.classe_id', '=', 'classes.id')                    
+                    ->join('professeurs', 'enseigner.professeur_id', '=', 'professeurs.id')
+                    ->join('matieres', 'enseigner.matiere_id', '=', 'matieres.id')
+                    // ->select('enseigner.id', 'enseigner.coefficient', 'enseigner.professeur_id', 'classes.cla_intitule', 'matieres.intitule', 'professeurs.prof_nom', 'professeurs.prof_prenoms')
+                    ->get();
+
+        return response()->json($enseigner, 200);
+    }
+
+    /**
+     * Retournes les matieres enseignées
+     * dans une classe donnée à une date précisée
+     * 
+     * @param AbsenceFirstRequest
+     * @return JSON
+     */
+    public function getForClasseAndDate(AbsenceFirstStepRequest $req)
+    {
+        $jourID = Carbon::parse($req->date)->dayOfWeek;
+        $matieres = Enseigner::with('matiere')->where([
+            [ 'annee_scolaire_id', $req->anneeScolaire ],
+            [ 'classe_id', $req->classe ]
+        ])->get();
+
+        return response()->json($matieres, 200);
     }
 }

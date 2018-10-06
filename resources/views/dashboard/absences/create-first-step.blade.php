@@ -2,9 +2,14 @@
 @section('title') Absences @endsection
 @section('section-title') Enregistrer une absence @endsection
 @section('content')
-    
-<div class='row'>
-    <div class="col-md-5 col-md-offset-3 col-sm-6 col-sm-offset-3 col-xs-12">
+<div class="row">
+    <div class="col-sm-12">
+        <absence-create></absence-create>
+    </div>
+</div>
+
+<div class='row'>    
+    <div class="col-sm-5 col-sm-offset-3 col-sm-6 col-xs-12">
         <div class="panel panel-default">
             <div class="panel-body">
                 <div class="x-content">

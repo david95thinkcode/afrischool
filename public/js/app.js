@@ -1645,6 +1645,218 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/gestion-absence/AbsenceCreate.vue":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__routes_js__ = __webpack_require__("./resources/assets/js/routes.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    data: function data() {
+        return {
+            classes: [],
+            matieres: [],
+            inscrits: [],
+            absence: {
+                date: '',
+                classe: '',
+                anneeScolaire: ''
+            },
+            choosedMatiere: '',
+            choosedEleve: [],
+
+            isSaving: false,
+            isSaved: false
+        };
+    },
+
+    props: {
+        agent_id: {},
+        agentobject: {}
+    },
+    mounted: function mounted() {
+        this.fetchClasses();
+    },
+
+    methods: {
+        fetchClasses: function fetchClasses() {
+            var _this = this;
+
+            axios.get(__WEBPACK_IMPORTED_MODULE_0__routes_js__["a" /* Routes */].classes.get.fetch).then(function (response) {
+                _this.classes = response.data;
+            }).catch(function (error) {
+                _this.errorActions(error, "Error on getting classes");
+            });
+        },
+        fetchMatieres: function fetchMatieres() {
+            var _this2 = this;
+
+            axios.get(__WEBPACK_IMPORTED_MODULE_0__routes_js__["a" /* Routes */].enseigner.get.forClasse.concat(this.absence.classe)).then(function (response) {
+                _this2.matieres = response.data;
+            }).catch(function (error) {
+                _this2.errorActions(error, "Error on getting matieres");
+            });
+        },
+        fetchInscrits: function fetchInscrits() {
+            var _this3 = this;
+
+            axios.get(__WEBPACK_IMPORTED_MODULE_0__routes_js__["a" /* Routes */].inscription.forClasse.concat(this.absence.classe)).then(function (response) {
+                _this3.inscrits = response.data;
+            }).catch(function (error) {
+                _this3.errorActions(error, "Error on getting inscrits");
+            });
+        },
+        gotoMatStep: function gotoMatStep() {
+            this.fetchMatieres();
+            this.fetchInscrits();
+        },
+        save: function save() {
+            var _this4 = this;
+
+            var route = this.rootURI.concat('dashboard/agents');
+            this.isSaving = true;
+
+            axios.post(route, this.agent).then(function (response) {
+                _this4.successActions("Agent enregistré");
+            }).catch(function (error) {
+                _this4.errorActions(error, "Problème enregistrement de l'agent");
+            }).finally(function () {
+                _this4.isSaving = false;
+            });
+        },
+
+
+        /**
+         * Met à jour le agent dans la base de données
+         * @return {[type]} [description]
+         */
+        updateagent: function updateagent() {
+            var _this5 = this;
+
+            var UpdateRoute = this.rootURI.concat('dashboard/agents/').concat(this.agent.id);
+
+            axios.put(UpdateRoute, this.agent).then(function (response) {
+                _this5.isEdition = false;
+                _this5.successActions("Mise à jour effectuée !");
+            }).catch(function (error) {
+                _this5.errorActions(error, "Error on update");
+            }).finally(function () {
+                _this5.isSaving = false;
+            });
+        },
+        successActions: function successActions(successMessage) {
+            this.resetInput();
+            this.isSaved = true;
+            this.error = '';
+            this.$emit('refresh');
+            console.log(successMessage);
+        },
+        errorActions: function errorActions(error, message) {
+            console.log(message);
+            console.log(error);
+            this.error = error;
+            this.isSaved = false;
+        }
+    },
+    computed: {
+        CLASSES_ARE_FILLED: function CLASSES_ARE_FILLED() {
+            return this.classes.length > 0 ? true : false;
+        },
+        INSCRITS_ARE_FILLED: function INSCRITS_ARE_FILLED() {
+            return this.inscrits.length > 0 ? true : false;
+        },
+        MATIERES_ARE_FILLED: function MATIERES_ARE_FILLED() {
+            return this.matieres.length > 0 ? true : false;
+        },
+        READY_FOR_MATIERE_STEP: function READY_FOR_MATIERE_STEP() {
+            return true;
+            // return (this.absence.date != '' && this.absence.classe != null) ? true : false;
+        },
+        isErrored: function isErrored() {
+            return this.error === '' ? false : true;
+        }
+    }
+});
+
+/***/ }),
+
 /***/ "./node_modules/bootstrap-sass/assets/javascripts/bootstrap.js":
 /***/ (function(module, exports) {
 
@@ -32111,6 +32323,247 @@ module.exports = function normalizeComponent (
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-3440ab88\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/gestion-absence/AbsenceCreate.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "row" }, [
+    _c("div", { staticClass: "col-sm-4" }, [
+      _c("div", { staticClass: "panel panel-default mx-auto" }, [
+        _c("div", { staticClass: "panel-heading" }, [_vm._v("Etape 1")]),
+        _vm._v(" "),
+        _c("div", { staticClass: "panel-body" }, [
+          _c(
+            "form",
+            {
+              attrs: { "accept-charset": "UTF-8" },
+              on: {
+                submit: function($event) {
+                  $event.preventDefault()
+                }
+              }
+            },
+            [
+              _c("div", { staticClass: "form-group row" }, [
+                _c("div", { staticClass: "col-sm-6" }, [
+                  _c("div", { staticClass: "form-group" }, [
+                    _c("label", { attrs: { for: "classe" } }, [
+                      _vm._v("Classe")
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "select",
+                      {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.absence.classe,
+                            expression: "absence.classe"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { name: "classe", id: "classe" },
+                        on: {
+                          change: function($event) {
+                            var $$selectedVal = Array.prototype.filter
+                              .call($event.target.options, function(o) {
+                                return o.selected
+                              })
+                              .map(function(o) {
+                                var val = "_value" in o ? o._value : o.value
+                                return val
+                              })
+                            _vm.$set(
+                              _vm.absence,
+                              "classe",
+                              $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            )
+                          }
+                        }
+                      },
+                      [
+                        _c("option", { attrs: { value: "" } }),
+                        _vm._v(" "),
+                        _vm._l(_vm.classes, function(c) {
+                          return _vm.CLASSES_ARE_FILLED
+                            ? _c("option", { key: c.id }, [
+                                _vm._v(_vm._s(c.cla_intitule))
+                              ])
+                            : _vm._e()
+                        })
+                      ],
+                      2
+                    )
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-sm-6" }, [
+                  _c("div", { staticClass: "form-group" }, [
+                    _c("label", { attrs: { for: "prenom" } }, [_vm._v("Date")]),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.absence.date,
+                          expression: "absence.date"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "date" },
+                      domProps: { value: _vm.absence.date },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.absence, "date", $event.target.value)
+                        }
+                      }
+                    })
+                  ])
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-group" }, [
+                _vm.READY_FOR_MATIERE_STEP
+                  ? _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-success",
+                        on: {
+                          click: function($event) {
+                            _vm.gotoMatStep()
+                          }
+                        }
+                      },
+                      [_vm._v("Suivant")]
+                    )
+                  : _vm._e()
+              ])
+            ]
+          )
+        ])
+      ])
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "col-sm-4" }, [
+      _c("div", { staticClass: "panel panel-default" }, [
+        _c("div", { staticClass: "panel-heading" }, [
+          _vm._v("Etape 2 - Le cours")
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "panel-body" }, [
+          _vm.MATIERES_ARE_FILLED
+            ? _c(
+                "form",
+                _vm._l(_vm.matieres, function(m) {
+                  return _c("div", { key: m.id, staticClass: "form-group" }, [
+                    _c("div", { staticClass: "checkbox" }, [
+                      _c("label", { attrs: { for: "" } }, [
+                        _vm._v(_vm._s(m.intitule))
+                      ]),
+                      _vm._v(" "),
+                      _c("input", {
+                        staticClass: "form-control",
+                        attrs: { type: "radio", name: "", id: "" }
+                      })
+                    ])
+                  ])
+                })
+              )
+            : _vm._e()
+        ])
+      ])
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "col-sm-4" }, [
+      _c("div", { staticClass: "panel panel-default mx-auto" }, [
+        _c("div", { staticClass: "panel-heading" }, [
+          _vm._v("Etape 3 - Cochez les absents")
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "panel-body" }, [
+          _vm.INSCRITS_ARE_FILLED
+            ? _c(
+                "form",
+                _vm._l(_vm.inscrits, function(i) {
+                  return _c("div", { key: i.id, staticClass: "form-group" }, [
+                    _c("div", { staticClass: "checkbox" }, [
+                      _c("label", { attrs: { for: "" } }, [
+                        _vm._v(
+                          _vm._s(i.eleve.nom) + " " + _vm._s(i.eleve.prenoms)
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.choosedEleve,
+                            expression: "choosedEleve"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { type: "checkbox", name: "", id: "" },
+                        domProps: {
+                          checked: Array.isArray(_vm.choosedEleve)
+                            ? _vm._i(_vm.choosedEleve, null) > -1
+                            : _vm.choosedEleve
+                        },
+                        on: {
+                          change: function($event) {
+                            var $$a = _vm.choosedEleve,
+                              $$el = $event.target,
+                              $$c = $$el.checked ? true : false
+                            if (Array.isArray($$a)) {
+                              var $$v = null,
+                                $$i = _vm._i($$a, $$v)
+                              if ($$el.checked) {
+                                $$i < 0 &&
+                                  (_vm.choosedEleve = $$a.concat([$$v]))
+                              } else {
+                                $$i > -1 &&
+                                  (_vm.choosedEleve = $$a
+                                    .slice(0, $$i)
+                                    .concat($$a.slice($$i + 1)))
+                              }
+                            } else {
+                              _vm.choosedEleve = $$c
+                            }
+                          }
+                        }
+                      })
+                    ])
+                  ])
+                })
+              )
+            : _vm._e()
+        ])
+      ])
+    ])
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-3440ab88", module.exports)
+  }
+}
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-650f2efa\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/Example.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -43195,9 +43648,10 @@ __webpack_require__("./resources/assets/js/textwriting.js");
 window.Vue = __webpack_require__("./node_modules/vue/dist/vue.common.js");
 
 Vue.component('example', __webpack_require__("./resources/assets/js/components/Example.vue"));
+Vue.component('absence-create', __webpack_require__("./resources/assets/js/components/gestion-absence/AbsenceCreate.vue"));
 
 var app = new Vue({
-  el: '#app'
+  el: '#vue-app'
 });
 
 /***/ }),
@@ -43309,10 +43763,92 @@ module.exports = Component.exports
 
 /***/ }),
 
+/***/ "./resources/assets/js/components/gestion-absence/AbsenceCreate.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/gestion-absence/AbsenceCreate.vue")
+/* template */
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-3440ab88\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/gestion-absence/AbsenceCreate.vue")
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/gestion-absence/AbsenceCreate.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-3440ab88", Component.options)
+  } else {
+    hotAPI.reload("data-v-3440ab88", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
 /***/ "./resources/assets/js/custom.js":
 /***/ (function(module, exports) {
 
 
+
+/***/ }),
+
+/***/ "./resources/assets/js/routes.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony export rootURI */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Routes; });
+var rootURI = window.location.protocol + '//' + document.location.host + '/';
+
+var Routes = {
+    enseigner: {
+        get: {
+            forClasse: rootURI.concat('api/enseigner/c/')
+        },
+        post: {
+            classNdate: rootURI.concat('api/enseigner/cnd/')
+        }
+    },
+    absenses: {
+        post: {
+            store: ''
+        }
+    },
+    classes: {
+        get: {
+            fetch: rootURI.concat('api/classes/fetch/')
+        }
+    },
+    inscription: {
+        forClasse: rootURI.concat('api/inscription/c/')
+    }
+};
 
 /***/ }),
 

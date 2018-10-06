@@ -133,4 +133,15 @@ class ClasseController extends Controller
         return Redirect::route('classe.index')
                 ->with('status', 'Une classe a été supprimé avec succès !');
     }
+
+    /**
+     * Returns classes as JSON
+     * 
+     * @param null
+     * @return Json 
+     */
+    public function fetch()
+    {
+        return response()->json(Classe::all(), 200);
+    }
 }

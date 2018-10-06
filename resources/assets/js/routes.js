@@ -1,0 +1,25 @@
+export const rootURI = window.location.protocol + '//' + document.location.host + '/';
+
+export const Routes = {
+    enseigner: {
+        get: {
+            forClasse: rootURI.concat('api/enseigner/c/'),
+        },
+        post: {
+            classNdate: rootURI.concat('api/enseigner/cnd/'),
+        }
+    },
+    absenses: {
+        post: {
+            store: '',
+        }
+    },
+    classes: {
+        get: {
+            fetch: rootURI.concat('api/classes/fetch/'),
+        }
+    },
+    inscription: {
+        forClasse: rootURI.concat('api/inscription/c/'),
+    },
+};

@@ -30,9 +30,9 @@ class ParentRequest extends FormRequest
             'mail_parent' => '',
             'sexe_parent' => '',
 
-            'person_a_contacter_nom' => 'required|string',
-            'person_a_contacter_tel' => 'required|string',
-            'person_a_contacter_lien' => 'required|string'
+            // 'person_a_contacter_nom' => 'required|string',
+            // 'person_a_contacter_tel' => 'required|string',
+            // 'person_a_contacter_lien' => 'required|string'
         ];
     }
 }

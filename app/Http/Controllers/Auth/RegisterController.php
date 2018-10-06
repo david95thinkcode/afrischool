@@ -12,6 +12,7 @@ use Illuminate\Foundation\Auth\RegistersUsers;
 use App\Http\Requests\StoreUserRequest;
 use App\Models\Inscription;
 use App\Models\ParentEleve;
+use App\Models\Role;
 
 class RegisterController extends Controller
 {
@@ -66,8 +67,14 @@ class RegisterController extends Controller
             $user = User::create([
                 'name' => $concernedParent->full_name,
                 'username' => $req->tel,
-                'active' => false,
+                'active' => true,
                 'password' => bcrypt($req->password),
+            ]);
+
+            $ur = UserRole::create([
+                'user_id' => $user->id,
+                'role_id' => Role::where('name', 'parent')->first()->id,
+                'is_active' => true
             ]);
             
             $concernedParent->user_id = $user->id;
@@ -89,7 +96,7 @@ class RegisterController extends Controller
         $parentTel = (string) $parentTel;
 
         $i = Inscription::with('eleve')->where('id', $idInscription)->first();
-
+        
         if (!is_null($i)) {
             $p = $i->eleve->parent->par_tel;
             return ($p == $parentTel) ? true : false;

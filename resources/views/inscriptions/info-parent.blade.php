@@ -12,8 +12,20 @@
                 </fieldset>
 
                 <fieldset>
-                    <legend>Personne à contacter en cas d'urgence</legend>
-                    @include('inscriptions.partials.personne-a-contacter')
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingOne">
+                              <h4 class="panel-title">
+                                <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                  Personne à contacter en cas d'urgence
+                                </a>
+                              </h4>
+                            </div>
+                            <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                                <div class="panel-body">
+                                    @include('inscriptions.partials.personne-a-contacter')
+                                </div>
+                            </div>
+                        </div>
                 </fieldset>
 
                 <br>

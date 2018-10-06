@@ -16,28 +16,14 @@ class HoraireController extends Controller
 
     public function search()
     {
-        $enseigner_classes = Enseigner::all()->toArray();
-        $classes = [];
-
-        foreach ($enseigner_classes as $item) {
-            $exists = false;
-            foreach ($classes as $classe) {
-                if ($classe['id'] == $item['classe_id']) {
-                    $exists = true;
-                }
-            }            
-            if (!$exists) {
-                $classe_data = [];
-                $classe_data['id'] = $item['classe_id'];
-                $classe_data['datas'] = Classe::findorFail($item['classe_id']);
-                array_push($classes, $classe_data);
-            }
-        }
+        $classes = Classe::all();
         return view('dashboard.emploi-du-temps.search', compact('classes'));
     }
 
     /**
      * Retourne l'emploi du temps complet d'une classe donnée
+     * @param integer $classe
+     * @return 
      */
     public function showAllForClasse($classe)
     {
@@ -80,6 +66,21 @@ class HoraireController extends Controller
      */
     public function create()
     {
+        $classes = Classe::all();    
+        return view('dashboard.emploi-du-temps.create-first-step', compact('classes'));
+    }
+    
+    /**
+     * Retourne les classes pour lesquelles
+     * au moins une matière est déjà enseignée donc
+     * une classe éligible pour l'ajout de l'horaire d'une matière
+     * consitituant l'emploi du temps
+     * 
+     * @param null
+     * @return array $classes;
+     */
+    private function getHorairableClasses()
+    {
         $enseigner_classes = Enseigner::all()->toArray();
         $classes = [];
         
@@ -88,9 +89,7 @@ class HoraireController extends Controller
         foreach ($enseigner_classes as $item) {
             $exists = false;
             foreach ($classes as $classe) {
-                if ($classe['id'] == $item['classe_id']) {
-                    $exists = true;
-                }
+                $exists = $classe['id'] == $item['classe_id'] ? true : $exists;
             }            
             if (!$exists) {
                 $classe_data = [];
@@ -99,7 +98,8 @@ class HoraireController extends Controller
                 array_push($classes, $classe_data);
             }
         }
-        return view('dashboard.emploi-du-temps.create-first-step', compact('classes'));
+
+        return $classes;
     }
 
     /**

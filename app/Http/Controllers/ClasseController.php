@@ -22,7 +22,7 @@ class ClasseController extends Controller
     ];
 
     public function index()
-    {
+    {        
         $numberOfClasses = [
             self::PRIMAIRE_ID => Classe::where('estPrimaire', true)->count(),
             self::COLLEGE_ID => Classe::where('estCollege', true)->count(),
@@ -132,5 +132,16 @@ class ClasseController extends Controller
 
         return Redirect::route('classe.index')
                 ->with('status', 'Une classe a été supprimé avec succès !');
+    }
+
+    /**
+     * Returns classes as JSON
+     * 
+     * @param null
+     * @return Json 
+     */
+    public function fetch()
+    {
+        return response()->json(Classe::all(), 200);
     }
 }

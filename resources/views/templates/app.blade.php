@@ -67,7 +67,7 @@
                         </div>
                     </div>
 
-                    <div class="row">
+                    <div class="row" id='vue-app'>
                         @yield('content')
                     </div>
 
@@ -88,7 +88,6 @@
     @yield('custom-js')
     @include('flashy::message')
     <script src="{{asset('js/ie10-viewport-bug-workaround.js')}}"></script>
-    <script src="{{ asset('js/app.js') }}"></script>
 </body>
 
 </html>

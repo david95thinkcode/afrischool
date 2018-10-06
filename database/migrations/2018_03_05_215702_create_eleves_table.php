@@ -24,9 +24,9 @@ class CreateElevesTable extends Migration
             $table->boolean('redoublant')->default(false)->nullable();
             $table->string('ecole_provenance')->nullable();
 
-            $table->string('person_a_contacter_nom');
-            $table->string('person_a_contacter_tel');
-            $table->string('person_a_contacter_lien');
+            $table->string('person_a_contacter_nom')->nullable();
+            $table->string('person_a_contacter_tel')->nullable();
+            $table->string('person_a_contacter_lien')->nullable();
 
             $table->unsignedInteger('parent_id');
             $table->foreign('parent_id')

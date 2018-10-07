@@ -105,7 +105,7 @@
 
 <footer class="footer pt-2 pb-1">
     <div class="container">
-        <p class="wrap"><i class="fa fa-graduation-cap"></i> Afrikaschool | © Copyright 2018</p>
+        <p class="wrap"><i class="fa fa-graduation-cap"></i> AfrikaSchool | © Copyright 2018</p>
     </div>
 </footer>
 

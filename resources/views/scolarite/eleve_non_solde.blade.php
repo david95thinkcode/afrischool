@@ -75,7 +75,7 @@
 <script src="{{asset('js/dataTables.bootstrap.min.js')}}"></script>
 <script>
     $(document).ready(function () {
-        $('#eleves').dataTable({
+        $('.table-bordered').dataTable({
             "language": {
                 "url": "{{asset('lang/French.json')}}"
             }

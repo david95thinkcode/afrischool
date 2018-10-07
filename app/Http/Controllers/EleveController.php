@@ -171,7 +171,7 @@ class EleveController extends Controller
         
         if (is_null($paid)) return false;
 
-        return ((Carbon::today())->toDateString()) == ($paid->created_at->toDateString());
+        return (Carbon::today()->toDateString()) == ($paid->created_at->toDateString());
     }
 
     public function storeScolarite($eleve, $classe, $anne_scolaire, $verser, $scolarite, $reste, $date_inscription)

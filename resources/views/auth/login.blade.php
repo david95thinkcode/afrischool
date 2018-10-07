@@ -71,8 +71,8 @@
                         </p>
 
                         <div>
-                            <h1><i class="fa fa-graduation-cap"></i> AfriSchool!</h1>
-                            <p>©2018 All Rights Reserved. AfriSchool! Gestionnaire d'école. Privacy and Terms</p>
+                            <h1><i class="fa fa-graduation-cap"></i> AfrikaSchool!</h1>
+                            <p>©2018 All Rights Reserved. AfrikaSchool! Gestionnaire d'école. Privacy and Terms</p>
                         </div>
                 </form>
             </section>

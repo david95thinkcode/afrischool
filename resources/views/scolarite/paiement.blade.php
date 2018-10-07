@@ -61,7 +61,7 @@
     <div class="col-sm-4">
         <div class="panel panel-default">
             <div class="panel-heading"><h5>Les paiements déjà effectués</h5></div>
-            <table class="table table-responsive">
+            <table class="table table-bordered jambo_table">
                 <thead>
                     <th>#</th>
                     <th>Montant payé</th>
@@ -70,12 +70,12 @@
                 </thead>
                 <tbody>
                     @foreach ($paiements as $p)
-                    <tr>
-                        <td>{{ $p->id }}</td>
-                        <td class="text-center">{{ $p->montant }}</td>
-                        <td class="text-center">{{ $p->tranche_scolarite_id }}</td>
-                        <td>{{ $p->created_at }}</td>
-                    </tr>
+                        <tr>
+                            <td>{{ $p->id }}</td>
+                            <td class="text-center">{{ $p->montant }}</td>
+                            <td class="text-center">{{ $p->tranche_scolarite_id }}</td>
+                            <td>{{ $p->created_at }}</td>
+                        </tr>
                     @endforeach
                 </tbody>
             </table>
@@ -83,4 +83,22 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('custom-css')
+    <link rel="stylesheet" href="{{asset('css/dataTables.bootstrap.min.css')}}">
+@stop
+
+@section('custom-js')
+    <script src="{{asset('js/jquery.dataTables.js')}}"></script>
+    <script src="{{asset('js/dataTables.bootstrap.min.js')}}"></script>
+    <script>
+        $(document).ready(function () {
+            $('.table-bordered').dataTable({
+                "language": {
+                    "url": "{{asset('lang/French.json')}}"
+                }
+            });
+        });
+    </script>
 @endsection

@@ -15,9 +15,12 @@ class Professeur extends Model
      */
     public function getAgeAttribute()
     {
-        $t = strtotime($this->attributes['prof_date_naissance']);
+        return date('Y') - date('Y', strtotime($this->attributes['prof_date_naissance'])) . ' ans ';
+    }
 
-        return date('Y') - date('Y', $t);
+    public function getFullNameAttribute()
+    {
+        return $this->attributes['prof_prenoms'] . ' ' . $this->attributes['prof_nom'];
     }
 
     /**

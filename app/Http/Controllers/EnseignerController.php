@@ -10,6 +10,11 @@ use App\Models\Classe;
 use App\Models\Enseigner;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Requests\StoreEnseignerRequest;
+use Illuminate\Support\Facades\DB;
+use App\Http\Requests\AbsenceFirstStepRequest;
+use Carbon\Carbon;
+use App\Http\Requests\FetchEnseignerCnD;
+use App\Models\Horaire;
 
 class EnseignerController extends Controller
 {
@@ -131,5 +136,62 @@ class EnseignerController extends Controller
         }
 
         return $status;
+    }
+
+    /**
+     * Retourne la liste des matières pour une classe spécifiée
+     *
+     * @param integer $classe
+     * @return 
+     */
+    public function getForClasse($classe)
+    {
+        $enseigner = DB::table('enseigner')
+                    ->where('classe_id', '=', $classe)
+                    ->join('classes', 'enseigner.classe_id', '=', 'classes.id')                    
+                    ->join('professeurs', 'enseigner.professeur_id', '=', 'professeurs.id')
+                    ->join('matieres', 'enseigner.matiere_id', '=', 'matieres.id')
+                    // ->select('enseigner.id', 'enseigner.coefficient', 'enseigner.professeur_id', 'classes.cla_intitule', 'matieres.intitule', 'professeurs.prof_nom', 'professeurs.prof_prenoms')
+                    ->get();
+
+        return response()->json($enseigner, 200);
+    }
+
+    /**
+     * Retournes les occurences de Enseigner (Matières enseignées)
+     * dans une classe donnée à une date donnée
+     * 
+     * @param AbsenceFirstRequest
+     * @return JSON
+     */
+    public function getForClasseAndDate(FetchEnseignerCnD $req)
+    {
+        $a = isset($req->anneeScolaire) ? $req->annneeScolaire : AnneeScolaire::where('an_ouverte', true)->first()->id;
+        $j = Carbon::parse($req->date)->dayOfWeek;
+        $returnableEnseigner = [];
+        $ensID = [];
+
+        // Matieres enseignées
+        $me = Enseigner::with('matiere')->where([
+            [ 'annee_scolaire_id', $a],
+            [ 'classe_id', $req->classe ]
+        ])->get();
+            
+        // Récupérons les id de tous les enseigner à vérifier dans horaire
+        foreach ($me as $key => $e) { array_push($ensID, $e->id); }
+    
+        // Recherche des horaires pour les matières trouvées du jour $j
+        $concernedHoraire = Horaire::where('jour_id', $j)
+            ->whereIn('enseigner_id', $ensID)
+            ->get();
+        
+        // Trie des enseigner à retourner
+        foreach ($concernedHoraire as $hkey => $hvalue) {
+            foreach ($me as $ekey => $evalue) {
+                if ($hvalue->enseigner_id == $evalue->id) array_push($returnableEnseigner, $evalue);
+            }
+        }
+
+        return response()->json($returnableEnseigner, 200);
     }
 }

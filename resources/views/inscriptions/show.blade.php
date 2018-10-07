@@ -51,7 +51,10 @@
                                     </a>
                                     @endif
                                     <a href="{{ route('inscriptions.show', ['id' => $i->id]) }}" class="btn btn-sm btn-info sm-mg-2">Afficher</a>
+                                    
+                                    @if (!(Auth::user()->hasRole('comptable')))
                                     <a href="{{ route('inscriptions.edit', ['id' => $i->id]) }}" class="btn btn-sm btn-warning">Modifier</a>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach

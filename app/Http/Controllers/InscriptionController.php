@@ -93,7 +93,7 @@ class InscriptionController extends Controller
         $parent = $this->storeParent(session('parent.nom_parent'), session('parent.prenoms_parent'),
             session('parent.sexe_parent'), $tel_parent,
             session('parent.mail_parent'));
-
+        // dd($parent);
         $eleve = $this->storeEleve($parent->id, session('eleve.nom'), session('eleve.prenoms'),
             session('eleve.sexe'), session('eleve.date_naissance'), session('eleve.ancien'),
             session('eleve.redoublant'), session('eleve.ecole_provenance'),
@@ -187,9 +187,21 @@ class InscriptionController extends Controller
     }
 
     /**
+     * Retourne les élèves inscrit dans une classe
+     * 
+     * @param integer $classe
+     * @return Json
+     */
+    public function getForClasse($classe)
+    {
+        $inscriptions = Inscription::with('classe', 'eleve')->where('classe_id', $classe)->get();
+        return response()->json($inscriptions, 200);
+    }
+
+    /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param integer $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -198,14 +210,14 @@ class InscriptionController extends Controller
             ->where('inscriptions.id', '=', $id)
             ->join('classes', 'inscriptions.classe_id', '=', 'classes.id')
             ->join('eleves', 'inscriptions.eleve_id', '=', 'eleves.id')
-            ->join('parents', 'eleves.id', '=', 'parents.id')
+            ->join('parents', 'eleves.parent_id', '=', 'parents.id')
             ->get()
             ->first();
 
         $ins = Inscription::findOrFail($id);
         $montants['payer'] = $ins->montant_paye;
         $montants['restant'] = $ins->montant_scolarite - $montants['payer'];
-        // dd($montants);
+
         return view('inscriptions.eleve-detail', compact('inscription', 'montants'));
     }
 
@@ -221,7 +233,7 @@ class InscriptionController extends Controller
             ->where('inscriptions.id', '=', $id)
             ->join('classes', 'inscriptions.classe_id', '=', 'classes.id')
             ->join('eleves', 'inscriptions.eleve_id', '=', 'eleves.id')
-            ->join('parents', 'eleves.id', '=', 'parents.id')
+            ->join('parents', 'eleves.parent_id', '=', 'parents.id')
             ->get()
             ->first();
         $classes = Classe::all();
@@ -275,6 +287,7 @@ class InscriptionController extends Controller
         $parent->par_email = $req->mail_parent;
 
         $parent->save();
+        // TODO: Update user login par la même occasion
         return Redirect::route('parent.info',['id' => $id])->with('status', 'Informations parent modifiés avec succès !');
     }
 
@@ -310,28 +323,30 @@ class InscriptionController extends Controller
         $eleve->prenoms = $prenom;
         $eleve->sexe = $sexe;
         $eleve->date_naissance = $date;
-        $eleve->person_a_contacter_nom = $pac_nom;
-        $eleve->person_a_contacter_tel = $pac_tel;
-        $eleve->person_a_contacter_lien = $pac_lien;
         $eleve->parent_id = $parent_id;
 
         $eleve->save();
 
         return $eleve;
     }
-
+    
     public function storeParent($nom, $prenom, $sexe, $tel, $email)
     {
-        $parent = new ParentEleve();
-        $parent->par_nom = $nom;
-        $parent->par_prenoms = $prenom;
-        $parent->par_sexe = $sexe;
-        $parent->par_tel = $tel;
-        $parent->par_email = $email;
-
-        $parent->save();
-
-        return $parent;
+        $parent = ParentEleve::where('par_tel', $tel)->first();
+        
+        if (!is_null($parent)) {
+            return $parent;
+        }
+        else {
+            $parent = new ParentEleve();
+            $parent->par_nom = $nom;
+            $parent->par_prenoms = $prenom;
+            $parent->par_sexe = $sexe;
+            $parent->par_tel = $tel;
+            $parent->par_email = $email;    
+            $parent->save();
+            return $parent;
+        }
     }
 
     public function storeScolarite($eleve, $classe, $anne_scolaire, $verser, $scolarite, $date_inscription)

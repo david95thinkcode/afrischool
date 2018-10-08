@@ -1,6 +1,11 @@
 export const rootURI = window.location.protocol + '//' + document.location.host + '/';
 
 export const Routes = {
+    emploiDuTemps: {
+        get: {
+            prof: rootURI.concat('api/emploi-du-temps/p/'),
+        },
+    },
     enseigner: {
         get: {
             forClasse: rootURI.concat('api/enseigner/c/'),

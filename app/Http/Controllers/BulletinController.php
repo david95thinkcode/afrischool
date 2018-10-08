@@ -238,6 +238,7 @@ class BulletinController extends Controller
         $results = $this->GetOrdoredNotesByTrimestre($idTrimestre, $matricule);
         
         if (!is_null($results)) {
+            $eleve = [];
             $eleve = $results['eleve'];
             $notesOrdonnes = $results['notesOrdonnes'];
             

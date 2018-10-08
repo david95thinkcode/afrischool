@@ -12,6 +12,7 @@ require('./textwriting');
 
 Vue.component('example', require('./components/Example.vue'));
 Vue.component('absence-create', require('./components/gestion-absence/AbsenceCreate.vue'));
+Vue.component('professeur-edt', require('./components/professeurs/ProfesseurEmploiDuTemps.vue'));
 
 const app = new Vue({
     el: '#vue-app'

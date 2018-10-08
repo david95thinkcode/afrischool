@@ -67,7 +67,8 @@ class ClasseController extends Controller
     public function show($id)
     {
         $c = Classe::find($id);
-        return response()->json($c, 200);
+
+        return view('dashboard.classes.show', compact('c'));
     }
 
     public function listclasse($niveau)

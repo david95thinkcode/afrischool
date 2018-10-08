@@ -22,12 +22,12 @@ Route::get('emploi-du-temps/p/{professeur}', 'EmploiDuTempsController@getForProf
 
 Route::post('absences/store', 'AbsenceController@storeFromJsPost');
 
+
 Route::prefix('enseigner')->group(function () {
+    Route::get('c/{classe}', 'EnseignerController@getForClasse');
     Route::post('cnd', 'EnseignerController@getForClasseAndDate');
-    Route::prefix('c')->group(function () {
-        Route::get('{classe}', 'EnseignerController@getForClasse');
-    });
 });
+
 
 Route::prefix('inscription')->group(function () {
     Route::prefix('c')->group(function () {

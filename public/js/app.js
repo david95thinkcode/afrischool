@@ -1806,6 +1806,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__routes_js__ = __webpack_require__("./resources/assets/js/routes.js");
 //
 //
 //
@@ -1817,27 +1818,81 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: {
         classe: {
             type: Number,
-            required: true,
-            default: ''
+            required: true
         }
     },
     data: function data() {
         return {
             matieres: [],
-            isFetching: false
+            isFetching: false,
+            error: ''
         };
     },
     mounted: function mounted() {
-        console.log('Component mounted.');
+        this.fetch();
     },
 
-    methods: {},
-    computed: {}
+    methods: {
+        fetch: function fetch() {
+            var _this = this;
+
+            this.isFetching = true;
+
+            axios.get(__WEBPACK_IMPORTED_MODULE_0__routes_js__["a" /* Routes */].enseigner.get.forClasse.concat(this.classe)).then(function (response) {
+                _this.matieres = response.data;
+            }).catch(function (error) {
+                _this.error = error;
+            }).finally(function () {
+                _this.isFetching = false;
+            });
+        }
+    },
+    computed: {
+        READY_FOR_SHOW: function READY_FOR_SHOW() {
+            return this.matieres.length > 0 && this.FETCHED ? true : false;
+        },
+        isErrored: function isErrored() {
+            return this.error === "" ? false : true;
+        },
+        FETCHED: function FETCHED() {
+            return this.isFetching ? false : true;
+        }
+    }
 });
 
 /***/ }),
@@ -33460,20 +33515,82 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", { staticClass: "panel panel-default" }, [
+    _vm._m(0),
+    _vm._v(" "),
+    _vm.READY_FOR_SHOW
+      ? _c("table", { staticClass: "table table-responsive" }, [
+          _vm._m(1),
+          _vm._v(" "),
+          _c(
+            "tbody",
+            _vm._l(_vm.matieres, function(m) {
+              return _c("tr", { key: m.id }, [
+                _c("td", [_vm._v(_vm._s(m.id))]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(m.intitule))]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(m.coefficient))]),
+                _vm._v(" "),
+                _c("td", [
+                  _vm._v(_vm._s(m.prof_prenoms) + " " + _vm._s(m.prof_nom))
+                ])
+              ])
+            })
+          )
+        ])
+      : _c("div", { staticClass: "panel-body" }, [
+          _vm.isFetching
+            ? _c("p", [_vm._v("Chargement en cours ...")])
+            : _c("div", [_c("h5", [_vm._v("Aucune matière trouvée !")])])
+        ]),
+    _vm._v(" "),
+    _vm.isErrored
+      ? _c("div", { staticClass: "panel-footer" }, [
+          _c("div", { staticClass: "alert alert-warning" }, [
+            _c("p", [_vm._v("Une erreur s'est produite")]),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-primary",
+                on: {
+                  click: function($event) {
+                    _vm.fetch()
+                  }
+                }
+              },
+              [_vm._v("Rééssayez ici")]
+            ),
+            _vm._v(" "),
+            _c("p", [_c("strong", [_vm._v(_vm._s(_vm.error))])])
+          ])
+        ])
+      : _vm._e()
+  ])
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "panel panel-default" }, [
-      _c("div", { staticClass: "panel-heading" }, [
-        _c("h5", [_vm._v("Matieres enseignées")])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "panel-body" }, [
-        _vm._v("\n        I'm an example component!\n    ")
+    return _c("div", { staticClass: "panel-heading" }, [
+      _c("h5", [_vm._v("Matieres enseignées")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("td", [_vm._v("#")]),
+        _vm._v(" "),
+        _c("td", [_vm._v("Matière")]),
+        _vm._v(" "),
+        _c("td", [_vm._v("Coefficient")]),
+        _vm._v(" "),
+        _c("td", [_vm._v("Enseignée par")])
       ])
     ])
   }

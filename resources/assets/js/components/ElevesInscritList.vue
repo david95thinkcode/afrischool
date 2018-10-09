@@ -9,31 +9,31 @@
                     <table class="table table-responsive" v-if="READY_FOR_SHOW">
                         <thead>
                             <tr>
-                                <th>N°</th>
+                                <th>#</th>
                                 <th>Elève</th>
                                 <th>Age</th>
                                 <th>Redoublant</th>
                                 <th>Inscrit le</th>
-                                <th>Parents & contact</th>
-                                <th>Paiements</th>
+                                <th>Contact du parent</th>
+                                <th>Paiement restant</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="ins in inscriptions" v-bind:key="ins.id">
-                                <td>{{ ins.id }}</td>
-                                <td>{{ ins.eleve.prenoms }} {{ ins.eleve.nom }}</td>
-                                <td>{{ getAge(ins.eleve.date_naissance) }}</td>
-                                <td>{{ ins.eleve.redoublant == 1 ? 'Oui' : 'Non' }}</td>
-                                <td>{{ ins.date_inscription }}</td>
-                                <td></td>
-                                <td></td>
+                            <tr v-for="ins in inscriptions" v-bind:key="ins.inscription">
+                                <td>{{ ins.inscription }}</td>
+                                <td>{{ ins.datas.prenoms }} {{ ins.datas.nom }}</td>
+                                <td>{{ getAge(ins.datas.date_naissance) }} ans</td>
+                                <td>{{ ins.datas.redoublant == 1 ? 'Oui' : 'Non' }}</td>
+                                <td>{{ ins.datas.date_inscription }}</td>
+                                <td>{{ ins.datas.par_tel }} / {{ ins.datas.par_email }}</td>
+                                <td>{{ ins.paiement.reste }}</td>
                             </tr>
                         </tbody>
                     </table>
                     <div class="panel-body" v-else>
                         <p v-if="isFetching">Chargement en cours ...</p>
                         <div v-else>
-                        <h5>Vide !</h5>
+                        <h5>Aucun élève trouvé !</h5>
                         <button @click="fetch()" class="btn btn-primary">Rééssayez ici</button>
                         </div>
                     </div>
@@ -74,7 +74,7 @@ import { Routes } from "../routes.js";
             fetch() {
                 this.isFetching = true;
 
-                axios.get(Routes.inscription.forClasse.concat(this.classe))
+                axios.get(Routes.inscription.basicsForClasse.concat(this.classe))
                 .then(response => {
                     this.inscriptions = response.data;
                 })
@@ -87,8 +87,8 @@ import { Routes } from "../routes.js";
                 });
             },
 
-            getAge($birthday) {
-
+            getAge(birthday) {
+                return new Date().getFullYear() - new Date(Date.parse(birthday)).getFullYear();
             }
         },
         computed: {

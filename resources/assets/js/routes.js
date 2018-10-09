@@ -26,5 +26,7 @@ export const Routes = {
     },
     inscription: {
         forClasse: rootURI.concat('api/inscription/c/'),
+        basicsForClasse: rootURI.concat('api/inscription/c/basics/'),
+        fullForClasse: rootURI.concat('api/inscription/c/full/'),
     },
 };

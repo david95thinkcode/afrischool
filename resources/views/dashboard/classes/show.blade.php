@@ -21,7 +21,7 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-sm-offset-2 col-sm-8">
+    <div class="col-sm-offset-1 col-sm-10">
         <div class="row">
             <div class="col-sm-12">
                 <classe-edt v-bind:classe={!! $c->id !!}></classe-edt>

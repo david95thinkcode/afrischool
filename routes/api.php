@@ -32,6 +32,8 @@ Route::prefix('enseigner')->group(function () {
 Route::prefix('inscription')->group(function () {
     Route::prefix('c')->group(function () {
         Route::get('{classe}', 'InscriptionController@getForClasse');
+        Route::get('basics/{classe}', 'InscriptionController@getBasicsForClasse');
+        Route::get('full/{classe}', 'InscriptionController@getFullForClasse');
     });
 });
 

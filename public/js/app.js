@@ -1743,7 +1743,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             this.isFetching = true;
 
-            axios.get(__WEBPACK_IMPORTED_MODULE_0__routes_js__["a" /* Routes */].inscription.forClasse.concat(this.classe)).then(function (response) {
+            axios.get(__WEBPACK_IMPORTED_MODULE_0__routes_js__["a" /* Routes */].inscription.basicsForClasse.concat(this.classe)).then(function (response) {
                 _this.inscriptions = response.data;
             }).catch(function (error) {
                 _this.error = error.message;
@@ -1752,7 +1752,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 _this.isFetching = false;
             });
         },
-        getAge: function getAge($birthday) {}
+        getAge: function getAge(birthday) {
+            return new Date().getFullYear() - new Date(Date.parse(birthday)).getFullYear();
+        }
     },
     computed: {
         READY_FOR_SHOW: function READY_FOR_SHOW() {
@@ -32920,32 +32922,40 @@ var render = function() {
                 _c(
                   "tbody",
                   _vm._l(_vm.inscriptions, function(ins) {
-                    return _c("tr", { key: ins.id }, [
-                      _c("td", [_vm._v(_vm._s(ins.id))]),
+                    return _c("tr", { key: ins.inscription }, [
+                      _c("td", [_vm._v(_vm._s(ins.inscription))]),
                       _vm._v(" "),
                       _c("td", [
                         _vm._v(
-                          _vm._s(ins.eleve.prenoms) +
+                          _vm._s(ins.datas.prenoms) +
                             " " +
-                            _vm._s(ins.eleve.nom)
+                            _vm._s(ins.datas.nom)
                         )
-                      ]),
-                      _vm._v(" "),
-                      _c("td", [
-                        _vm._v(_vm._s(_vm.getAge(ins.eleve.date_naissance)))
                       ]),
                       _vm._v(" "),
                       _c("td", [
                         _vm._v(
-                          _vm._s(ins.eleve.redoublant == 1 ? "Oui" : "Non")
+                          _vm._s(_vm.getAge(ins.datas.date_naissance)) + " ans"
                         )
                       ]),
                       _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(ins.date_inscription))]),
+                      _c("td", [
+                        _vm._v(
+                          _vm._s(ins.datas.redoublant == 1 ? "Oui" : "Non")
+                        )
+                      ]),
                       _vm._v(" "),
-                      _c("td"),
+                      _c("td", [_vm._v(_vm._s(ins.datas.date_inscription))]),
                       _vm._v(" "),
-                      _c("td")
+                      _c("td", [
+                        _vm._v(
+                          _vm._s(ins.datas.par_tel) +
+                            " / " +
+                            _vm._s(ins.datas.par_email)
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(ins.paiement.reste))])
                     ])
                   })
                 )
@@ -32954,7 +32964,7 @@ var render = function() {
                 _vm.isFetching
                   ? _c("p", [_vm._v("Chargement en cours ...")])
                   : _c("div", [
-                      _c("h5", [_vm._v("Vide !")]),
+                      _c("h5", [_vm._v("Aucun élève trouvé !")]),
                       _vm._v(" "),
                       _c(
                         "button",
@@ -33000,7 +33010,7 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("thead", [
       _c("tr", [
-        _c("th", [_vm._v("N°")]),
+        _c("th", [_vm._v("#")]),
         _vm._v(" "),
         _c("th", [_vm._v("Elève")]),
         _vm._v(" "),
@@ -33010,9 +33020,9 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", [_vm._v("Inscrit le")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Parents & contact")]),
+        _c("th", [_vm._v("Contact du parent")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Paiements")])
+        _c("th", [_vm._v("Paiement restant")])
       ])
     ])
   }
@@ -45212,7 +45222,9 @@ var Routes = {
         }
     },
     inscription: {
-        forClasse: rootURI.concat('api/inscription/c/')
+        forClasse: rootURI.concat('api/inscription/c/'),
+        basicsForClasse: rootURI.concat('api/inscription/c/basics/'),
+        fullForClasse: rootURI.concat('api/inscription/c/full/')
     }
 };
 

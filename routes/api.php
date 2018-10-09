@@ -19,6 +19,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::get('classes/fetch', 'ClasseController@fetch');
 Route::get('emploi-du-temps/p/{professeur}', 'EmploiDuTempsController@getForProfesseur');
+Route::get('emploi-du-temps/c/{classe}', 'EmploiDuTempsController@getForClasse');
 
 Route::post('absences/store', 'AbsenceController@storeFromJsPost');
 

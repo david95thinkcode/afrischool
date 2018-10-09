@@ -4,6 +4,7 @@ export const Routes = {
     emploiDuTemps: {
         get: {
             prof: rootURI.concat('api/emploi-du-temps/p/'),
+            classe: rootURI.concat('api/emploi-du-temps/c/'),
         },
     },
     enseigner: {

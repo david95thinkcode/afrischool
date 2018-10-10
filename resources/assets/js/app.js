@@ -13,6 +13,9 @@ require('./textwriting');
 Vue.component('example', require('./components/Example.vue'));
 Vue.component('absence-create', require('./components/gestion-absence/AbsenceCreate.vue'));
 Vue.component('professeur-edt', require('./components/professeurs/ProfesseurEmploiDuTemps.vue'));
+Vue.component('eleves-inscrits-list', require('./components/ElevesInscritList.vue'));
+Vue.component('matieres-enseigner', require('./components/MatieresEnseigner.vue'));
+Vue.component('classe-edt', require('./components/ClasseEmploiDuTemps.vue'));
 
 const app = new Vue({
     el: '#vue-app'

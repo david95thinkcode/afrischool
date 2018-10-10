@@ -199,6 +199,87 @@ class InscriptionController extends Controller
     }
 
     /**
+     * Retourne tout concernant une classe
+     * 
+     */
+    public function getFullForClasse($classe)
+    {
+        // TODO: finish it
+        
+        $inscriptions = DB::table('inscriptions')
+        ->where('inscriptions.classe_id', '=', $classe)
+        ->join('eleves', 'inscriptions.eleve_id', 'eleves.id')
+        ->join('parents', 'eleves.parent_id', 'parents.id')
+        ->join('classes', 'inscriptions.classe_id', 'classes.id')
+        ->join('enseigner', 'classes.id', 'enseigner.classe_id')
+        ->join('matieres', 'enseigner.matiere_id', 'matieres.id')
+        ->select('*', 'inscriptions.id as inscription_key', 'classes.id as classe_key', 
+            'eleves.id as eleve_key', 'parents.id as parent_key', 'enseigner.id as enseigner_key',
+            'matieres.id as matiere_key')
+        ->get();
+
+        // $ar = [];
+        // foreach ($inscriptions as $key => $i) {
+        //     array_push($ar, $i->inscription_key);
+        // }
+        // $paiements = PaiementScolarite::where('inscription_id', $)
+        return (json_encode($inscriptions));
+    }
+    
+    /**
+     * Retourne des informations sur les élèves et inscriptions d'une classes
+     * Tables utilisées : inscriptions, eleves, parents, classes, paiement_scolarite
+     * 
+     * @param integer $classe
+     * @return JSON {inscription: integer, datas: {}, paiement: {}}
+     */
+    public function getBasicsForClasse($classe)
+    {
+        $distinctInscription = [];
+        $returnable = [];
+        
+        $inscriptions = DB::table('inscriptions')
+        ->where('inscriptions.classe_id', '=', $classe)
+        ->join('eleves', 'inscriptions.eleve_id', 'eleves.id')
+        ->join('parents', 'eleves.parent_id', 'parents.id')
+        ->join('classes', 'inscriptions.classe_id', 'classes.id')
+        ->select('*', 'inscriptions.id as inscription_key', 'classes.id as classe_key', 
+            'eleves.id as eleve_key', 'parents.id as parent_key')
+        ->get();
+        
+        // Try des matricules
+        foreach ($inscriptions as $key => $i) {
+
+            if (!isset($distinctInscription[$i->inscription_key])) {
+                
+                $matricule = $i->inscription_key;
+                $concerned = $inscriptions->first(function ($value, $key) use ($matricule) {
+                    return $value->inscription_key == $matricule;
+                });
+
+                array_push($distinctInscription, $matricule); // Critical
+
+                // Paiement details
+                $p = new \StdClass();
+                $p->inscription = $matricule;
+                $p->paid = PaiementScolarite::where('inscription_id', $matricule)->sum('montant');
+                $p->reste = $concerned->montant_scolarite - $p->paid;
+                
+                // Ordering datas to return
+                $object = new \StdClass();
+                $object->inscription = $matricule;
+                $object->datas = $concerned;
+                $object->paiement = $p;
+
+                array_push($returnable, $object);
+            }
+        }
+
+        return response()->json($returnable, 200);
+    }
+
+
+    /**
      * Display the specified resource.
      *
      * @param integer $id

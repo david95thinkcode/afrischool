@@ -42,6 +42,8 @@
                             </div>
                         </td>
                         <td>
+                            <a href="{{ route('classe.show', ['id' => $c->id]) }}" class="btn btn-sm btn-info">Afficher</a>
+
                             <a href="{{ route('classe.edit', ['id' => $c->id]) }}" class="btn btn-sm btn-warning">Modifier</a>
 
                             <form action="{{ route('classe.destroy', $c->id) }}" method="post" class='table-del-btn' onsubmit="return confirm('Cette action est irréversible. Etes vous sûr de vouloir supprimer cette classe?');">

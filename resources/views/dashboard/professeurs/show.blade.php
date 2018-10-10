@@ -12,6 +12,20 @@
 <div class='row'>
     <div class="col-sm-12">
         <div>
+            <div class="col-md-offset-4 col-md-7">
+                <ul class="list-inline ">
+                    <li>
+                        <a href="{{ route('professeurs.list') }}" class="btn btn-sm btn-primary">
+                            Liste des professeurs
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('professeurs.edit', ['id' => $p->id] ) }}" class="btn btn-sm btn-warning">
+                            Modifier informations
+                        </a>
+                    </li>
+                </ul>
+            </div>
             <div class="row">
                 <div class="col-sm-5">
                     <div class="row">
@@ -132,9 +146,7 @@
                     </div>
                 </div>
             </div>
-            
         </div>
-        
     </div>
 </div>
 @endsection

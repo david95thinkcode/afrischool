@@ -57,7 +57,7 @@
                                 @endif
 
                                 <li><a href="{{ route('professeurs.index') }}">Liste par classe</a></li>
-                                <li><a href="{{ route('professeurs.list') }}">Liste complète</a>
+                                <li><a href="{{ route('professeurs.list') }}">Liste complète</a></li>
                             </ul>
                         </li>
 

@@ -1666,6 +1666,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -1724,6 +1726,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__routes_js__ = __webpack_require__("./resources/assets/js/routes.js");
+//
+//
 //
 //
 //
@@ -1867,6 +1871,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__routes_js__ = __webpack_require__("./resources/assets/js/routes.js");
+//
+//
 //
 //
 //
@@ -33024,101 +33030,100 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "container" }, [
-    _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-sm-12" }, [
-        _c("div", { staticClass: "panel panel-default" }, [
-          _vm._m(0),
-          _vm._v(" "),
-          _vm.READY_FOR_SHOW
-            ? _c("table", { staticClass: "table table-responsive" }, [
-                _vm._m(1),
-                _vm._v(" "),
-                _c(
-                  "tbody",
-                  _vm._l(_vm.inscriptions, function(ins) {
-                    return _c("tr", { key: ins.inscription }, [
-                      _c("td", [_vm._v(_vm._s(ins.inscription))]),
-                      _vm._v(" "),
-                      _c("td", [
-                        _vm._v(
-                          _vm._s(ins.datas.prenoms) +
-                            " " +
-                            _vm._s(ins.datas.nom)
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("td", [
-                        _vm._v(
-                          _vm._s(_vm.getAge(ins.datas.date_naissance)) + " ans"
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("td", [
-                        _vm._v(
-                          _vm._s(ins.datas.redoublant == 1 ? "Oui" : "Non")
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(ins.datas.date_inscription))]),
-                      _vm._v(" "),
-                      _c("td", [
-                        _vm._v(
-                          _vm._s(ins.datas.par_tel) +
-                            " / " +
-                            _vm._s(ins.datas.par_email)
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(ins.paiement.reste))])
-                    ])
-                  })
-                )
-              ])
-            : _c("div", { staticClass: "panel-body" }, [
-                _vm.isFetching
-                  ? _c("p", [_vm._v("Chargement en cours ...")])
-                  : _c("div", [
-                      _c("h5", [_vm._v("Aucun élève trouvé !")]),
-                      _vm._v(" "),
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-primary",
-                          on: {
-                            click: function($event) {
-                              _vm.fetch()
-                            }
-                          }
-                        },
-                        [_vm._v("Rééssayez ici")]
-                      )
-                    ])
-              ]),
-          _vm._v(" "),
-          _vm.isErrored
-            ? _c("div", { staticClass: "panel-footer" }, [
-                _c("div", { staticClass: "alert alert-warning" }, [
-                  _c("p", [_vm._v("Une erreur s'est produite")]),
-                  _vm._v(" "),
-                  _c("p", [_c("strong", [_vm._v(_vm._s(_vm.error))])])
+  return _c("div", { staticClass: "row" }, [
+    _c("div", { staticClass: "col-sm-12" }, [
+      _c("div", { staticClass: "panel panel-primary" }, [
+        _c("div", { staticClass: "panel-heading" }, [
+          _c("h5", [
+            _vm._v("\n                     Elèves inscrits "),
+            _vm.READY_FOR_SHOW
+              ? _c("span", { staticClass: "badge" }, [
+                  _vm._v(
+                    "  Total inscrits : " + _vm._s(_vm.inscriptions.length)
+                  )
                 ])
+              : _vm._e()
+          ])
+        ]),
+        _vm._v(" "),
+        _vm.READY_FOR_SHOW
+          ? _c("table", { staticClass: "table table-responsive" }, [
+              _vm._m(0),
+              _vm._v(" "),
+              _c(
+                "tbody",
+                _vm._l(_vm.inscriptions, function(ins, index) {
+                  return _c("tr", { key: ins.inscription }, [
+                    _c("td", [_vm._v(_vm._s(index + 1))]),
+                    _vm._v(" "),
+                    _c("td", [
+                      _vm._v(
+                        _vm._s(ins.datas.prenoms) + " " + _vm._s(ins.datas.nom)
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("td", [
+                      _vm._v(
+                        _vm._s(_vm.getAge(ins.datas.date_naissance)) + " ans"
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(ins.datas.sexe))]),
+                    _vm._v(" "),
+                    _c("td", [
+                      _vm._v(_vm._s(ins.datas.redoublant == 1 ? "Oui" : "Non"))
+                    ]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(ins.datas.date_inscription))]),
+                    _vm._v(" "),
+                    _c("td", [
+                      _vm._v(
+                        _vm._s(ins.datas.par_tel) +
+                          " / " +
+                          _vm._s(ins.datas.par_email)
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(ins.paiement.reste) + " FCFA ")])
+                  ])
+                })
+              )
+            ])
+          : _c("div", { staticClass: "panel-body" }, [
+              _vm.isFetching
+                ? _c("p", [_vm._v("Chargement en cours ...")])
+                : _c("div", [
+                    _c("h5", [_vm._v("Aucun élève trouvé !")]),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-primary",
+                        on: {
+                          click: function($event) {
+                            _vm.fetch()
+                          }
+                        }
+                      },
+                      [_vm._v("Rééssayez ici")]
+                    )
+                  ])
+            ]),
+        _vm._v(" "),
+        _vm.isErrored
+          ? _c("div", { staticClass: "panel-footer" }, [
+              _c("div", { staticClass: "alert alert-warning" }, [
+                _c("p", [_vm._v("Une erreur s'est produite")]),
+                _vm._v(" "),
+                _c("p", [_c("strong", [_vm._v(_vm._s(_vm.error))])])
               ])
-            : _vm._e()
-        ])
+            ])
+          : _vm._e()
       ])
     ])
   ])
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "panel-heading" }, [
-      _c("h5", [_vm._v("Elèves inscrits")])
-    ])
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -33130,6 +33135,8 @@ var staticRenderFns = [
         _c("th", [_vm._v("Elève")]),
         _vm._v(" "),
         _c("th", [_vm._v("Age")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Sexe")]),
         _vm._v(" "),
         _c("th", [_vm._v("Redoublant")]),
         _vm._v(" "),
@@ -33160,7 +33167,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "panel panel-default" }, [
+  return _c("div", { staticClass: "panel panel-primary" }, [
     _vm._m(0),
     _vm._v(" "),
     _vm.READY_FOR_SHOW
@@ -33169,8 +33176,10 @@ var render = function() {
           _vm._v(" "),
           _c(
             "tbody",
-            _vm._l(_vm.emploiDuTemps, function(edt) {
+            _vm._l(_vm.emploiDuTemps, function(edt, index) {
               return _c("tr", { key: edt.matiere }, [
+                _c("th", [_vm._v(_vm._s(index))]),
+                _vm._v(" "),
                 _c("th", [_vm._v(_vm._s(edt.day))]),
                 _vm._v(" "),
                 _c(
@@ -33186,6 +33195,7 @@ var render = function() {
                 _vm._v(" "),
                 _c(
                   "td",
+                  {},
                   _vm._l(edt.datas, function(data) {
                     return _c("tr", { key: data.id }, [
                       _c("td", [_c("strong", [_vm._v(_vm._s(data.intitule))])])
@@ -33241,6 +33251,8 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("thead", [
       _c("tr", [
+        _c("th", [_vm._v("#")]),
+        _vm._v(" "),
         _c("th", [_vm._v("Jour")]),
         _vm._v(" "),
         _c("th", [_vm._v("Horaire")]),
@@ -33649,22 +33661,33 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "panel panel-default" }, [
-    _vm._m(0),
+  return _c("div", { staticClass: "panel panel-primary" }, [
+    _c("div", { staticClass: "panel-heading" }, [
+      _c("h5", [
+        _vm._v("Matieres enseignées\n            "),
+        _vm.READY_FOR_SHOW
+          ? _c("span", { staticClass: "badge" }, [
+              _vm._v(" Total trouvé : " + _vm._s(_vm.matieres.length))
+            ])
+          : _vm._e()
+      ])
+    ]),
     _vm._v(" "),
     _vm.READY_FOR_SHOW
       ? _c("table", { staticClass: "table table-responsive" }, [
-          _vm._m(1),
+          _vm._m(0),
           _vm._v(" "),
           _c(
             "tbody",
-            _vm._l(_vm.matieres, function(m) {
+            _vm._l(_vm.matieres, function(m, index) {
               return _c("tr", { key: m.id }, [
-                _c("td", [_vm._v(_vm._s(m.id))]),
+                _c("td", [_vm._v(_vm._s(index + 1))]),
                 _vm._v(" "),
                 _c("td", [_vm._v(_vm._s(m.intitule))]),
                 _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(m.coefficient))]),
+                _c("td", { staticClass: "text-center" }, [
+                  _vm._v(_vm._s(m.coefficient))
+                ]),
                 _vm._v(" "),
                 _c("td", [
                   _vm._v(_vm._s(m.prof_prenoms) + " " + _vm._s(m.prof_nom))
@@ -33708,23 +33731,15 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "panel-heading" }, [
-      _c("h5", [_vm._v("Matieres enseignées")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
     return _c("thead", [
       _c("tr", [
-        _c("td", [_vm._v("#")]),
+        _c("th", [_vm._v("#")]),
         _vm._v(" "),
-        _c("td", [_vm._v("Matière")]),
+        _c("th", [_vm._v("Matière")]),
         _vm._v(" "),
-        _c("td", [_vm._v("Coefficient")]),
+        _c("th", { staticClass: "text-center" }, [_vm._v("Coefficient")]),
         _vm._v(" "),
-        _c("td", [_vm._v("Enseignée par")])
+        _c("th", [_vm._v("Enseignée par")])
       ])
     ])
   }

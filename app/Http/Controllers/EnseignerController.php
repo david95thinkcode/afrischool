@@ -151,6 +151,7 @@ class EnseignerController extends Controller
                     ->join('classes', 'enseigner.classe_id', '=', 'classes.id')                    
                     ->join('professeurs', 'enseigner.professeur_id', '=', 'professeurs.id')
                     ->join('matieres', 'enseigner.matiere_id', '=', 'matieres.id')
+                    ->select('*', 'enseigner.id as enseigner_key')
                     // ->select('enseigner.id', 'enseigner.coefficient', 'enseigner.professeur_id', 'classes.cla_intitule', 'matieres.intitule', 'professeurs.prof_nom', 'professeurs.prof_prenoms')
                     ->get();
 

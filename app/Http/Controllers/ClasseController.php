@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Requests\StoreClasseRequest;
 use App\Http\Requests\UpdateClasseRequest;
+use App\Models\Fourniture;
 
 class ClasseController extends Controller
 {
@@ -67,7 +68,9 @@ class ClasseController extends Controller
     public function show($id)
     {
         $c = Classe::find($id);
-        return response()->json($c, 200);
+        $fournitures = Fourniture::where('classe_id', $c->id)->first();
+
+        return view('dashboard.classes.show', compact('c', 'fournitures'));
     }
 
     public function listclasse($niveau)

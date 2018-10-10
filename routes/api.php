@@ -19,19 +19,22 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::get('classes/fetch', 'ClasseController@fetch');
 Route::get('emploi-du-temps/p/{professeur}', 'EmploiDuTempsController@getForProfesseur');
+Route::get('emploi-du-temps/c/{classe}', 'EmploiDuTempsController@getForClasse');
 
 Route::post('absences/store', 'AbsenceController@storeFromJsPost');
 
+
 Route::prefix('enseigner')->group(function () {
+    Route::get('c/{classe}', 'EnseignerController@getForClasse');
     Route::post('cnd', 'EnseignerController@getForClasseAndDate');
-    Route::prefix('c')->group(function () {
-        Route::get('{classe}', 'EnseignerController@getForClasse');
-    });
 });
+
 
 Route::prefix('inscription')->group(function () {
     Route::prefix('c')->group(function () {
         Route::get('{classe}', 'InscriptionController@getForClasse');
+        Route::get('basics/{classe}', 'InscriptionController@getBasicsForClasse');
+        Route::get('full/{classe}', 'InscriptionController@getFullForClasse');
     });
 });
 

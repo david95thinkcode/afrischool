@@ -10,6 +10,7 @@ class NoteByMatiere
 
     public $key;
     public $label;
+    public $eleve;
     public $coef;
     public $isCollege;
     public $notes = [];
@@ -65,6 +66,15 @@ class NoteByMatiere
     public function getCoef()
     {
         return $this->coef;
+    }
+
+    public function setEleve(AboutEleve $eleve)
+    {
+        $this->eleve = $eleve;
+    }
+
+    public function getEleve() {
+        return $this->eleve;
     }
 
     /**

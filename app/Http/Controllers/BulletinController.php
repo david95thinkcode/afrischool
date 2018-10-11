@@ -15,6 +15,9 @@ use Illuminate\Support\Facades\DB;
 use App\CustomClasses\NoteByMatiere;
 use App\CustomClasses\NoteByTrimestre;
 use App\CustomClasses\AvgByTrimestre;
+use App\CustomClasses\AboutEleve;
+use Illuminate\Support\Collection;
+use App\CustomClasses\SuperBulletin;
 
 class BulletinController extends Controller
 {
@@ -227,48 +230,29 @@ class BulletinController extends Controller
     }
 
     /**
-     * Affiche le bulletin pour un trimestre donné
-     *
-     * @param int $idTrimestre
-     * @param int $matricule : numéro de l'élève dans la table inscription
-     * @return View
+     * 
+     * @param Inscription $concernedInscription : Eleve concerné
+     * @param Collection $trimestres : Tous les trimestre de la DB
+     * @param Collection $enseigner : Collection des matières enseignées dans la classe de l'élève
+     * @param Collection $everybodysNotesInClassroom : Collection des notes de tous les élèves de la classe
+     * @param Collection $elevesInClassroom : Collections des instances du model "Inscription" des élèves de la classe
+     * @return \App\CustomClasses\NoteByTrimestre
+     * 
      */
-    public function AvgByTrimestreWithRangeAndNumber($idTrimestre, $matricule)
+    private function getBulletin(
+        Inscription $concernedInscription, 
+        Collection $trimestres,
+        Collection $enseigner, 
+        Collection $everybodysNotesInClassroom,
+        Collection $elevesInClassroom)
     {
         $avgbt;
         $nbt = new NoteByTrimestre();
-        $trimestres = Trimestre::all();
-        $concernedInscription = Inscription::find($matricule);
-
-        // Toures les matières enseignées dans la classe de l'élève concerné
-        $enseigner = DB::table('enseigner')
-        ->where('classe_id', $concernedInscription->classe_id)
-        ->join('matieres', 'enseigner.matiere_id', 'matieres.id')
-        ->select('*')
-        ->get();
-
-        // Tous les élèves inscrits dans la même classe 
-        $elevesInClassroom = DB::table('inscriptions')
-        ->where('inscriptions.classe_id', $concernedInscription->classe_id)
-        ->join('eleves', 'inscriptions.eleve_id', 'eleves.id')
-        ->select('*')
-        ->get();
-
-        // Toutes les notes des élèves dans cette même classe
-        $everybodysNotesInClassroom = DB::table('notes')
-        ->where('classe_id', $concernedInscription->classe_id)
-        ->join('classes', 'notes.classe_id', 'classes.id')
-        ->join('matieres', 'notes.matiere_id', 'matieres.id')
-        ->join('eleves', 'notes.eleve_id', 'eleves.id')
-        ->join('types_evaluation', 'notes.types_evaluation_id', 'types_evaluation.id')
-        ->select('*', 'classes.id as classe_key', 'matieres.id as matiere_key',
-          'eleves.id as eleve_key')
-        ->get();
-
+        
         // Notes de l'élève concerné
         $currentEleveNotes = $everybodysNotesInClassroom
-            ->where('eleve_key', $concernedInscription->eleve_id);
-               
+        ->where('eleve_key', $concernedInscription->eleve_id);
+        
         $isCollege = $everybodysNotesInClassroom[0]->estCollege;
                 
         foreach ($trimestres as $tKey => $trimestre) {
@@ -277,15 +261,22 @@ class BulletinController extends Controller
                 $currentMatiere = $eValue->matiere_id;
                 
                 $nbm = new NoteByMatiere($currentMatiere, $eValue->intitule, $isCollege);
-                $nbm->setCoef(Enseigner::where([['classe_id', $concernedInscription->classe_id], ['matiere_id', $currentMatiere]])->first()->coefficient);
-
+                $nbm->setCoef($enseigner->where('matiere_id', $currentMatiere)->first()->coefficient);
+                
                 $currentMatNotes = $currentEleveNotes
                     ->where('matiere_id', $currentMatiere)
                     ->where('trimestre_id', $trimestre->id);
+                
                 foreach ($currentMatNotes as $cmnKey => $cmnValue) {
                     $nbm->addNote($cmnValue);
                 }
-                $nbm->calculateAvgs();
+                
+                $nbm->calculateAvgs(); //obligatoire
+                $nbm->setEleve(new AboutEleve($concernedInscription->id, $concernedInscription->eleve_id));
+                $nbm->getEleve()->setNom($concernedInscription->eleve->nom);
+                $nbm->getEleve()->setPrenom($concernedInscription->eleve->prenoms);
+                $nbm->getEleve()->setSex($concernedInscription->eleve->sexe);
+                
                 switch ($trimestre->id) {
                     case 1:
                         # trimestre 1...
@@ -305,11 +296,64 @@ class BulletinController extends Controller
         }
 
         $avgbt = new AvgByTrimestre($nbt);
-        // TODO: a suivre
-        dd($avgbt);
+        
+        return $avgbt;
+    }
+
+    /**
+     * Affiche le bulletin pour un trimestre donné
+     *
+     * @param int $idTrimestre
+     * @param int $matricule : numéro de l'élève dans la table inscription
+     * @return View
+     */
+    public function AvgByTrimestreWithRangeAndNumber($idTrimestre, $matricule)
+    {
+        $concernedInscription = Inscription::with('eleve')->find($matricule);
+        $concernedClasse = $concernedInscription->classe_id;
+        $trimestres = Trimestre::all();
+        
+        // Tous les élèves inscrits dans la même classe 
+        $elevesInClassroom = Inscription::with('eleve')
+            ->where('classe_id', $concernedClasse)
+        ->get();        
+
+        // Toures les matières enseignées dans la classe de l'élève concerné
+        $enseigner = DB::table('enseigner')
+            ->where('classe_id', $concernedClasse)
+            ->join('matieres', 'enseigner.matiere_id', 'matieres.id')
+            ->select('*')
+        ->get();
+        
+        // Toutes les notes des élèves dans cette même classe
+        $everybodysNotesInClassroom = DB::table('notes')
+            ->where('classe_id', $concernedClasse)
+            ->join('classes', 'notes.classe_id', 'classes.id')
+            ->join('matieres', 'notes.matiere_id', 'matieres.id')
+            ->join('eleves', 'notes.eleve_id', 'eleves.id')
+            ->join('types_evaluation', 'notes.types_evaluation_id', 'types_evaluation.id')
+            ->select('*', 'classes.id as classe_key', 'matieres.id as matiere_key', 'eleves.id as eleve_key')
+        ->get();
+        
+        $friends = $elevesInClassroom->whereNotIn('id', $matricule); // Les autres élèves de la classe
+        $friendsAvg = []; // Moyennes des autres élèves de la classe
+        
+        $moyennesEleveActuel = $this->getBulletin($concernedInscription, $trimestres, $enseigner, $everybodysNotesInClassroom, $elevesInClassroom);
+        $bulletin = new SuperBulletin($moyennesEleveActuel);
+        
+        // Elaboration du belletin
+        foreach ($friends as $fk => $friendValue) {
+            $averages = $this->getBulletin($friendValue, $trimestres, $enseigner, $everybodysNotesInClassroom, $elevesInClassroom);
+            array_push($friendsAvg, $averages);
+            $bulletin->addFriendAvg($averages); // important
+        }
+        
+        $bulletin->setEleve($concernedInscription);
+        $bulletin->finish(); // Obligatoire
+
+        return response()->json($bulletin, 200);
         
 
-        return response()->json($nbt);
         // ///////////////////////
         $rang;
         $avgs = [];

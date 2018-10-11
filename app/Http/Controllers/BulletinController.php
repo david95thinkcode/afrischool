@@ -253,7 +253,7 @@ class BulletinController extends Controller
         $currentEleveNotes = $everybodysNotesInClassroom
         ->where('eleve_key', $concernedInscription->eleve_id);
         
-        $isCollege = $everybodysNotesInClassroom[0]->estCollege;
+        $isCollege = $concernedInscription->classe->estCollege;
                 
         foreach ($trimestres as $tKey => $trimestre) {
             
@@ -309,7 +309,7 @@ class BulletinController extends Controller
      */
     public function AvgByTrimestreWithRangeAndNumber($idTrimestre, $matricule)
     {
-        $concernedInscription = Inscription::with('eleve')->find($matricule);
+        $concernedInscription = Inscription::with('eleve', 'classe')->find($matricule);
         $concernedClasse = $concernedInscription->classe_id;
         $trimestres = Trimestre::all();
         

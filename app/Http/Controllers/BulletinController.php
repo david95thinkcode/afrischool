@@ -52,6 +52,61 @@ class BulletinController extends Controller
         return view('dashboard.bulletins.step-2', compact('years', 'classes'));
     }
 
+    /**
+     * Retourne l'objet bulletin correspondant 
+     * à l'élève dont le matricule est fourni
+     * 
+     * @param integer $matricule représente => InscriptionId
+     * @return \App\CustomClasses\SuperBulletin
+     * 
+     */
+    public function getBulletinOf($matricule)
+    {
+        $concernedInscription = Inscription::with('eleve', 'classe')->find($matricule);
+        $concernedClasse = $concernedInscription->classe_id;
+        $trimestres = Trimestre::all();
+        
+        // Tous les élèves inscrits dans la même classe 
+        $elevesInClassroom = Inscription::with('eleve')
+            ->where('classe_id', $concernedClasse)
+        ->get();        
+
+        // Toures les matières enseignées dans la classe de l'élève concerné
+        $enseigner = DB::table('enseigner')
+            ->where('classe_id', $concernedClasse)
+            ->join('matieres', 'enseigner.matiere_id', 'matieres.id')
+            ->select('*')
+        ->get();
+        
+        // Toutes les notes des élèves dans cette même classe
+        $everybodysNotesInClassroom = DB::table('notes')
+            ->where('classe_id', $concernedClasse)
+            ->join('classes', 'notes.classe_id', 'classes.id')
+            ->join('matieres', 'notes.matiere_id', 'matieres.id')
+            ->join('eleves', 'notes.eleve_id', 'eleves.id')
+            ->join('types_evaluation', 'notes.types_evaluation_id', 'types_evaluation.id')
+            ->select('*', 'classes.id as classe_key', 'matieres.id as matiere_key', 'eleves.id as eleve_key')
+        ->get();
+        
+        $friends = $elevesInClassroom->whereNotIn('id', $matricule); // Les autres élèves de la classe
+        $friendsAvg = []; // Moyennes des autres élèves de la classe
+        
+        $moyennesEleveActuel = $this->getBulletin($concernedInscription, $trimestres, $enseigner, $everybodysNotesInClassroom, $elevesInClassroom);
+        $bulletin = new SuperBulletin($moyennesEleveActuel);
+        
+        // Elaboration du belletin
+        foreach ($friends as $fk => $friendValue) {
+            $averages = $this->getBulletin($friendValue, $trimestres, $enseigner, $everybodysNotesInClassroom, $elevesInClassroom);
+            array_push($friendsAvg, $averages);
+            $bulletin->addFriendAvg($averages); // important
+        }
+        
+        $bulletin->setEleve($concernedInscription);
+        $bulletin->finish(); // Obligatoire
+
+        return $bulletin;
+    }
+
     public function ListEleves(StoreCriteresBulletinRequest $req)
     {
         $niveau = session()->pull('niveau'); //netoyage de la variable de session
@@ -307,54 +362,11 @@ class BulletinController extends Controller
      * @param int $matricule : numéro de l'élève dans la table inscription
      * @return View
      */
-    public function AvgByTrimestreWithRangeAndNumber($idTrimestre, $matricule)
+    public function AverageByTrimestre($idTrimestre, $matricule)
     {
-        $concernedInscription = Inscription::with('eleve', 'classe')->find($matricule);
-        $concernedClasse = $concernedInscription->classe_id;
-        $trimestres = Trimestre::all();
+        $completeBulletin = $this->getBulletinOf($matricule);
         
-        // Tous les élèves inscrits dans la même classe 
-        $elevesInClassroom = Inscription::with('eleve')
-            ->where('classe_id', $concernedClasse)
-        ->get();        
-
-        // Toures les matières enseignées dans la classe de l'élève concerné
-        $enseigner = DB::table('enseigner')
-            ->where('classe_id', $concernedClasse)
-            ->join('matieres', 'enseigner.matiere_id', 'matieres.id')
-            ->select('*')
-        ->get();
-        
-        // Toutes les notes des élèves dans cette même classe
-        $everybodysNotesInClassroom = DB::table('notes')
-            ->where('classe_id', $concernedClasse)
-            ->join('classes', 'notes.classe_id', 'classes.id')
-            ->join('matieres', 'notes.matiere_id', 'matieres.id')
-            ->join('eleves', 'notes.eleve_id', 'eleves.id')
-            ->join('types_evaluation', 'notes.types_evaluation_id', 'types_evaluation.id')
-            ->select('*', 'classes.id as classe_key', 'matieres.id as matiere_key', 'eleves.id as eleve_key')
-        ->get();
-        
-        $friends = $elevesInClassroom->whereNotIn('id', $matricule); // Les autres élèves de la classe
-        $friendsAvg = []; // Moyennes des autres élèves de la classe
-        
-        $moyennesEleveActuel = $this->getBulletin($concernedInscription, $trimestres, $enseigner, $everybodysNotesInClassroom, $elevesInClassroom);
-        $bulletin = new SuperBulletin($moyennesEleveActuel);
-        
-        // Elaboration du belletin
-        foreach ($friends as $fk => $friendValue) {
-            $averages = $this->getBulletin($friendValue, $trimestres, $enseigner, $everybodysNotesInClassroom, $elevesInClassroom);
-            array_push($friendsAvg, $averages);
-            $bulletin->addFriendAvg($averages); // important
-        }
-        
-        $bulletin->setEleve($concernedInscription);
-        $bulletin->finish(); // Obligatoire
-
-
-        dd($bulletin);
-        return response()->json($bulletin, 200);
-        
+        dd($completeBulletin);
     }
 
 
@@ -365,32 +377,11 @@ class BulletinController extends Controller
      * @param [type] $matricule
      * @return void
      */
-    public function FinalAvgWithRangeAndNumber($matricule)
+    public function FinalAverage($matricule)
     {
-        $avgs = []; // Moyenne des autres éléèves de la classe
-
-        $eleve = Inscription::find($matricule)->first();
-        $eleves = Inscription::with('eleve')
-                ->where('classe_id', $eleve->classe_id)
-                ->whereNotIn('id', [$matricule])->get();        
+        $completeBulletin = $this->getBulletinOf($matricule);
         
-        foreach ($eleves as $key => $InscriptionModel) {
-            $data = $this->ShowFinal($matricule);
-            array_push($avgs, $data['moyenneGenerale']);
-        }
-
-        $effectif = $this->getEffectif($eleve->classe_id, $eleve->annee_scolaire_id);
-        $moyEleve = $this->ShowFinal($matricule);
-        array_push($avgs, $moyEleve);
-        $rang = $this->getRange($moyEleve, $avgs);
-        
-        $toReturn = [
-            "rang" => $rang,
-            "effectif" => $effectif,
-            "moyennes" => $moyEleve
-        ];
-
-        return $toReturn;
+        return response()->json($completeBulletin, 200);
     }
 
     /**

@@ -7,16 +7,12 @@
                 <div class="panel-body">
                     <div class="text-center">
                         <h3 class="mb-1 text-center">Vous désirez gérer ...</h3>
-                        <a href="{!! route('notes.create', ['niveau' => 'PRM']) !!}" class="btn btn-warning">
+                        <a href="{!! route('notes.create', ['niveau' => 'PRM']) !!}" class="btn btn-lg btn-warning">
                             Primaire
                         </a>
-
-                        <a href="{!! route('notes.create', ['niveau' => 'CLG']) !!}" class="btn btn-success">
+                        ou  
+                        <a href="{!! route('notes.create', ['niveau' => 'CLG']) !!}" class="btn btn-lg btn-success">
                             Collège
-                        </a>
-
-                        <a href="{!! route('notes.create', ['niveau' => 'UNV']) !!}" class="btn btn-info">
-                            Université
                         </a>
                     </div>
                 </div>

@@ -11,6 +11,10 @@ use App\Models\Inscription;
 use App\Models\Matiere;
 use App\Models\Note;
 use App\Models\Trimestre;
+use Illuminate\Support\Facades\DB;
+use App\CustomClasses\NoteByMatiere;
+use App\CustomClasses\NoteByTrimestre;
+use App\CustomClasses\AvgByTrimestre;
 
 class BulletinController extends Controller
 {
@@ -231,12 +235,90 @@ class BulletinController extends Controller
      */
     public function AvgByTrimestreWithRangeAndNumber($idTrimestre, $matricule)
     {
+        $avgbt;
+        $nbt = new NoteByTrimestre();
+        $trimestres = Trimestre::all();
+        $concernedInscription = Inscription::find($matricule);
+
+        // Toures les matières enseignées dans la classe de l'élève concerné
+        $enseigner = DB::table('enseigner')
+        ->where('classe_id', $concernedInscription->classe_id)
+        ->join('matieres', 'enseigner.matiere_id', 'matieres.id')
+        ->select('*')
+        ->get();
+
+        // Tous les élèves inscrits dans la même classe 
+        $elevesInClassroom = DB::table('inscriptions')
+        ->where('inscriptions.classe_id', $concernedInscription->classe_id)
+        ->join('eleves', 'inscriptions.eleve_id', 'eleves.id')
+        ->select('*')
+        ->get();
+
+        // Toutes les notes des élèves dans cette même classe
+        $everybodysNotesInClassroom = DB::table('notes')
+        ->where('classe_id', $concernedInscription->classe_id)
+        ->join('classes', 'notes.classe_id', 'classes.id')
+        ->join('matieres', 'notes.matiere_id', 'matieres.id')
+        ->join('eleves', 'notes.eleve_id', 'eleves.id')
+        ->join('types_evaluation', 'notes.types_evaluation_id', 'types_evaluation.id')
+        ->select('*', 'classes.id as classe_key', 'matieres.id as matiere_key',
+          'eleves.id as eleve_key')
+        ->get();
+
+        // Notes de l'élève concerné
+        $currentEleveNotes = $everybodysNotesInClassroom
+            ->where('eleve_key', $concernedInscription->eleve_id);
+               
+        $isCollege = $everybodysNotesInClassroom[0]->estCollege;
+                
+        foreach ($trimestres as $tKey => $trimestre) {
+            
+            foreach ($enseigner as $eKey => $eValue) {
+                $currentMatiere = $eValue->matiere_id;
+                
+                $nbm = new NoteByMatiere($currentMatiere, $eValue->intitule, $isCollege);
+                $nbm->setCoef(Enseigner::where([['classe_id', $concernedInscription->classe_id], ['matiere_id', $currentMatiere]])->first()->coefficient);
+
+                $currentMatNotes = $currentEleveNotes
+                    ->where('matiere_id', $currentMatiere)
+                    ->where('trimestre_id', $trimestre->id);
+                foreach ($currentMatNotes as $cmnKey => $cmnValue) {
+                    $nbm->addNote($cmnValue);
+                }
+                $nbm->calculateAvgs();
+                switch ($trimestre->id) {
+                    case 1:
+                        # trimestre 1...
+                        $nbt->pushToFirst($nbm);
+                        break;
+                    case 2:
+                        $nbt->pushToSecond($nbm);
+                        break;
+                    case 3:
+                        $nbt->pushToThird($nbm);
+                        break;
+                    default:
+                        # Nothing to do here
+                        break;
+                }
+            }            
+        }
+
+        $avgbt = new AvgByTrimestre($nbt);
+        // TODO: a suivre
+        dd($avgbt);
+        
+
+        return response()->json($nbt);
+        // ///////////////////////
         $rang;
         $avgs = [];
         $effectif = 0;
         $moyEleve = 0;
         $results = $this->GetOrdoredNotesByTrimestre($idTrimestre, $matricule);
         
+        // dd($results);
+
         if (!is_null($results)) {
             $eleve = [];
             $eleve = $results['eleve'];
@@ -254,7 +336,9 @@ class BulletinController extends Controller
                 ->whereNotIn('id', [$matricule])->get(); 
             
             foreach ($eleves as $key => $InscriptionModel) {
+                // TODO: il y a un problème ici
                 $ordNotes = $this->GetOrdoredNotesByTrimestre($idTrimestre, $InscriptionModel->$matricule);
+                // dd($ordNotes);
                 if ($InscriptionModel->classe->estPrimaire == 1) {
                     $avg = $this->getTrimestreAvgFromOrderedNotes($ordNotes, false);
                 } else {
@@ -265,6 +349,8 @@ class BulletinController extends Controller
 
             $rang = $this->getRange($moyEleve, $avgs);
             $effectif = $this->getEffectif($eleve->classe_id, $eleve->annee_scolaire_id);
+
+            // dd($effectif);
 
             if ($eleve->classe->estPrimaire == 1) {
                 $bulletinview = 'dashboard.bulletins.b-primaire';

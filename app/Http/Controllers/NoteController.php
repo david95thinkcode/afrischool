@@ -28,11 +28,17 @@ class NoteController extends Controller
         self::UNIVERSITE_ID => "Université"
     ];
 
+    /**
+     * Step 1 pour ajouter une note
+     */
     public function selectType()
     {
         return view('dashboard.notes.selecttype');
     }
 
+    /**
+     * Step 2 pour ajouter une note
+     */
     public function selectNiveau($niveau)
     {
         switch ($niveau) {
@@ -54,6 +60,9 @@ class NoteController extends Controller
         return view('dashboard.notes.create-first-step', compact('classes', 'trimestres', 'anneeScolaires'));
     }
 
+    /**
+     * Step 3 pour ajouter une note
+     */
     public function goToSecondStep(StoreNoteFirstStepRequest $req)
     {
         $classe = Classe::findOrFail($req->classe);
@@ -80,6 +89,7 @@ class NoteController extends Controller
     }
 
     /**
+     * Step 4 pour ajouter une no
      * Retourne la dernière vue pour enregistrer les notes
      */
     public function lastStep(Request $req){
@@ -153,7 +163,6 @@ class NoteController extends Controller
             ->where(['inscriptions.classe_id' => session('classe'),
                 'inscriptions.annee_scolaire_id' => session('annee_scolaire')])
             ->get();
-
 
         $notes = Note::where(['trimestre_id' => session('trimestre'),
             'classe_id' => session('classe'),

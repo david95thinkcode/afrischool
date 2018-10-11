@@ -40,11 +40,11 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/', 'BulletinController@ListEleves')
             ->where('niveau', '[A-Za-z]+')
             ->name('bulletin.criteres.post');
-        Route::get('trimestre/{idtrimestre}/{matricule}', 'BulletinController@AvgByTrimestreWithRangeAndNumber')
+        Route::get('trimestre/{idtrimestre}/{matricule}', 'BulletinController@AverageByTrimestre')
             ->where('idtrimestre', '[0-9]')
             ->where('matricule', '[0-9]+')
             ->name('bulletin.showbytrimestre');
-        Route::get('final/{matricule}', 'BulletinController@FinalAvgWithRangeAndNumber')
+        Route::get('final/{matricule}', 'BulletinController@FinalAverage')
             ->where('matricule', '[0-9]+')
             ->name('bulletin.final');
     });

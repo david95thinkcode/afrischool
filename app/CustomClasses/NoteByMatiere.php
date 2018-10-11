@@ -16,6 +16,8 @@ class NoteByMatiere
     public $notes = [];
     public $avgs;
     public $sums;
+    public $points; // note coefficiée
+    public $appreciation;
 
     public function __construct($matiere_key, $matiere_intitule, $isCollegeClasse) 
     {
@@ -89,7 +91,8 @@ class NoteByMatiere
     }
 
     /**
-     * Calcul la moyenne générale
+     * Calcul la moyenne générale et la 
+     * note coefficiée
      * 
      * LE PRIMAIRE
      * La moyenne de la matière se trouve dans 
@@ -111,7 +114,14 @@ class NoteByMatiere
             $generalAvg = $this->avgs->getDevoir();
         }
         
-        $this->avgs->setGeneral($generalAvg);
+        $this->avgs->setGeneral($generalAvg);        
+        
+        // Caluclons la note coefficiée 
+        // Elle se calcul en multpipliant par le coefficient la moyenne générale
+        $this->points = $this->getAvgs()->getGeneral() * $this->getCoef();
+
+        // Récupérons le message d'apréciation
+        $this->appreciation = AvgAppreciation::getAppreciation($this->avgs->getGeneral());
     }
 
     private function calculateInterroAvg()

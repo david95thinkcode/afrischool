@@ -351,65 +351,10 @@ class BulletinController extends Controller
         $bulletin->setEleve($concernedInscription);
         $bulletin->finish(); // Obligatoire
 
+
+        dd($bulletin);
         return response()->json($bulletin, 200);
         
-
-        // ///////////////////////
-        $rang;
-        $avgs = [];
-        $effectif = 0;
-        $moyEleve = 0;
-        $results = $this->GetOrdoredNotesByTrimestre($idTrimestre, $matricule);
-        
-        // dd($results);
-
-        if (!is_null($results)) {
-            $eleve = [];
-            $eleve = $results['eleve'];
-            $notesOrdonnes = $results['notesOrdonnes'];
-            
-            if ($eleve->classe->estPrimaire == 1) {
-                $moyEleve = $this->getTrimestreAvgFromOrderedNotes($notesOrdonnes, false);
-            } else {
-                $moyEleve = $this->getTrimestreAvgFromOrderedNotes($notesOrdonnes, true);
-            }
-            array_push($avgs, $moyEleve);
-
-            $eleves = Inscription::with('eleve', 'classe')
-                ->where('classe_id', $eleve->classe_id)
-                ->whereNotIn('id', [$matricule])->get(); 
-            
-            foreach ($eleves as $key => $InscriptionModel) {
-                // TODO: il y a un problème ici
-                $ordNotes = $this->GetOrdoredNotesByTrimestre($idTrimestre, $InscriptionModel->$matricule);
-                // dd($ordNotes);
-                if ($InscriptionModel->classe->estPrimaire == 1) {
-                    $avg = $this->getTrimestreAvgFromOrderedNotes($ordNotes, false);
-                } else {
-                    $avg = $this->getTrimestreAvgFromOrderedNotes($ordNotes, true);
-                }
-                array_push($avgs, $avg);
-            }
-
-            $rang = $this->getRange($moyEleve, $avgs);
-            $effectif = $this->getEffectif($eleve->classe_id, $eleve->annee_scolaire_id);
-
-            // dd($effectif);
-
-            if ($eleve->classe->estPrimaire == 1) {
-                $bulletinview = 'dashboard.bulletins.b-primaire';
-            } 
-            else {
-                $bulletinview = 'dashboard.bulletins.b-college';
-            }
-            
-            return view($bulletinview, compact('eleve', 'notesOrdonnes', 'rang', 'effectif'));
-
-        }
-        else {
-            return null;
-        }
-
     }
 
 

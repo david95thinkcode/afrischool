@@ -18,6 +18,8 @@ class SuperBulletin
     
     public $points; 
 
+    public $appreciations;
+
     public $avg; // AVGBYTRIMESTRE OBJECT
     
     public $friendsAvg = [];
@@ -36,6 +38,7 @@ class SuperBulletin
             $this->avg = $avgByTrimestreObject;
             $this->ranges = new RangeByTrimestre();
             $this->points = new PointByTrimestre();
+            $this->appreciations = new AppreciationByTrimestre();
             $this->fillDescription();
         }
     }
@@ -76,7 +79,16 @@ class SuperBulletin
             $this->calculateRanges();
             $this->calculateSums();
             $this->populateEffectif();
+            $this->appreciate();
         }
+    }
+
+    private function appreciate() 
+    {
+        $this->appreciations->setFirst(AvgAppreciation::getAppreciation($this->avg->getFirst()));
+        $this->appreciations->setSecond(AvgAppreciation::getAppreciation($this->avg->getSecond()));
+        $this->appreciations->setThird(AvgAppreciation::getAppreciation($this->avg->getThird()));
+        $this->appreciations->setFinal(AvgAppreciation::getAppreciation($this->avg->getFinal()));
     }
 
     private function calculateSums () 
@@ -151,12 +163,13 @@ class SuperBulletin
     private function fillDescription() {
 
         $this->description = [
-            "eleve" => "Contient les informations sur l'élève dont le bulletin est élaboré",
-            "ranges" => "Les rangs par trimestre \n",
-            "points" => "Le total de points obtenus\n",
-            "avg" => "Les moyennes par trimestre de l'élève\n",
-            "effectif" => "Le nombre total d'élèves de la classe\n",
-            "friendsAvg" => "Les moyennes par trimestres des autres camarades de classe",
+            "eleve"         => "Contient les informations sur l'élève dont le bulletin est élaboré",
+            "ranges"        => "Les rangs par trimestre \n",
+            "points"        => "Le total de points obtenus\n",
+            "appreciations" => "Les appreciations obtenus pour chaque trimestre\n",
+            "avg"           => "Les moyennes par trimestre de l'élève\n",
+            "effectif"      => "Le nombre total d'élèves de la classe\n",
+            "friendsAvg"    => "Les moyennes par trimestres des autres camarades de classe",
         ];
     }
 }
@@ -164,3 +177,5 @@ class SuperBulletin
 class RangeByTrimestre extends ByTrimestreStats { }
 
 class PointByTrimestre extends ByTrimestreStats { }
+
+class AppreciationByTrimestre extends ByTrimestreStats { }

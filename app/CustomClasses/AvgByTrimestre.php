@@ -49,7 +49,7 @@ class AvgByTrimestre
     private function populateFinalAttribute()
     {
         $sum = 0;
-        $sum += $this->getFirst() + $this->getSecond() + $this->getFinal();
+        $sum += $this->getFirst() + $this->getSecond() + $this->getThird();
         $this->final = $sum / self::NUMBER_OF_TRIMESTRE;
     }
 

@@ -22,7 +22,7 @@ Route::get('emploi-du-temps/p/{professeur}', 'EmploiDuTempsController@getForProf
 Route::get('emploi-du-temps/c/{classe}', 'EmploiDuTempsController@getForClasse');
 
 Route::post('absences/store', 'AbsenceController@storeFromJsPost');
-
+Route::post('comptabilite/scolarite/state', 'GestionScolarite\ScolariteController@getScolariteState');
 
 Route::prefix('enseigner')->group(function () {
     Route::get('c/{classe}', 'EnseignerController@getForClasse');

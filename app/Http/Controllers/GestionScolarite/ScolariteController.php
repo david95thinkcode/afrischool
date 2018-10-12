@@ -9,6 +9,7 @@ use App\Models\Inscription;
 use App\Http\Requests\Scolarite\GetScolariteStateRequest;
 use App\Models\PaiementScolarite;
 use App\CustomClasses\ComptabiliteScolarite\EleveScolariteState;
+use App\CustomClasses\ComptabiliteScolarite\ClasseScolariteState;
 
 class ScolariteController extends Controller
 {
@@ -52,7 +53,11 @@ class ScolariteController extends Controller
                 $returnableResponse = $this->getStateForInscription($req->key);
                 break;
             case 'c':
-                # code...
+                if (!is_null($req->year)){
+                    $returnableResponse = $this->getStateForClass($req->key, $req->year);
+                } else {
+                    return response(400, 400);
+                }
                 break;
             case 's':
                 # code...
@@ -65,12 +70,7 @@ class ScolariteController extends Controller
         return response()->json($returnableResponse, 200);
     }
 
-    /**
-     * Récupérer L'état de scolarité d'un inscript donné
-     * 
-     * @param  [integer] $inscription 
-     * @return \App\CustomClasses\EleveScolariteState 
-     */
+   
     private function getStateForInscription($inscription) {
 
         $eleve = Inscription::with('eleve')->findOrFail($inscription);
@@ -78,6 +78,38 @@ class ScolariteController extends Controller
         $state = new EleveScolariteState($eleve);
         $state->setPaid(PaiementScolarite::where('inscription_id', $eleve->id)->sum('montant'));
                 
+        return $state;
+    }
+
+    /**
+     * Récupérer L'état de scolarité d'une classe 
+     * d'une année donné
+     * 
+     * @param  [integer] $inscription 
+     * @return \App\CustomClasses\ClasseScolariteState 
+     */
+    private function getStateForClass($classe, $anneescolaire) 
+    {
+        $cash = 0;
+        $paid = 0;
+
+        $inscrits = Inscription::where([
+            ['annee_scolaire_id', $anneescolaire],
+            ['classe_id', $classe]
+        ])->get();
+        
+        if (!($inscrits->isNotEmpty())) return null; 
+
+        foreach ($inscrits as $key => $i) {
+            $es = $this->getStateForInscription($i->id);
+            $cash += $es->getCash();
+            $paid += $es->getPaid();
+        }
+        $state = new ClasseScolariteState(Classe::findOrFail($classe));
+        $state->setCash($cash);
+        $state->setPaid($paid);
+        $state->finish();
+        
         return $state;
     }
 

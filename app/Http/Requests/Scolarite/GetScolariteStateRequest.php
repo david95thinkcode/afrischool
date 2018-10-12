@@ -25,7 +25,7 @@ class GetScolariteStateRequest extends FormRequest
     {
         return [
             'type' => 'required|string',
-            'key' => 'required|integer', // ID de la classe ou matricule de l'élève selon le param key ci-dessus
+            'key' => 'nullable|integer', // ID de la classe ou matricule de l'élève selon le param key ci-dessus
             'year' => 'nullable|integer' // Id de l'année scolaire
         ];
     }

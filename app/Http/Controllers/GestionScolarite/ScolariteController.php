@@ -10,6 +10,8 @@ use App\Http\Requests\Scolarite\GetScolariteStateRequest;
 use App\Models\PaiementScolarite;
 use App\CustomClasses\ComptabiliteScolarite\EleveScolariteState;
 use App\CustomClasses\ComptabiliteScolarite\ClasseScolariteState;
+use Illuminate\Support\Facades\DB;
+use App\CustomClasses\ComptabiliteScolarite\SchoolScolariteState;
 
 class ScolariteController extends Controller
 {
@@ -50,7 +52,11 @@ class ScolariteController extends Controller
 
         switch ($req->type) {
             case 'i':
-                $returnableResponse = $this->getStateForInscription($req->key);
+                if (!is_null($req->key)) {
+                    $returnableResponse = $this->getStateForInscription($req->key);
+                } else {
+                    return response(400, 400);
+                }
                 break;
             case 'c':
                 if (!is_null($req->year)){
@@ -60,7 +66,11 @@ class ScolariteController extends Controller
                 }
                 break;
             case 's':
-                # code...
+                if (!is_null($req->year)){
+                    $returnableResponse = $this->getStateForSchool($req->year);
+                } else {
+                    return response(400, 400);
+                }
                 break;
             default:
                 abort(500);
@@ -110,6 +120,42 @@ class ScolariteController extends Controller
         $state->setPaid($paid);
         $state->finish();
         
+        return $state;
+    }
+
+
+    private function getStateForSchool($anneescolaire)
+    {
+        $cash = 0;
+        $paid = 0;
+        $distinctClasses = [];
+        
+        // Récupérons uniquement les classes où il y eu des inscription cette année
+        $classes = DB::table('inscriptions')
+        ->where('annee_scolaire_id', $anneescolaire)
+        ->select('classe_id')->get();
+        
+        if (!($classes->isNotEmpty())) return null;
+        
+        $state = new SchoolScolariteState();
+
+        foreach ($classes as $key => $c) {
+            
+            // On travaillera avec les classes tout en évitant les doublons
+            if ((count($distinctClasses) == 0) || (array_search($c->classe_id, $distinctClasses) == false)) 
+            {
+                array_push($distinctClasses, $c->classe_id);
+                $classeState = $this->getStateForClass($c->classe_id, $anneescolaire);
+                $cash += $classeState->getCash();
+                $paid += $classeState->getPaid();
+                $state->pushToClasses($classeState);                
+            }
+        }
+        
+        $state->setCash($cash);
+        $state->setPaid($paid);
+        $state->finish();
+
         return $state;
     }
 

@@ -1835,6 +1835,217 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/EmploiDuTempsToday.vue":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__routes_js__ = __webpack_require__("./resources/assets/js/routes.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      horaires: [],
+      readableCourses: [],
+
+      distinctsClasses: [],
+      distinctsClassesDetails: [],
+
+      distincEnseigner: [],
+      enseignerObjectsDetails: [], // Contient les onject enseignes de distinctsEnseigner
+
+      fetched: false
+    };
+  },
+
+  props: {},
+  mounted: function mounted() {
+    this.fetchTodaysCourses();
+  },
+
+  methods: {
+    /**
+     * Recupere les cours enseignes aujourdh"hui
+     */
+    fetchTodaysCourses: function fetchTodaysCourses() {
+      var _this = this;
+
+      var today = new Date();
+      var formattedToday = today.getDate().toString().concat("-", (today.getMonth() + 1).toString(), "-", today.getFullYear());
+      var requestBody = {
+        day: formattedToday
+      };
+      axios.post(__WEBPACK_IMPORTED_MODULE_0__routes_js__["a" /* Routes */].emploiDuTemps.post.date, requestBody).then(function (response) {
+        _this.horaires = response.data;
+
+        // Fetching enseigner details
+        _this.horaires.forEach(function (h) {
+          var found = _this.distincEnseigner.find(function (element) {
+            return element == h.enseigner.id;
+          });
+
+          if (_this.distincEnseigner.length == 0 || found == undefined) {
+            _this.distincEnseigner.push(h.enseigner.id);
+            _this.fetchEnseignerDetails(h.enseigner.id);
+          }
+          // Getting distincs classe
+          var foundClass = _this.distinctsClasses.find(function (element) {
+            return element == h.enseigner.classe_id;
+          });
+
+          if (_this.distinctsClasses.length == 0 || foundClass == undefined) {
+            _this.distinctsClasses.push(h.enseigner.classe_id);
+            // Getting classe details directly from enseignerDetails
+          }
+          // End gettings distinct clasees
+        });
+        _this.fetched = true;
+        // End fetching enseigner details
+
+      }).catch(function (error) {
+        alert("Un probleme est survenu");
+      });
+    },
+    fetchEnseignerDetails: function fetchEnseignerDetails(enseignerID) {
+      var _this2 = this;
+
+      axios.get(__WEBPACK_IMPORTED_MODULE_0__routes_js__["a" /* Routes */].enseigner.get.details.concat(enseignerID)).then(function (res) {
+        _this2.enseignerObjectsDetails.push({
+          id: enseignerID,
+          details: res.data
+        });
+      });
+    },
+    fetchClasses: function fetchClasses() {
+      var _this3 = this;
+
+      axios.get(__WEBPACK_IMPORTED_MODULE_0__routes_js__["a" /* Routes */].classes.get.fetch).then(function (response) {
+        _this3.classes = response.data;
+      }).catch(function (error) {
+        _this3.errorActions(error, "Error on getting classes");
+      });
+    },
+    fetchMatieres: function fetchMatieres() {
+      var _this4 = this;
+
+      axios.post(__WEBPACK_IMPORTED_MODULE_0__routes_js__["a" /* Routes */].enseigner.post.classNdate, this.absence).then(function (response) {
+        _this4.matieres = response.data;
+      }).catch(function (error) {
+        _this4.errorActions(error, "Error on getting matieres");
+      });
+    },
+    fetchInscrits: function fetchInscrits() {
+      var _this5 = this;
+
+      axios.get(__WEBPACK_IMPORTED_MODULE_0__routes_js__["a" /* Routes */].inscription.forClasse.concat(this.absence.classe)).then(function (response) {
+        _this5.inscrits = response.data;
+      }).catch(function (error) {
+        _this5.errorActions(error, "Error on getting inscrits");
+      });
+    },
+    gotoMatStep: function gotoMatStep() {
+      this.resetInput();
+      this.fetchMatieres();
+      this.fetchInscrits();
+    },
+    toggleEleveCheckbox: function toggleEleveCheckbox(inscriptionID) {
+      if (this.choosedEleve.length == 0) {
+        this.choosedEleve.push(inscriptionID);
+      } else {
+        // Toggling code
+        var i = this.choosedEleve.indexOf(inscriptionID);
+        i == -1 ? this.choosedEleve.push(inscriptionID) : this.choosedEleve.splice(i, 1);
+      }
+    },
+
+
+    /**
+     * @param
+     */
+    removeInscritItem: function removeInscritItem(itemvalue) {},
+    store: function store() {
+      var _this6 = this;
+
+      this.isSaving = true;
+      axios.post(__WEBPACK_IMPORTED_MODULE_0__routes_js__["a" /* Routes */].absenses.post.store, {
+        eleves: this.choosedEleve,
+        enseigner: this.pickedMat,
+        date: this.absence.date
+      }).then(function (response) {
+        console.log(response.data);
+        _this6.successActions("Absences enregistré");
+      }).catch(function (error) {
+        _this6.errorActions(error, "Problème");
+      }).finally(function () {
+        _this6.isSaving = false;
+      });
+    },
+    resetInput: function resetInput() {
+      this.matieres = [];
+      this.inscrits = [];
+      this.choosedEleve = [];
+      this.pickedMat = "";
+    },
+    successActions: function successActions(successMessage) {
+      this.resetInput();
+      this.isSaved = true;
+      this.error = "";
+      // this.$emit('refresh');
+      console.log(successMessage);
+      alert(successMessage);
+    },
+    errorActions: function errorActions(error, message) {
+      console.log(message);
+      console.log(error);
+      this.error = error;
+      this.isSaved = false;
+    }
+  },
+  computed: {
+    CLASSES_ARE_FILLED: function CLASSES_ARE_FILLED() {
+      return this.classes.length > 0 ? true : false;
+    },
+    INSCRITS_ARE_FILLED: function INSCRITS_ARE_FILLED() {
+      return this.inscrits.length > 0 ? true : false;
+    },
+    MATIERES_ARE_FILLED: function MATIERES_ARE_FILLED() {
+      return this.matieres.length > 0 ? true : false;
+    },
+    READY_FOR_MATIERE_STEP: function READY_FOR_MATIERE_STEP() {
+      return this.absence.date != "" && this.absence.classe != "" ? true : false;
+    },
+    READY_FOR_SUBMIT: function READY_FOR_SUBMIT() {
+      return this.choosedEleve.length > 0 && this.pickedMat != "" ? true : false;
+    },
+    isErrored: function isErrored() {
+      return this.error === "" ? false : true;
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/Example.vue":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -4723,6 +4934,21 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 // module
 exports.push([module.i, "\n.btn-primary:active, \n.btn-primary.active,\n.btn-primary.active.focus,\n.open > .btn-primary.dropdown-toggle {\n    background-color: #1abb9c;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4c9a2568\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/EmploiDuTempsToday.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.btn-primary:active,\n.btn-primary.active,\n.btn-primary.active.focus,\n.open > .btn-primary.dropdown-toggle {\n  background-color: #1abb9c;\n}\n", ""]);
 
 // exports
 
@@ -33610,6 +33836,51 @@ if (false) {
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-4c9a2568\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/EmploiDuTempsToday.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "row" }, [
+    _c("div", { staticClass: "col-sm-12" }, [
+      _vm.fetched
+        ? _c("div", { staticClass: "row" }, [
+            _c(
+              "div",
+              { staticClass: "col-sm-4" },
+              _vm._l(_vm.distinctsClasses, function(c) {
+                return _c(
+                  "div",
+                  { key: c, staticClass: "panel panel-default" },
+                  [
+                    _c("div", { staticClass: "panel-heading" }, [
+                      _c("h5", [_vm._v(_vm._s(c))])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "panel-body" })
+                  ]
+                )
+              })
+            )
+          ])
+        : _vm._e()
+    ])
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-4c9a2568", module.exports)
+  }
+}
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-650f2efa\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/Example.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -33772,6 +34043,33 @@ if(false) {
  if(!content.locals) {
    module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-3440ab88\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./AbsenceCreate.vue", function() {
      var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-3440ab88\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./AbsenceCreate.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4c9a2568\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/EmploiDuTempsToday.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__("./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4c9a2568\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/EmploiDuTempsToday.vue");
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__("./node_modules/vue-style-loader/lib/addStylesClient.js")("3707086b", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4c9a2568\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./EmploiDuTempsToday.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4c9a2568\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./EmploiDuTempsToday.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -45090,6 +45388,7 @@ Vue.component('professeur-edt', __webpack_require__("./resources/assets/js/compo
 Vue.component('eleves-inscrits-list', __webpack_require__("./resources/assets/js/components/ElevesInscritList.vue"));
 Vue.component('matieres-enseigner', __webpack_require__("./resources/assets/js/components/MatieresEnseigner.vue"));
 Vue.component('classe-edt', __webpack_require__("./resources/assets/js/components/ClasseEmploiDuTemps.vue"));
+Vue.component('edt-today', __webpack_require__("./resources/assets/js/components/EmploiDuTempsToday.vue"));
 
 var app = new Vue({
   el: '#vue-app'
@@ -45241,6 +45540,58 @@ if (false) {(function () {
     hotAPI.createRecord("data-v-09a80f8e", Component.options)
   } else {
     hotAPI.reload("data-v-09a80f8e", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/EmploiDuTempsToday.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__("./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4c9a2568\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/EmploiDuTempsToday.vue")
+}
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/EmploiDuTempsToday.vue")
+/* template */
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-4c9a2568\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/EmploiDuTempsToday.vue")
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/EmploiDuTempsToday.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-4c9a2568", Component.options)
+  } else {
+    hotAPI.reload("data-v-4c9a2568", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -45468,11 +45819,15 @@ var Routes = {
         get: {
             prof: rootURI.concat('api/emploi-du-temps/p/'),
             classe: rootURI.concat('api/emploi-du-temps/c/')
+        },
+        post: {
+            date: rootURI.concat('api/emploi-du-temps/day/')
         }
     },
     enseigner: {
         get: {
-            forClasse: rootURI.concat('api/enseigner/c/')
+            forClasse: rootURI.concat('api/enseigner/c/'),
+            details: rootURI.concat('api/enseigner/')
         },
         post: {
             classNdate: rootURI.concat('api/enseigner/cnd/')

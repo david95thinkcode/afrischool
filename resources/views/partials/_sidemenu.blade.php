@@ -115,6 +115,7 @@
                                 @endif
 
                                 <li><a href="{{ route('emploi-du-temps.search') }}">Consulter</a></li>
+                                <li><a href="{{ route('emploi-du-temps.today') }}">Aujourd'hui</a></li>
                             </ul>
                         </li>
                     @endif

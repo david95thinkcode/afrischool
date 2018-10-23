@@ -12,6 +12,10 @@ use App\Models\Horaire;
 class EmploiDuTempsController extends Controller
 {
 
+    public function today() {
+        return view('dashboard.emploi-du-temps.today');
+    }
+
     /**
      * Retourne les horaires d'un jour donne
      *

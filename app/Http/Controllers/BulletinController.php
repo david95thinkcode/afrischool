@@ -225,7 +225,7 @@ class BulletinController extends Controller
     {
         $completeBulletin = $this->getBulletinOf($matricule);
         
-        return response()->json($completeBulletin, 200);
+        dd($completeBulletin);
     }
 
 }

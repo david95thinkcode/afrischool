@@ -1,20 +1,26 @@
 <template>
-<div class="row">
-    <div class="col-sm-12">
-        <div class="row" v-if="fetched">
-            <div class="col-sm-4">
-                <div class="panel panel-default" v-for="c in distinctsClasses" v-bind:key="c">
-                    <div class="panel-heading">
-                        <h5>{{c}}</h5>
-                    </div>
-                    <div class="panel-body">
-                        
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="row" v-if="fetched">
+                <div class="col-sm-4">
+                    <div class="panel panel-default" v-for="(c, cindex) in classesWithCorrespondingEnseigner"
+                        v-bind:key="cindex">
+                        <div class="panel-heading">
+                            <h5>{{ c.classe.cla_intitule}}</h5>
+                        </div>
+                        <div class="panel-body">
+                            <form v-on:submit.prevent accept-charset="UTF-8">
+                                <div class="form-group" v-for="e in c.enseigner" v-bind:key='e.created_at'>
+                                    <input type="checkbox" :id="'el'.concat(e.created_at)" class="">
+                                    <label :for="'el'.concat(e.created_at)">{{ e.matiere.intitule }}</label>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 </template>
 
 <script>
@@ -27,11 +33,17 @@ export default {
       readableCourses: [],
 
       distinctsClasses: [],
-      distinctsClassesDetails: [],
 
-      distincEnseigner: [],
-      enseignerObjectsDetails: [], // Contient les onject enseignes de distinctsEnseigner
-      
+      /* Contient des classes sans doublon
+        * Chaque item contient :
+        * - la classe
+        * - les enseigner concernant la classe
+       */
+      classesWithCorrespondingEnseigner: [],
+
+      distinctEnseigner: [],
+      enseignerObjectsDetails: [], // Contient les oject enseigner de distinctsEnseigner
+
       fetched: false
     };
   },
@@ -40,10 +52,32 @@ export default {
     this.fetchTodaysCourses();
   },
   methods: {
+    populateClassesWithEnseigner() {
+      // On prends chaque item de $chassesdistintes
+      // puis on recherche dans $distinctEnseigner l'element
+      // correspondant a la classe en question
+      // Une fois trouvé, on peuple cree un object
+      // dans lequel se trouve les details de la classe
+      // mais aussi un les enseigner correspondants
+
+      this.distinctsClasses.forEach(classeID => {
+        this.enseignerObjectsDetails.forEach(ens => {
+          if (ens.details.classe_id == classeID) {
+            let d = {
+              classe: ens.details.classe,
+              enseigner: []
+            };
+            d.enseigner.push(ens.details);
+            this.classesWithCorrespondingEnseigner.push(d);
+          }
+        });
+      });
+    },
+
     /**
      * Recupere les cours enseignes aujourdh"hui
      */
-    fetchTodaysCourses() {
+    async fetchTodaysCourses() {
       let today = new Date();
       let formattedToday = today
         .getDate()
@@ -57,60 +91,63 @@ export default {
       let requestBody = {
         day: formattedToday
       };
-      axios
-        .post(Routes.emploiDuTemps.post.date, requestBody)
-        .then(response => {
-          this.horaires = response.data;
 
-          // Fetching enseigner details
-          this.horaires.forEach(h => {
-            let found = this.distincEnseigner.find(function(element) {
-              return element == h.enseigner.id;
-            });
+      let post = await axios.post(Routes.emploiDuTemps.post.date, requestBody);
 
-            if (this.distincEnseigner.length == 0 || found == undefined) {
-              this.distincEnseigner.push(h.enseigner.id);
-              this.fetchEnseignerDetails(h.enseigner.id);
-            }
-            // Getting distincs classe
-            let foundClass = this.distinctsClasses.find(function(element) {
-                return element == h.enseigner.classe_id;
-            });
+      this.horaires = post.data;
 
-            if ((this.distinctsClasses.length == 0) || (foundClass == undefined)) {
-                this.distinctsClasses.push(h.enseigner.classe_id);
-                // Getting classe details directly from enseignerDetails
-            }
-            // End gettings distinct clasees
-          });
-          this.fetched = true;
-          // End fetching enseigner details
-          
+      // Let's fetch enseigner data for each horaire
+      for (let h of this.horaires) {
+        this.pushToDistinctEnseigner(h.enseigner.id);
+        await this.fetchEnseignerDetails(h.enseigner.id);
+        this.pushToDistinctsClasses(h.enseigner.classe_id);
+      }
+      this.fetched = true;
 
-        })
-        .catch(error => {
-          alert("Un probleme est survenu");
-        });
+      this.populateClassesWithEnseigner();
     },
 
-    fetchEnseignerDetails(enseignerID) {
-      axios.get(Routes.enseigner.get.details.concat(enseignerID)).then(res => {
-        this.enseignerObjectsDetails.push({
-          id: enseignerID,
-          details: res.data
-        });
+    /**
+     * Recupere les details d'un model Enseigner
+     * dont l'ID est recu en parametre
+     */
+    async fetchEnseignerDetails(enseignerID) {
+      let response = await axios.get(
+        Routes.enseigner.get.details.concat(enseignerID)
+      );
+
+      this.enseignerObjectsDetails.push({
+        id: enseignerID,
+        details: response.data
+      });
+
+      return new Promise(resolve => {
+        resolve();
       });
     },
 
-    fetchClasses() {
-      axios
-        .get(Routes.classes.get.fetch)
-        .then(response => {
-          this.classes = response.data;
-        })
-        .catch(error => {
-          this.errorActions(error, "Error on getting classes");
-        });
+    /**
+     * Push to the array and prevent agains duplication
+     */
+    pushToDistinctEnseigner(enseignerID) {
+      let found = this.distinctEnseigner.find(function(element) {
+        return element == enseignerID;
+      });
+
+      if (this.distinctEnseigner.length == 0 || found == undefined) {
+        this.distinctEnseigner.push(enseignerID);
+      }
+    },
+
+    pushToDistinctsClasses(classeID) {
+      let foundClass = this.distinctsClasses.find(function(element) {
+        return element == classeID;
+      });
+
+      if (this.distinctsClasses.length == 0 || foundClass == undefined) {
+        this.distinctsClasses.push(classeID);
+        // Getting classe details directly from enseignerDetails
+      }
     },
 
     fetchMatieres() {
@@ -202,9 +239,9 @@ export default {
     }
   },
   computed: {
-    CLASSES_ARE_FILLED() {
-      return this.classes.length > 0 ? true : false;
-    },
+    // CLASSES_ARE_FILLED() {
+    //   return this.classes.length > 0 ? true : false;
+    // },
     INSCRITS_ARE_FILLED() {
       return this.inscrits.length > 0 ? true : false;
     },
@@ -229,11 +266,11 @@ export default {
 </script>
 
 <style>
-.btn-primary:active,
+/* .btn-primary:active,
 .btn-primary.active,
 .btn-primary.active.focus,
 .open > .btn-primary.dropdown-toggle {
-  background-color: #1abb9c;
-}
+  background-color: #1abb9c; */
+/* } */
 </style>
 

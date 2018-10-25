@@ -16,6 +16,7 @@ Vue.component('professeur-edt', require('./components/professeurs/ProfesseurEmpl
 Vue.component('eleves-inscrits-list', require('./components/ElevesInscritList.vue'));
 Vue.component('matieres-enseigner', require('./components/MatieresEnseigner.vue'));
 Vue.component('classe-edt', require('./components/ClasseEmploiDuTemps.vue'));
+Vue.component('edt-today', require('./components/EmploiDuTempsToday.vue'));
 
 const app = new Vue({
     el: '#vue-app'

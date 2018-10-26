@@ -17,7 +17,7 @@
                         <li><a><i class="fa fa-street-view"></i>Personnel
                                 <span class="fa fa-chevron-down"></span></a>
                             <ul class="nav child_menu">
-                                @if (!Auth::user()->hasRole('secretaire'))
+                                @if (!Auth::user()->hasRole('secretaire') || Auth::user()->hasRole('administrator'))
                                     <li><a href="{!! route('personnel.create') !!}">Créer</a></li>
                                     <li>
                                         <a href="{!! route('personnel.role.create') !!}">
@@ -32,7 +32,7 @@
                                 <span class="fa fa-chevron-down"></span></a>
                             <ul class="nav child_menu">
 
-                                @if (Auth::user()->hasRole('comptable'))
+                                @if (Auth::user()->hasRole('comptable') || Auth::user()->hasRole('administrator'))
                                     <li><a href="{{ route('inscriptions.create') }}">Inscrire</a></li>
                                 @endif
 
@@ -50,7 +50,7 @@
                                 <span class="fa fa-chevron-down"></span></a>
                             <ul class="nav child_menu">
 
-                                @if (Auth::user()->hasRole('censeur'))
+                                @if (Auth::user()->hasRole('censeur') || Auth::user()->hasRole('administrator'))
                                     <li><a href="{{ route('professeurs.create') }}">Créer</a></li>
                                     <li><a href="{{ route('enseigner.create') }}">Ajouter un professeur à une
                                             classe </a></li>
@@ -67,7 +67,7 @@
                                 <span class="fa fa-chevron-down"></span></a>
                             <ul class="nav child_menu">
 
-                                @if (Auth::user()->hasRole('censeur'))
+                                @if (Auth::user()->hasRole('censeur') || Auth::user()->hasRole('administrator'))
                                     <li><a href="{{ route('classe.create') }}">Créer</a></li>
                                 @endif
 
@@ -81,7 +81,7 @@
                                 <span class="fa fa-chevron-down"></span></a>
                             <ul class="nav child_menu">
 
-                                @if (Auth::user()->hasRole('censeur'))
+                                @if (Auth::user()->hasRole('censeur') || Auth::user()->hasRole('administrator'))
                                     <li><a href="{{ route('matieres.create') }}">Créer</a></li>
                                     <li><a href="{{ route('enseigner.create') }}">Ajouter une matière à une classe </a>
                                     </li>
@@ -99,7 +99,7 @@
                                 <span class="fa fa-chevron-down"></span></a>
                             <ul class="nav child_menu">
 
-                                @if (Auth::user()->hasRole('censeur'))
+                                @if (Auth::user()->hasRole('censeur') || Auth::user()->hasRole('administrator'))
                                     <li><a href="{{ route('notes.selecteType') }}">Ajouter</a></li>
                                 @endif
 
@@ -110,7 +110,7 @@
                             <a><i class="fa fa-file-text-o"></i>Emploi du temps<span class="fa fa-chevron-down"></span></a>
                             <ul class="nav child_menu">
 
-                                @if (Auth::user()->hasRole('censeur'))
+                                @if (Auth::user()->hasRole('censeur') || Auth::user()->hasRole('administrator'))
                                     <li><a href="{{ route('horaire.create') }}">Ajouter</a></li>
                                 @endif
 
@@ -141,7 +141,7 @@
                             <ul class="nav child_menu">
                                 <li><a href="{{ route('finance.index') }}">Informations générales</a></li>
 
-                                @if (Auth::user()->hasRole('comptable'))
+                                @if (Auth::user()->hasRole('comptable') || Auth::user()->hasRole('administrator'))
                                     <li><a href="{{ route('finance.depense.index') }}">Saisir les dépenses</a></li>
                                 @endif
 
@@ -156,7 +156,7 @@
                             <a><i class="fa fa-hashtag"></i>Absence <span class="fa fa-chevron-down"></span></a>
                             <ul class="nav child_menu">
 
-                                @if (Auth::user()->hasRole('surveillant'))
+                                @if (Auth::user()->hasRole('surveillant') || Auth::user()->hasRole('administrator'))
                                     <li><a href="{{ route('absences.steps.first') }}">Enregistrer</a></li>
                                 @endif
 

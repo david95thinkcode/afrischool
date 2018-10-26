@@ -1,9 +1,9 @@
 @extends('templates.app')
-@section('title') Saisie des notes @endsection
-@section('section-title')Saisir les notes! @endsection
+@section('title') Saisie de notes @endsection
+@section('section-title')Saisir les notes ! @endsection
 @section('content')
     <div class='row'>
-        <div class="col-md-5 col-md-offset-3 col-sm-6 col-sm-offset-3 col-xs-12">
+        <div class="col-md-5 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-12">
             <div class="panel panel-default">
                 <div class="panel-body">
                     <div class="x-content">
@@ -44,18 +44,28 @@
                         @endif
                         <td class="text-center">
                             @forelse($noters as $noter)
-                                <a href="#" data-name="not_note" data-value="{{$noter->not_note}}"
-                                   class="note " data-url="{{route('notes.req')}}"
-                                   data-type="text" data-pk="{{$noter->id}}" >
-                                    @if(is_null($noter->not_note))
-                                        saisir la note
-                                    @else
+                                @if(is_null($noter->not_note))
+                                    <a href="#" data-name="not_note" data-value="{{$noter->not_note}}"
+                                       class="note " data-url="{{route('notes.req')}}"
+                                       data-type="text" data-pk="{{$noter->id}}" >
+                                        ajouter la note ou 0
+                                    </a>
+                                @else
+                                    <a href="#" data-name="not_note" data-value="{{$noter->not_note}}"
+                                       class="note " data-url="{{route('notes.req')}}"
+                                       data-type="text" data-pk="{{$noter->id}}" >
                                         {{$noter->not_note}}
-                                    @endif
-                                </a><hr>
+                                    </a> <span class="separateur"> || </span>
+                                @endif
+                                @if ($loop->last)
+                                    <hr>
+                                    <a href="{{route('add.ligne.eleve', ['eleve' => $eleve->eleve->id])}}" class="btn btn-success">
+                                        Ajouter un champ
+                                    </a>
+                                @endif
                             @empty
                                 <a href="{{route('add.ligne.eleve', ['eleve' => $eleve->eleve->id])}}" class="btn btn-success">
-                                    Ajouter une ligne
+                                    Ajouter un champ
                                 </a>
                             @endforelse
                         </td>
@@ -71,6 +81,12 @@
     <link rel="stylesheet" href="{{asset('css/dataTables.bootstrap.min.css')}}">
     <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css"
           rel="stylesheet"/>
+    <style>
+        .separateur{
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+    </style>
 @endsection
 @section('custom-js')
     <script src="{{asset('js/jquery.dataTables.js')}}"></script>
@@ -107,7 +123,7 @@
                 },
                 success: function(data) {
                     if(data.code == "new"){
-                        location.reload();
+                        return 'Note ajoutée avec succès';
                     }
                 },
                 error: function (response, newValue) {

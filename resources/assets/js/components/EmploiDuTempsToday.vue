@@ -3,8 +3,7 @@
         <div class="col-sm-12">
             <div class="row" v-if="fetched">
                 <div class="col-sm-4">
-                    <div class="panel panel-default" 
-                        v-for="(c, cindex) in classesWithCorrespondingEnseigner"
+                    <div class="panel panel-default" v-for="(c, cindex) in classesWithCorrespondingEnseigner"
                         v-bind:key="cindex">
                         <div class="panel-heading">
                             <h5>{{ c.classe.cla_intitule}}</h5>
@@ -12,9 +11,7 @@
 
                         <div class="panel-body">
                             <form v-on:submit.prevent accept-charset="UTF-8">
-                                <div class="form-group" 
-                                  v-for="e in c.enseigner" 
-                                  v-bind:key='e.created_at'>
+                                <div class="form-group" v-for="e in c.enseigner" v-bind:key='e.created_at'>
                                     <input type="checkbox" :id="'el'.concat(e.created_at)" class="">
                                     <label :for="'el'.concat(e.created_at)">{{ e.matiere.intitule }}</label>
                                 </div>
@@ -66,12 +63,12 @@ export default {
       this.distinctsClasses.forEach(classeID => {
 
         let enseignerForThisClasse = this.enseignerObjectsDetails.filter(function(eodElement) {
-          return eodElement.details.classe.id == classeID
+          return eodElement.details.classe.id === classeID; 
         });
         
         let pureData = []; // contiendra juste les donnees necessaires car enseignerForThisClasse est trop riche
 
-        this.enseignerObjectsDetails.forEach(f => {
+        enseignerForThisClasse.forEach(f => {
           pureData.push(f.details);
         });
 
@@ -101,7 +98,7 @@ export default {
         );
 
       // for test only
-      formattedToday = '26-10-2018';
+      formattedToday = '24-10-2018';
 
       let requestBody = {
         day: formattedToday

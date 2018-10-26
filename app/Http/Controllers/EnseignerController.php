@@ -18,6 +18,20 @@ use App\Models\Horaire;
 
 class EnseignerController extends Controller
 {
+
+    /**
+     * Retourne les details d'une matiere
+     * enseignee 
+     *
+     * @param [integer] $id
+     * @return void
+     */
+    public function show($id) 
+    {
+        $h = Enseigner::with('professeur', 'classe', 'matiere')->find($id);
+
+        return response()->json($h, 200);
+    }
     /**
      * Display a listing of the resource.
      *

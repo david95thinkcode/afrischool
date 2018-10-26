@@ -133,6 +133,7 @@ Route::group(['middleware' => ['auth']], function () {
     // Emploi du temps
     Route::prefix('emploi-du-temps')->group(function () {
         Route::get('consulter', 'HoraireController@search')->name('emploi-du-temps.search');
+        Route::get('presence', 'EmploiDuTempsController@today')->name('emploi-du-temps.today');
         Route::get('{classe}', 'HoraireController@showAllForClasse')->where('classe', '[0-9]+')->name('emploi-du-temps.afficher');
         Route::get('create/horaire', 'HoraireController@create')->where('classe', '[0-9]+')->name('horaire.create');
         

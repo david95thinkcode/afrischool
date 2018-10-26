@@ -5,9 +5,33 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Jour;
+use App\Http\Requests\SearchEmploiDuTempsByDay;
+use Carbon\Carbon;
+use App\Models\Horaire;
 
 class EmploiDuTempsController extends Controller
 {
+
+    public function today() {
+        return view('dashboard.emploi-du-temps.today');
+    }
+
+    /**
+     * Retourne les horaires d'un jour donne
+     *
+     * @param SearchEmploiDuTempsByDay $req
+     * @return JSON
+     */
+    public function getForDay(SearchEmploiDuTempsByDay $req) 
+    {
+        $day = Carbon::parse($req->day);
+        
+        $horaires = Horaire::with('enseigner')->where([
+            ['jour_id', $day->dayOfWeek]
+        ])->get();
+
+        return response()->json($horaires, 200);
+    }
 
     /**
      * Retourne en JSON l'ensemble des horaires de la

@@ -6,10 +6,14 @@ export const Routes = {
             prof: rootURI.concat('api/emploi-du-temps/p/'),
             classe: rootURI.concat('api/emploi-du-temps/c/'),
         },
+        post: {
+            date: rootURI.concat('api/emploi-du-temps/day/'),
+        }
     },
     enseigner: {
         get: {
             forClasse: rootURI.concat('api/enseigner/c/'),
+            details: rootURI.concat('api/enseigner/')
         },
         post: {
             classNdate: rootURI.concat('api/enseigner/cnd/'),

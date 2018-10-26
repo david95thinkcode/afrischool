@@ -3,19 +3,24 @@
         <div class="col-sm-12">
             <div class="row" v-if="fetched">
                 <div class="col-sm-4">
-                    <div class="panel panel-default" v-for="(c, cindex) in classesWithCorrespondingEnseigner"
+                    <div class="panel panel-default" 
+                        v-for="(c, cindex) in classesWithCorrespondingEnseigner"
                         v-bind:key="cindex">
                         <div class="panel-heading">
                             <h5>{{ c.classe.cla_intitule}}</h5>
                         </div>
+
                         <div class="panel-body">
                             <form v-on:submit.prevent accept-charset="UTF-8">
-                                <div class="form-group" v-for="e in c.enseigner" v-bind:key='e.created_at'>
+                                <div class="form-group" 
+                                  v-for="e in c.enseigner" 
+                                  v-bind:key='e.created_at'>
                                     <input type="checkbox" :id="'el'.concat(e.created_at)" class="">
                                     <label :for="'el'.concat(e.created_at)">{{ e.matiere.intitule }}</label>
                                 </div>
                             </form>
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -30,8 +35,6 @@ export default {
   data() {
     return {
       horaires: [],
-      readableCourses: [],
-
       distinctsClasses: [],
 
       /* Contient des classes sans doublon
@@ -40,7 +43,6 @@ export default {
         * - les enseigner concernant la classe
        */
       classesWithCorrespondingEnseigner: [],
-
       distinctEnseigner: [],
       enseignerObjectsDetails: [], // Contient les oject enseigner de distinctsEnseigner
 
@@ -52,26 +54,35 @@ export default {
     this.fetchTodaysCourses();
   },
   methods: {
+
     populateClassesWithEnseigner() {
       // On prends chaque item de $chassesdistintes
-      // puis on recherche dans $distinctEnseigner l'element
+      // puis on recherche dans $enseignerObjectsDetails les elements
       // correspondant a la classe en question
-      // Une fois trouvé, on peuple cree un object
+      // Une fois trouvé, on crée un object
       // dans lequel se trouve les details de la classe
-      // mais aussi un les enseigner correspondants
+      // mais aussi les enseigner correspondants
 
       this.distinctsClasses.forEach(classeID => {
-        this.enseignerObjectsDetails.forEach(ens => {
-          if (ens.details.classe_id == classeID) {
-            let d = {
-              classe: ens.details.classe,
-              enseigner: []
-            };
-            d.enseigner.push(ens.details);
-            this.classesWithCorrespondingEnseigner.push(d);
-          }
+
+        let enseignerForThisClasse = this.enseignerObjectsDetails.filter(function(eodElement) {
+          return eodElement.details.classe.id == classeID
         });
-      });
+        
+        let pureData = []; // contiendra juste les donnees necessaires car enseignerForThisClasse est trop riche
+
+        this.enseignerObjectsDetails.forEach(f => {
+          pureData.push(f.details);
+        });
+
+        if (pureData.length > 0) {
+          let d = {
+            classe: { ...enseignerForThisClasse[0].details.classe },
+            enseigner: { ...pureData }
+          };
+          this.classesWithCorrespondingEnseigner.push(d);
+        }
+      })
     },
 
     /**
@@ -88,6 +99,10 @@ export default {
           "-",
           today.getFullYear()
         );
+
+      // for test only
+      formattedToday = '26-10-2018';
+
       let requestBody = {
         day: formattedToday
       };
@@ -110,6 +125,7 @@ export default {
     /**
      * Recupere les details d'un model Enseigner
      * dont l'ID est recu en parametre
+     * et l'ajoute au tableau enseignerObjectsDetails
      */
     async fetchEnseignerDetails(enseignerID) {
       let response = await axios.get(
@@ -158,17 +174,6 @@ export default {
         })
         .catch(error => {
           this.errorActions(error, "Error on getting matieres");
-        });
-    },
-
-    fetchInscrits() {
-      axios
-        .get(Routes.inscription.forClasse.concat(this.absence.classe))
-        .then(response => {
-          this.inscrits = response.data;
-        })
-        .catch(error => {
-          this.errorActions(error, "Error on getting inscrits");
         });
     },
 
@@ -239,38 +244,11 @@ export default {
     }
   },
   computed: {
-    // CLASSES_ARE_FILLED() {
-    //   return this.classes.length > 0 ? true : false;
-    // },
-    INSCRITS_ARE_FILLED() {
-      return this.inscrits.length > 0 ? true : false;
-    },
-    MATIERES_ARE_FILLED() {
-      return this.matieres.length > 0 ? true : false;
-    },
-    READY_FOR_MATIERE_STEP() {
-      return this.absence.date != "" && this.absence.classe != ""
-        ? true
-        : false;
-    },
-    READY_FOR_SUBMIT() {
-      return this.choosedEleve.length > 0 && this.pickedMat != ""
-        ? true
-        : false;
-    },
-    isErrored() {
-      return this.error === "" ? false : true;
-    }
+    
   }
 };
 </script>
 
 <style>
-/* .btn-primary:active,
-.btn-primary.active,
-.btn-primary.active.focus,
-.open > .btn-primary.dropdown-toggle {
-  background-color: #1abb9c; */
-/* } */
 </style>
 

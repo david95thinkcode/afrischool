@@ -2,23 +2,10 @@
     <div class="row">
         <div class="col-sm-12">
             <div class="row" v-if="fetched">
-                <div class="col-sm-4">
-                    <div class="panel panel-default" v-for="(c, cindex) in classesWithCorrespondingEnseigner"
-                        v-bind:key="cindex">
-                        <div class="panel-heading">
-                            <h5>{{ c.classe.cla_intitule}}</h5>
-                        </div>
-
-                        <div class="panel-body">
-                            <form v-on:submit.prevent accept-charset="UTF-8">
-                                <div class="form-group" v-for="e in c.enseigner" v-bind:key='e.created_at'>
-                                    <input type="checkbox" :id="'el'.concat(e.created_at)" class="">
-                                    <label :for="'el'.concat(e.created_at)">{{ e.matiere.intitule }}</label>
-                                </div>
-                            </form>
-                        </div>
-
-                    </div>
+                <div class="col-sm-4" 
+                  v-for="(c, cindex) in classesWithCorrespondingEnseigner"
+                  v-bind:key="cindex">
+                  <prof-presence-check v-bind:courses='c'></prof-presence-check>
                 </div>
             </div>
         </div>
@@ -27,8 +14,12 @@
 
 <script>
 import { Routes } from "../routes.js";
+import ProfesseurPresenceCheck from "./professeurs/ProfesseurPresenceCheck.vue";
 
 export default {
+  components: {
+    'prof-presence-check' : ProfesseurPresenceCheck
+  },
   data() {
     return {
       horaires: [],

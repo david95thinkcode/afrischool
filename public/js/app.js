@@ -1843,7 +1843,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator__ = __webpack_require__("./node_modules/babel-runtime/regenerator/index.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__routes_js__ = __webpack_require__("./resources/assets/js/routes.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__professeurs_ProfesseurPresenceCheck_vue__ = __webpack_require__("./resources/assets/js/components/professeurs/ProfesseurPresenceCheck.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__professeurs_ProfesseurPresenceCheck_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__professeurs_ProfesseurPresenceCheck_vue__);
 
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
@@ -1861,26 +1865,17 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    'prof-presence-check': __WEBPACK_IMPORTED_MODULE_2__professeurs_ProfesseurPresenceCheck_vue___default.a
+  },
   data: function data() {
     return {
       horaires: [],
-      readableCourses: [],
-
       distinctsClasses: [],
 
       /* Contient des classes sans doublon
@@ -1889,7 +1884,6 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
         * - les enseigner concernant la classe
        */
       classesWithCorrespondingEnseigner: [],
-
       distinctEnseigner: [],
       enseignerObjectsDetails: [], // Contient les oject enseigner de distinctsEnseigner
 
@@ -1907,23 +1901,31 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
       var _this = this;
 
       // On prends chaque item de $chassesdistintes
-      // puis on recherche dans $distinctEnseigner l'element
+      // puis on recherche dans $enseignerObjectsDetails les elements
       // correspondant a la classe en question
-      // Une fois trouvé, on peuple cree un object
+      // Une fois trouvé, on crée un object
       // dans lequel se trouve les details de la classe
-      // mais aussi un les enseigner correspondants
+      // mais aussi les enseigner correspondants
 
       this.distinctsClasses.forEach(function (classeID) {
-        _this.enseignerObjectsDetails.forEach(function (ens) {
-          if (ens.details.classe_id == classeID) {
-            var d = {
-              classe: ens.details.classe,
-              enseigner: []
-            };
-            d.enseigner.push(ens.details);
-            _this.classesWithCorrespondingEnseigner.push(d);
-          }
+
+        var enseignerForThisClasse = _this.enseignerObjectsDetails.filter(function (eodElement) {
+          return eodElement.details.classe.id === classeID;
         });
+
+        var pureData = []; // contiendra juste les donnees necessaires car enseignerForThisClasse est trop riche
+
+        enseignerForThisClasse.forEach(function (f) {
+          pureData.push(f.details);
+        });
+
+        if (pureData.length > 0) {
+          var d = {
+            classe: _extends({}, enseignerForThisClasse[0].details.classe),
+            enseigner: _extends({}, pureData)
+          };
+          _this.classesWithCorrespondingEnseigner.push(d);
+        }
       });
     },
 
@@ -1941,13 +1943,18 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
               case 0:
                 today = new Date();
                 formattedToday = today.getDate().toString().concat("-", (today.getMonth() + 1).toString(), "-", today.getFullYear());
+
+                // for test only
+
+                formattedToday = '24-10-2018';
+
                 requestBody = {
                   day: formattedToday
                 };
-                _context.next = 5;
+                _context.next = 6;
                 return axios.post(__WEBPACK_IMPORTED_MODULE_1__routes_js__["a" /* Routes */].emploiDuTemps.post.date, requestBody);
 
-              case 5:
+              case 6:
                 post = _context.sent;
 
 
@@ -1957,74 +1964,74 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
                 _iteratorNormalCompletion = true;
                 _didIteratorError = false;
                 _iteratorError = undefined;
-                _context.prev = 10;
+                _context.prev = 11;
                 _iterator = this.horaires[Symbol.iterator]();
 
-              case 12:
+              case 13:
                 if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
-                  _context.next = 21;
+                  _context.next = 22;
                   break;
                 }
 
                 h = _step.value;
 
                 this.pushToDistinctEnseigner(h.enseigner.id);
-                _context.next = 17;
+                _context.next = 18;
                 return this.fetchEnseignerDetails(h.enseigner.id);
 
-              case 17:
+              case 18:
                 this.pushToDistinctsClasses(h.enseigner.classe_id);
 
-              case 18:
+              case 19:
                 _iteratorNormalCompletion = true;
-                _context.next = 12;
+                _context.next = 13;
                 break;
 
-              case 21:
-                _context.next = 27;
+              case 22:
+                _context.next = 28;
                 break;
 
-              case 23:
-                _context.prev = 23;
-                _context.t0 = _context["catch"](10);
+              case 24:
+                _context.prev = 24;
+                _context.t0 = _context["catch"](11);
                 _didIteratorError = true;
                 _iteratorError = _context.t0;
 
-              case 27:
-                _context.prev = 27;
+              case 28:
                 _context.prev = 28;
+                _context.prev = 29;
 
                 if (!_iteratorNormalCompletion && _iterator.return) {
                   _iterator.return();
                 }
 
-              case 30:
-                _context.prev = 30;
+              case 31:
+                _context.prev = 31;
 
                 if (!_didIteratorError) {
-                  _context.next = 33;
+                  _context.next = 34;
                   break;
                 }
 
                 throw _iteratorError;
 
-              case 33:
-                return _context.finish(30);
-
               case 34:
-                return _context.finish(27);
+                return _context.finish(31);
 
               case 35:
+                return _context.finish(28);
+
+              case 36:
                 this.fetched = true;
 
                 this.populateClassesWithEnseigner();
 
-              case 37:
+              case 38:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, this, [[10, 23, 27, 35], [28,, 30, 34]]);
+        }, _callee, this, [[11, 24, 28, 36], [29,, 31, 35]]);
       }));
 
       function fetchTodaysCourses() {
@@ -2038,6 +2045,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
     /**
      * Recupere les details d'un model Enseigner
      * dont l'ID est recu en parametre
+     * et l'ajoute au tableau enseignerObjectsDetails
      */
     fetchEnseignerDetails: function () {
       var _ref2 = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee2(enseignerID) {
@@ -2109,15 +2117,6 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
         _this2.errorActions(error, "Error on getting matieres");
       });
     },
-    fetchInscrits: function fetchInscrits() {
-      var _this3 = this;
-
-      axios.get(__WEBPACK_IMPORTED_MODULE_1__routes_js__["a" /* Routes */].inscription.forClasse.concat(this.absence.classe)).then(function (response) {
-        _this3.inscrits = response.data;
-      }).catch(function (error) {
-        _this3.errorActions(error, "Error on getting inscrits");
-      });
-    },
     gotoMatStep: function gotoMatStep() {
       this.resetInput();
       this.fetchMatieres();
@@ -2139,7 +2138,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
      */
     removeInscritItem: function removeInscritItem(itemvalue) {},
     store: function store() {
-      var _this4 = this;
+      var _this3 = this;
 
       this.isSaving = true;
       axios.post(__WEBPACK_IMPORTED_MODULE_1__routes_js__["a" /* Routes */].absenses.post.store, {
@@ -2148,11 +2147,11 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
         date: this.absence.date
       }).then(function (response) {
         console.log(response.data);
-        _this4.successActions("Absences enregistré");
+        _this3.successActions("Absences enregistré");
       }).catch(function (error) {
-        _this4.errorActions(error, "Problème");
+        _this3.errorActions(error, "Problème");
       }).finally(function () {
-        _this4.isSaving = false;
+        _this3.isSaving = false;
       });
     },
     resetInput: function resetInput() {
@@ -2176,26 +2175,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
       this.isSaved = false;
     }
   },
-  computed: {
-    // CLASSES_ARE_FILLED() {
-    //   return this.classes.length > 0 ? true : false;
-    // },
-    INSCRITS_ARE_FILLED: function INSCRITS_ARE_FILLED() {
-      return this.inscrits.length > 0 ? true : false;
-    },
-    MATIERES_ARE_FILLED: function MATIERES_ARE_FILLED() {
-      return this.matieres.length > 0 ? true : false;
-    },
-    READY_FOR_MATIERE_STEP: function READY_FOR_MATIERE_STEP() {
-      return this.absence.date != "" && this.absence.classe != "" ? true : false;
-    },
-    READY_FOR_SUBMIT: function READY_FOR_SUBMIT() {
-      return this.choosedEleve.length > 0 && this.pickedMat != "" ? true : false;
-    },
-    isErrored: function isErrored() {
-      return this.error === "" ? false : true;
-    }
-  }
+  computed: {}
 });
 
 /***/ }),
@@ -2691,6 +2671,60 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       return this.isFetching ? false : true;
     }
   }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/professeurs/ProfesseurPresenceCheck.vue":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: {
+        courses: ''
+    },
+    data: function data() {
+        return {
+            selected: [],
+            saved: [],
+            issending: false
+        };
+    },
+
+    methods: {
+        selectCourse: function selectCourse(id) {
+            console.log(id);
+            this.selected.push(id);
+            console.table(this.selected);
+        }
+    },
+    computed: {},
+    mounted: function mounted() {}
 });
 
 /***/ }),
@@ -5110,7 +5144,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* .btn-primary:active,\n.btn-primary.active,\n.btn-primary.active.focus,\n.open > .btn-primary.dropdown-toggle {\n  background-color: #1abb9c; */\n/* } */\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -34784,60 +34818,18 @@ var render = function() {
   return _c("div", { staticClass: "row" }, [
     _c("div", { staticClass: "col-sm-12" }, [
       _vm.fetched
-        ? _c("div", { staticClass: "row" }, [
-            _c(
-              "div",
-              { staticClass: "col-sm-4" },
-              _vm._l(_vm.classesWithCorrespondingEnseigner, function(
-                c,
-                cindex
-              ) {
-                return _c(
-                  "div",
-                  { key: cindex, staticClass: "panel panel-default" },
-                  [
-                    _c("div", { staticClass: "panel-heading" }, [
-                      _c("h5", [_vm._v(_vm._s(c.classe.cla_intitule))])
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "panel-body" }, [
-                      _c(
-                        "form",
-                        {
-                          attrs: { "accept-charset": "UTF-8" },
-                          on: {
-                            submit: function($event) {
-                              $event.preventDefault()
-                            }
-                          }
-                        },
-                        _vm._l(c.enseigner, function(e) {
-                          return _c(
-                            "div",
-                            { key: e.created_at, staticClass: "form-group" },
-                            [
-                              _c("input", {
-                                attrs: {
-                                  type: "checkbox",
-                                  id: "el".concat(e.created_at)
-                                }
-                              }),
-                              _vm._v(" "),
-                              _c(
-                                "label",
-                                { attrs: { for: "el".concat(e.created_at) } },
-                                [_vm._v(_vm._s(e.matiere.intitule))]
-                              )
-                            ]
-                          )
-                        })
-                      )
-                    ])
-                  ]
-                )
-              })
-            )
-          ])
+        ? _c(
+            "div",
+            { staticClass: "row" },
+            _vm._l(_vm.classesWithCorrespondingEnseigner, function(c, cindex) {
+              return _c(
+                "div",
+                { key: cindex, staticClass: "col-sm-4" },
+                [_c("prof-presence-check", { attrs: { courses: c } })],
+                1
+              )
+            })
+          )
         : _vm._e()
     ])
   ])
@@ -34849,6 +34841,78 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-4c9a2568", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-64ea803e\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/professeurs/ProfesseurPresenceCheck.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "panel panel-default" }, [
+    _c("div", { staticClass: "panel-heading" }, [
+      _c("h5", [_vm._v(_vm._s(_vm.courses.classe.cla_intitule))])
+    ]),
+    _vm._v(" "),
+    _c("table", { staticClass: "table table-striped" }, [
+      _c(
+        "tbody",
+        _vm._l(_vm.courses.enseigner, function(e) {
+          return _c("tr", { key: e.created_at }, [
+            _c("td", [
+              _c("input", {
+                attrs: { type: "checkbox" },
+                on: {
+                  click: function($event) {
+                    _vm.selectCourse(e.id)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("td", [_vm._v(_vm._s(e.matiere.intitule))]),
+            _vm._v(" "),
+            _c("td", [
+              _vm._v(
+                _vm._s(e.professeur.prof_prenoms) +
+                  " " +
+                  _vm._s(e.professeur.prof_nom)
+              )
+            ])
+          ])
+        })
+      )
+    ]),
+    _vm._v(" "),
+    _vm._m(0)
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "panel-footer" }, [
+      _c("button", { staticClass: "btn btn-sm btn-info" }, [
+        _vm._v("Tout cocher")
+      ]),
+      _vm._v(" "),
+      _c("button", { staticClass: "btn btn-sm btn-success" }, [
+        _vm._v("Enregistrer")
+      ])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-64ea803e", module.exports)
   }
 }
 
@@ -46761,6 +46825,54 @@ if (false) {(function () {
     hotAPI.createRecord("data-v-0932e0be", Component.options)
   } else {
     hotAPI.reload("data-v-0932e0be", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/professeurs/ProfesseurPresenceCheck.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/professeurs/ProfesseurPresenceCheck.vue")
+/* template */
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-64ea803e\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/professeurs/ProfesseurPresenceCheck.vue")
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/professeurs/ProfesseurPresenceCheck.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-64ea803e", Component.options)
+  } else {
+    hotAPI.reload("data-v-64ea803e", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true

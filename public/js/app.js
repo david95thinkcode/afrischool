@@ -1851,6 +1851,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 //
 //
 //
@@ -1871,7 +1873,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    'prof-presence-check': __WEBPACK_IMPORTED_MODULE_2__professeurs_ProfesseurPresenceCheck_vue___default.a
+    "prof-presence-check": __WEBPACK_IMPORTED_MODULE_2__professeurs_ProfesseurPresenceCheck_vue___default.a
   },
   data: function data() {
     return {
@@ -1908,21 +1910,13 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
       // mais aussi les enseigner correspondants
 
       this.distinctsClasses.forEach(function (classeID) {
-
         var enseignerForThisClasse = _this.enseignerObjectsDetails.filter(function (eodElement) {
           return eodElement.details.classe.id === classeID;
         });
-
-        var pureData = []; // contiendra juste les donnees necessaires car enseignerForThisClasse est trop riche
-
-        enseignerForThisClasse.forEach(function (f) {
-          pureData.push(f.details);
-        });
-
-        if (pureData.length > 0) {
+        if (enseignerForThisClasse.length > 0) {
           var d = {
             classe: _extends({}, enseignerForThisClasse[0].details.classe),
-            enseigner: _extends({}, pureData)
+            enseigner: [].concat(_toConsumableArray(enseignerForThisClasse))
           };
           _this.classesWithCorrespondingEnseigner.push(d);
         }
@@ -1945,16 +1939,15 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
                 formattedToday = today.getDate().toString().concat("-", (today.getMonth() + 1).toString(), "-", today.getFullYear());
 
                 // for test only
-
-                formattedToday = '24-10-2018';
+                // formattedToday = '24-10-2018';
 
                 requestBody = {
                   day: formattedToday
                 };
-                _context.next = 6;
+                _context.next = 5;
                 return axios.post(__WEBPACK_IMPORTED_MODULE_1__routes_js__["a" /* Routes */].emploiDuTemps.post.date, requestBody);
 
-              case 6:
+              case 5:
                 post = _context.sent;
 
 
@@ -1964,74 +1957,74 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
                 _iteratorNormalCompletion = true;
                 _didIteratorError = false;
                 _iteratorError = undefined;
-                _context.prev = 11;
+                _context.prev = 10;
                 _iterator = this.horaires[Symbol.iterator]();
 
-              case 13:
+              case 12:
                 if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
-                  _context.next = 22;
+                  _context.next = 21;
                   break;
                 }
 
                 h = _step.value;
 
                 this.pushToDistinctEnseigner(h.enseigner.id);
-                _context.next = 18;
+                _context.next = 17;
                 return this.fetchEnseignerDetails(h.enseigner.id);
 
-              case 18:
+              case 17:
                 this.pushToDistinctsClasses(h.enseigner.classe_id);
 
-              case 19:
+              case 18:
                 _iteratorNormalCompletion = true;
-                _context.next = 13;
+                _context.next = 12;
                 break;
 
-              case 22:
-                _context.next = 28;
+              case 21:
+                _context.next = 27;
                 break;
 
-              case 24:
-                _context.prev = 24;
-                _context.t0 = _context["catch"](11);
+              case 23:
+                _context.prev = 23;
+                _context.t0 = _context["catch"](10);
                 _didIteratorError = true;
                 _iteratorError = _context.t0;
 
-              case 28:
+              case 27:
+                _context.prev = 27;
                 _context.prev = 28;
-                _context.prev = 29;
 
                 if (!_iteratorNormalCompletion && _iterator.return) {
                   _iterator.return();
                 }
 
-              case 31:
-                _context.prev = 31;
+              case 30:
+                _context.prev = 30;
 
                 if (!_didIteratorError) {
-                  _context.next = 34;
+                  _context.next = 33;
                   break;
                 }
 
                 throw _iteratorError;
 
+              case 33:
+                return _context.finish(30);
+
               case 34:
-                return _context.finish(31);
+                return _context.finish(27);
 
               case 35:
-                return _context.finish(28);
-
-              case 36:
                 this.fetched = true;
 
                 this.populateClassesWithEnseigner();
 
-              case 38:
+              case 37:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, this, [[11, 24, 28, 36], [29,, 31, 35]]);
+        }, _callee, this, [[10, 23, 27, 35], [28,, 30, 34]]);
       }));
 
       function fetchTodaysCourses() {
@@ -2063,7 +2056,8 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 
                 this.enseignerObjectsDetails.push({
                   id: enseignerID,
-                  details: response.data
+                  details: response.data,
+                  cocher: false // tres important
                 });
 
                 return _context2.abrupt("return", new Promise(function (resolve) {
@@ -2107,72 +2101,6 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
         this.distinctsClasses.push(classeID);
         // Getting classe details directly from enseignerDetails
       }
-    },
-    fetchMatieres: function fetchMatieres() {
-      var _this2 = this;
-
-      axios.post(__WEBPACK_IMPORTED_MODULE_1__routes_js__["a" /* Routes */].enseigner.post.classNdate, this.absence).then(function (response) {
-        _this2.matieres = response.data;
-      }).catch(function (error) {
-        _this2.errorActions(error, "Error on getting matieres");
-      });
-    },
-    gotoMatStep: function gotoMatStep() {
-      this.resetInput();
-      this.fetchMatieres();
-      this.fetchInscrits();
-    },
-    toggleEleveCheckbox: function toggleEleveCheckbox(inscriptionID) {
-      if (this.choosedEleve.length == 0) {
-        this.choosedEleve.push(inscriptionID);
-      } else {
-        // Toggling code
-        var i = this.choosedEleve.indexOf(inscriptionID);
-        i == -1 ? this.choosedEleve.push(inscriptionID) : this.choosedEleve.splice(i, 1);
-      }
-    },
-
-
-    /**
-     * @param
-     */
-    removeInscritItem: function removeInscritItem(itemvalue) {},
-    store: function store() {
-      var _this3 = this;
-
-      this.isSaving = true;
-      axios.post(__WEBPACK_IMPORTED_MODULE_1__routes_js__["a" /* Routes */].absenses.post.store, {
-        eleves: this.choosedEleve,
-        enseigner: this.pickedMat,
-        date: this.absence.date
-      }).then(function (response) {
-        console.log(response.data);
-        _this3.successActions("Absences enregistré");
-      }).catch(function (error) {
-        _this3.errorActions(error, "Problème");
-      }).finally(function () {
-        _this3.isSaving = false;
-      });
-    },
-    resetInput: function resetInput() {
-      this.matieres = [];
-      this.inscrits = [];
-      this.choosedEleve = [];
-      this.pickedMat = "";
-    },
-    successActions: function successActions(successMessage) {
-      this.resetInput();
-      this.isSaved = true;
-      this.error = "";
-      // this.$emit('refresh');
-      console.log(successMessage);
-      alert(successMessage);
-    },
-    errorActions: function errorActions(error, message) {
-      console.log(message);
-      console.log(error);
-      this.error = error;
-      this.isSaved = false;
     }
   },
   computed: {}
@@ -2680,6 +2608,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator__ = __webpack_require__("./node_modules/babel-runtime/regenerator/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator__);
+
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
+//
+//
+//
 //
 //
 //
@@ -2705,26 +2646,80 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: {
-        courses: ''
-    },
-    data: function data() {
-        return {
-            selected: [],
-            saved: [],
-            issending: false
-        };
-    },
+  props: {
+    courses: ""
+  },
+  data: function data() {
+    return {
+      formatedCourses: "",
+      selected: [],
+      saved: [],
+      issending: false
+    };
+  },
 
-    methods: {
-        selectCourse: function selectCourse(id) {
-            console.log(id);
-            this.selected.push(id);
-            console.table(this.selected);
-        }
-    },
-    computed: {},
-    mounted: function mounted() {}
+  methods: {
+    cloneCourseProp: function () {
+      var _ref = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee() {
+        return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.next = 2;
+                return _extends({}, this.courses);
+
+              case 2:
+                this.formatedCourses = _context.sent;
+
+              case 3:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this);
+      }));
+
+      function cloneCourseProp() {
+        return _ref.apply(this, arguments);
+      }
+
+      return cloneCourseProp;
+    }(),
+
+
+    /**
+     * Recupere tous les models representant des elements deja
+     * coches pour la date d'aujourd'hui
+     */
+    getAlreadySaved: function () {
+      var _ref2 = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee2() {
+        return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this);
+      }));
+
+      function getAlreadySaved() {
+        return _ref2.apply(this, arguments);
+      }
+
+      return getAlreadySaved;
+    }()
+  },
+  computed: {
+    isReady: function isReady() {
+      return _typeof(this.formatedCourses) == "object" ? true : false;
+    }
+  },
+  mounted: function mounted() {
+    this.cloneCourseProp();
+    this.getAlreadySaved();
+  }
 });
 
 /***/ }),
@@ -5144,7 +5139,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -34853,43 +34848,76 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "panel panel-default" }, [
-    _c("div", { staticClass: "panel-heading" }, [
-      _c("h5", [_vm._v(_vm._s(_vm.courses.classe.cla_intitule))])
-    ]),
-    _vm._v(" "),
-    _c("table", { staticClass: "table table-striped" }, [
-      _c(
-        "tbody",
-        _vm._l(_vm.courses.enseigner, function(e) {
-          return _c("tr", { key: e.created_at }, [
-            _c("td", [
-              _c("input", {
-                attrs: { type: "checkbox" },
-                on: {
-                  click: function($event) {
-                    _vm.selectCourse(e.id)
-                  }
-                }
-              })
-            ]),
-            _vm._v(" "),
-            _c("td", [_vm._v(_vm._s(e.matiere.intitule))]),
-            _vm._v(" "),
-            _c("td", [
-              _vm._v(
-                _vm._s(e.professeur.prof_prenoms) +
-                  " " +
-                  _vm._s(e.professeur.prof_nom)
-              )
-            ])
-          ])
-        })
-      )
-    ]),
-    _vm._v(" "),
-    _vm._m(0)
-  ])
+  return _vm.isReady
+    ? _c("div", { staticClass: "panel panel-default" }, [
+        _c("div", { staticClass: "panel-heading" }, [
+          _c("h5", [_vm._v(_vm._s(_vm.courses.classe.cla_intitule))])
+        ]),
+        _vm._v(" "),
+        _c("table", { staticClass: "table table-striped" }, [
+          _c(
+            "tbody",
+            _vm._l(_vm.courses.enseigner, function(e) {
+              return _c("tr", { key: e.created_at }, [
+                _c("td", [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: e.cocher,
+                        expression: "e.cocher"
+                      }
+                    ],
+                    attrs: { type: "checkbox" },
+                    domProps: {
+                      checked: Array.isArray(e.cocher)
+                        ? _vm._i(e.cocher, null) > -1
+                        : e.cocher
+                    },
+                    on: {
+                      change: function($event) {
+                        var $$a = e.cocher,
+                          $$el = $event.target,
+                          $$c = $$el.checked ? true : false
+                        if (Array.isArray($$a)) {
+                          var $$v = null,
+                            $$i = _vm._i($$a, $$v)
+                          if ($$el.checked) {
+                            $$i < 0 && _vm.$set(e, "cocher", $$a.concat([$$v]))
+                          } else {
+                            $$i > -1 &&
+                              _vm.$set(
+                                e,
+                                "cocher",
+                                $$a.slice(0, $$i).concat($$a.slice($$i + 1))
+                              )
+                          }
+                        } else {
+                          _vm.$set(e, "cocher", $$c)
+                        }
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(e.details.matiere.intitule))]),
+                _vm._v(" "),
+                _c("td", [
+                  _vm._v(
+                    _vm._s(e.details.professeur.prof_prenoms) +
+                      " " +
+                      _vm._s(e.details.professeur.prof_nom)
+                  )
+                ])
+              ])
+            })
+          )
+        ]),
+        _vm._v(" "),
+        _vm._m(0)
+      ])
+    : _c("div", [_vm._v("\n    Loading...\n")])
 }
 var staticRenderFns = [
   function() {

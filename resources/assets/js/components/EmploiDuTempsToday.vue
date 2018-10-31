@@ -18,7 +18,7 @@ import ProfesseurPresenceCheck from "./professeurs/ProfesseurPresenceCheck.vue";
 
 export default {
   components: {
-    'prof-presence-check' : ProfesseurPresenceCheck
+    "prof-presence-check": ProfesseurPresenceCheck
   },
   data() {
     return {
@@ -42,7 +42,6 @@ export default {
     this.fetchTodaysCourses();
   },
   methods: {
-
     populateClassesWithEnseigner() {
       // On prends chaque item de $chassesdistintes
       // puis on recherche dans $enseignerObjectsDetails les elements
@@ -52,25 +51,19 @@ export default {
       // mais aussi les enseigner correspondants
 
       this.distinctsClasses.forEach(classeID => {
-
-        let enseignerForThisClasse = this.enseignerObjectsDetails.filter(function(eodElement) {
-          return eodElement.details.classe.id === classeID; 
-        });
-        
-        let pureData = []; // contiendra juste les donnees necessaires car enseignerForThisClasse est trop riche
-
-        enseignerForThisClasse.forEach(f => {
-          pureData.push(f.details);
-        });
-
-        if (pureData.length > 0) {
+        let enseignerForThisClasse = this.enseignerObjectsDetails.filter(
+          function(eodElement) {
+            return eodElement.details.classe.id === classeID;
+          }
+        );
+        if (enseignerForThisClasse.length > 0) {
           let d = {
             classe: { ...enseignerForThisClasse[0].details.classe },
-            enseigner: { ...pureData }
+            enseigner: [...enseignerForThisClasse]
           };
           this.classesWithCorrespondingEnseigner.push(d);
         }
-      })
+      });
     },
 
     /**
@@ -89,7 +82,7 @@ export default {
         );
 
       // for test only
-      formattedToday = '24-10-2018';
+      // formattedToday = '24-10-2018';
 
       let requestBody = {
         day: formattedToday
@@ -122,7 +115,8 @@ export default {
 
       this.enseignerObjectsDetails.push({
         id: enseignerID,
-        details: response.data
+        details: response.data,
+        cocher: false // tres important
       });
 
       return new Promise(resolve => {
@@ -152,88 +146,9 @@ export default {
         this.distinctsClasses.push(classeID);
         // Getting classe details directly from enseignerDetails
       }
-    },
-
-    fetchMatieres() {
-      axios
-        .post(Routes.enseigner.post.classNdate, this.absence)
-        .then(response => {
-          this.matieres = response.data;
-        })
-        .catch(error => {
-          this.errorActions(error, "Error on getting matieres");
-        });
-    },
-
-    gotoMatStep() {
-      this.resetInput();
-      this.fetchMatieres();
-      this.fetchInscrits();
-    },
-
-    toggleEleveCheckbox(inscriptionID) {
-      if (this.choosedEleve.length == 0) {
-        this.choosedEleve.push(inscriptionID);
-      } else {
-        // Toggling code
-        let i = this.choosedEleve.indexOf(inscriptionID);
-        i == -1
-          ? this.choosedEleve.push(inscriptionID)
-          : this.choosedEleve.splice(i, 1);
-      }
-    },
-
-    /**
-     * @param
-     */
-    removeInscritItem(itemvalue) {},
-
-    store() {
-      this.isSaving = true;
-      axios
-        .post(Routes.absenses.post.store, {
-          eleves: this.choosedEleve,
-          enseigner: this.pickedMat,
-          date: this.absence.date
-        })
-        .then(response => {
-          console.log(response.data);
-          this.successActions("Absences enregistré");
-        })
-        .catch(error => {
-          this.errorActions(error, "Problème");
-        })
-        .finally(() => {
-          this.isSaving = false;
-        });
-    },
-
-    resetInput() {
-      this.matieres = [];
-      this.inscrits = [];
-      this.choosedEleve = [];
-      this.pickedMat = "";
-    },
-
-    successActions(successMessage) {
-      this.resetInput();
-      this.isSaved = true;
-      this.error = "";
-      // this.$emit('refresh');
-      console.log(successMessage);
-      alert(successMessage);
-    },
-
-    errorActions(error, message) {
-      console.log(message);
-      console.log(error);
-      this.error = error;
-      this.isSaved = false;
     }
   },
-  computed: {
-    
-  }
+  computed: {}
 };
 </script>
 

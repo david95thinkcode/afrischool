@@ -9,16 +9,19 @@ use App\Models\PresenceProfesseur;
 use App\Models\Professeur;
 use App\Models\Horaire;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\SearchPresenceProfesseur;
 
 class PresenceProfesseurController extends Controller
 {
 
-    public function __construct() {
-        
+    public function __construct()
+    {
+
     }
 
-    public function store(StoreProfesseurPresenceRequest $req) {
-        
+    public function store(StoreProfesseurPresenceRequest $req)
+    {
+
         $horaire = Horaire::findOrFail($req->horaire);
         $prof = Professeur::findOrFail($req->prof);
         $presence = new PresenceProfesseur();
@@ -41,8 +44,37 @@ class PresenceProfesseurController extends Controller
             $presence->duree = $req->duree;
         }
 
-        $presence->save();
-        
+        if (!($this->isAlreadyExists($presence->horaire_id, $presence->real_professeur_id, $presence->date, $presence->duree))) {
+            $presence->save();
+        }
+
         return response()->json($presence, 200);
+    }
+
+
+    public function Exists(SearchPresenceProfesseur $req)
+    {
+
+    }
+    /**
+     * Retourne true si une occurence de presence professeur
+     * avec les parametre existe deja dans la base de données
+     *
+     * @param integer $horaireID
+     * @param integer $professeurID
+     * @param [type] $date
+     * @param integer $duree
+     * @return boolean
+     */
+    private function isAlreadyExists($horaireID, $professeurID, $date, $duree)
+    {
+        $results = PresenceProfesseur::where([
+            ['horaire_id', $horaireID],
+            ['real_professeur_id', $professeurID],
+            ['duree', $duree],
+            ['date', $date]
+        ])->get();
+
+        return $results->isNotEmpty();
     }
 }

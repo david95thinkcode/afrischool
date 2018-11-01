@@ -23,6 +23,7 @@ class CreateProfesseursTable extends Migration
             $table->date('prof_date_naissance')->nullable();
             $table->string('prof_nationalite')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

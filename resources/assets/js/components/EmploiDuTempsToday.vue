@@ -5,7 +5,7 @@
                 <div class="col-sm-4" 
                   v-for="(c, cindex) in classesWithCorrespondingEnseigner"
                   v-bind:key="cindex">
-                  <prof-presence-check v-bind:courses='c'></prof-presence-check>
+                  <prof-presence-check v-bind:courses='c' v-bind:date='today'></prof-presence-check>
                 </div>
             </div>
         </div>
@@ -34,11 +34,15 @@ export default {
       distinctEnseigner: [],
       enseignerObjectsDetails: [], // Contient les oject enseigner de distinctsEnseigner
 
-      fetched: false
+      fetched: false,
+      today: '',
+      formattedToday: "",
     };
   },
   props: {},
   mounted() {
+    this.today = new Date();
+    this.formattedToday = this.getFormattedDate();
     this.fetchTodaysCourses();
   },
   methods: {
@@ -70,22 +74,12 @@ export default {
      * Recupere les cours enseignes aujourdh"hui
      */
     async fetchTodaysCourses() {
-      let today = new Date();
-      let formattedToday = today
-        .getDate()
-        .toString()
-        .concat(
-          "-",
-          (today.getMonth() + 1).toString(),
-          "-",
-          today.getFullYear()
-        );
-
+      
       // for test only
-      // formattedToday = '24-10-2018';
+      // this.formattedToday = '31-10-2018';
 
       let requestBody = {
-        day: formattedToday
+        day: this.formattedToday
       };
 
       let post = await axios.post(Routes.emploiDuTemps.post.date, requestBody);
@@ -124,6 +118,11 @@ export default {
       });
     },
 
+    getFormattedDate() {
+      let d = this.today.getDate() + "-" + (this.today.getMonth() + 1) + "-" + this.today.getFullYear();
+      return d;
+    },
+
     /**
      * Push to the array and prevent agains duplication
      */
@@ -151,7 +150,3 @@ export default {
   computed: {}
 };
 </script>
-
-<style>
-</style>
-

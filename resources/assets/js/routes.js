@@ -1,6 +1,9 @@
 export const rootURI = window.location.protocol + '//' + document.location.host + '/';
 
 export const Routes = {
+    presenceProfesseur: {
+        store: rootURI + 'api/presence-prof/store/',
+    },
     emploiDuTemps: {
         get: {
             prof: rootURI.concat('api/emploi-du-temps/p/'),

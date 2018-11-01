@@ -17,6 +17,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::prefix('presence-prof/')->group(function () {
+    Route::post('store', 'PresenceProfesseurController@store');
+});
+
 Route::get('classes/fetch', 'ClasseController@fetch');
 
 Route::prefix('emploi-du-temps')->group(function () {

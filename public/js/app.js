@@ -1889,12 +1889,16 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       distinctEnseigner: [],
       enseignerObjectsDetails: [], // Contient les oject enseigner de distinctsEnseigner
 
-      fetched: false
+      fetched: false,
+      today: '',
+      formattedToday: ""
     };
   },
 
   props: {},
   mounted: function mounted() {
+    this.today = new Date();
+    this.formattedToday = this.getFormattedDate();
     this.fetchTodaysCourses();
   },
 
@@ -1929,25 +1933,23 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
      */
     fetchTodaysCourses: function () {
       var _ref = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee() {
-        var today, formattedToday, requestBody, post, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, h;
+        var requestBody, post, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, h;
 
         return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                today = new Date();
-                formattedToday = today.getDate().toString().concat("-", (today.getMonth() + 1).toString(), "-", today.getFullYear());
 
                 // for test only
-                // formattedToday = '24-10-2018';
+                // this.formattedToday = '31-10-2018';
 
                 requestBody = {
-                  day: formattedToday
+                  day: this.formattedToday
                 };
-                _context.next = 5;
+                _context.next = 3;
                 return axios.post(__WEBPACK_IMPORTED_MODULE_1__routes_js__["a" /* Routes */].emploiDuTemps.post.date, requestBody);
 
-              case 5:
+              case 3:
                 post = _context.sent;
 
 
@@ -1957,74 +1959,74 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
                 _iteratorNormalCompletion = true;
                 _didIteratorError = false;
                 _iteratorError = undefined;
-                _context.prev = 10;
+                _context.prev = 8;
                 _iterator = this.horaires[Symbol.iterator]();
 
-              case 12:
+              case 10:
                 if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
-                  _context.next = 21;
+                  _context.next = 19;
                   break;
                 }
 
                 h = _step.value;
 
                 this.pushToDistinctEnseigner(h.enseigner.id);
-                _context.next = 17;
+                _context.next = 15;
                 return this.fetchEnseignerDetails(h.enseigner.id);
 
-              case 17:
+              case 15:
                 this.pushToDistinctsClasses(h.enseigner.classe_id);
 
-              case 18:
+              case 16:
                 _iteratorNormalCompletion = true;
-                _context.next = 12;
+                _context.next = 10;
+                break;
+
+              case 19:
+                _context.next = 25;
                 break;
 
               case 21:
-                _context.next = 27;
-                break;
-
-              case 23:
-                _context.prev = 23;
-                _context.t0 = _context["catch"](10);
+                _context.prev = 21;
+                _context.t0 = _context["catch"](8);
                 _didIteratorError = true;
                 _iteratorError = _context.t0;
 
-              case 27:
-                _context.prev = 27;
-                _context.prev = 28;
+              case 25:
+                _context.prev = 25;
+                _context.prev = 26;
 
                 if (!_iteratorNormalCompletion && _iterator.return) {
                   _iterator.return();
                 }
 
-              case 30:
-                _context.prev = 30;
+              case 28:
+                _context.prev = 28;
 
                 if (!_didIteratorError) {
-                  _context.next = 33;
+                  _context.next = 31;
                   break;
                 }
 
                 throw _iteratorError;
 
+              case 31:
+                return _context.finish(28);
+
+              case 32:
+                return _context.finish(25);
+
               case 33:
-                return _context.finish(30);
-
-              case 34:
-                return _context.finish(27);
-
-              case 35:
                 this.fetched = true;
 
                 this.populateClassesWithEnseigner();
 
-              case 37:
+              case 35:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, this, [[10, 23, 27, 35], [28,, 30, 34]]);
+        }, _callee, this, [[8, 21, 25, 33], [26,, 28, 32]]);
       }));
 
       function fetchTodaysCourses() {
@@ -2078,6 +2080,10 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
       return fetchEnseignerDetails;
     }(),
+    getFormattedDate: function getFormattedDate() {
+      var d = this.today.getDate() + "-" + (this.today.getMonth() + 1) + "-" + this.today.getFullYear();
+      return d;
+    },
 
 
     /**
@@ -2610,6 +2616,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator__ = __webpack_require__("./node_modules/babel-runtime/regenerator/index.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__routes_js__ = __webpack_require__("./resources/assets/js/routes.js");
 
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -2645,9 +2652,11 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
-    courses: ""
+    courses: "",
+    date: ""
   },
   data: function data() {
     return {
@@ -2659,6 +2668,35 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
   },
 
   methods: {
+    saveOnePresence: function saveOnePresence(indexInFormatedCourses) {
+      var concernedItem = this.formatedCourses.enseigner[indexInFormatedCourses];
+      var msg = "Confirmez-vous que le professeur " + concernedItem.details.professeur.prof_nom + ' ' + concernedItem.details.professeur.prof_prenoms + " a effectué le cours < " + concernedItem.details.matiere.intitule + " > aujourd'hui ? Attention car cette action est irréversible.";
+
+      // console.log(concernedItem);
+      var defaultHoraire = 4; // TODO: change it with the real horaire 
+
+      // Afficher l'alerte seulement si coché
+      if (concernedItem.cocher == false) {
+        if (confirm(msg)) {
+          console.log("C'est parti !");
+          var requestBody = {
+            prof: concernedItem.details.professeur_id,
+            horaire: defaultHoraire,
+            date: this.getFormattedDate()
+          };
+          axios.post(__WEBPACK_IMPORTED_MODULE_1__routes_js__["a" /* Routes */].presenceProfesseur.store, requestBody).then(function (response) {
+            console.log(response);
+          }).catch(function (error) {
+            console.log(error);
+          });
+        } else {
+          // decocher le checkbox
+          // this.formatedCourses.enseigner[indexInFormatedCourses].cocher = false
+          console.log("Il vaudrait mieux pour vous ...");
+        }
+      }
+    },
+    savePresences: function savePresences() {},
     cloneCourseProp: function () {
       var _ref = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee() {
         return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.wrap(function _callee$(_context) {
@@ -2685,6 +2723,10 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 
       return cloneCourseProp;
     }(),
+    getFormattedDate: function getFormattedDate() {
+      var d = this.date.getDate() + "-" + (this.date.getMonth() + 1) + "-" + this.date.getFullYear();
+      return d;
+    },
 
 
     /**
@@ -5125,21 +5167,6 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 // module
 exports.push([module.i, "\n.btn-primary:active, \n.btn-primary.active,\n.btn-primary.active.focus,\n.open > .btn-primary.dropdown-toggle {\n    background-color: #1abb9c;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
-
-/***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4c9a2568\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/EmploiDuTempsToday.vue":
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/css-base.js")(false);
-// imports
-
-
-// module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -34820,7 +34847,11 @@ var render = function() {
               return _c(
                 "div",
                 { key: cindex, staticClass: "col-sm-4" },
-                [_c("prof-presence-check", { attrs: { courses: c } })],
+                [
+                  _c("prof-presence-check", {
+                    attrs: { courses: c, date: _vm.today }
+                  })
+                ],
                 1
               )
             })
@@ -34857,7 +34888,7 @@ var render = function() {
         _c("table", { staticClass: "table table-striped" }, [
           _c(
             "tbody",
-            _vm._l(_vm.courses.enseigner, function(e) {
+            _vm._l(_vm.courses.enseigner, function(e, index) {
               return _c("tr", { key: e.created_at }, [
                 _c("td", [
                   _c("input", {
@@ -34876,6 +34907,9 @@ var render = function() {
                         : e.cocher
                     },
                     on: {
+                      click: function($event) {
+                        _vm.saveOnePresence(index)
+                      },
                       change: function($event) {
                         var $$a = e.cocher,
                           $$el = $event.target,
@@ -35108,33 +35142,6 @@ if(false) {
  if(!content.locals) {
    module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-3440ab88\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./AbsenceCreate.vue", function() {
      var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-3440ab88\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./AbsenceCreate.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-
-/***/ "./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4c9a2568\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/EmploiDuTempsToday.vue":
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__("./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4c9a2568\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/EmploiDuTempsToday.vue");
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__("./node_modules/vue-style-loader/lib/addStylesClient.js")("3707086b", content, false, {});
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4c9a2568\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./EmploiDuTempsToday.vue", function() {
-     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4c9a2568\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./EmploiDuTempsToday.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -46620,10 +46627,6 @@ module.exports = Component.exports
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__("./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4c9a2568\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/EmploiDuTempsToday.vue")
-}
 var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
 /* script */
 var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/EmploiDuTempsToday.vue")
@@ -46632,7 +46635,7 @@ var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/templa
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
-var __vue_styles__ = injectStyle
+var __vue_styles__ = null
 /* scopeId */
 var __vue_scopeId__ = null
 /* moduleIdentifier (server only) */
@@ -46928,6 +46931,9 @@ module.exports = Component.exports
 var rootURI = window.location.protocol + '//' + document.location.host + '/';
 
 var Routes = {
+    presenceProfesseur: {
+        store: rootURI + 'api/presence-prof/store/'
+    },
     emploiDuTemps: {
         get: {
             prof: rootURI.concat('api/emploi-du-temps/p/'),

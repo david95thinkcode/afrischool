@@ -8,7 +8,7 @@
                 <tbody>
                     <tr v-for="(e,index) in courses.enseigner" v-bind:key='e.created_at'>
                         <!-- <td><button class="btn btn-sm btn-primary">Marquer</button></td> -->
-                        <td><input type="checkbox" v-model="e.cocher" @click="saveOnePresence(index)"></td>
+                        <td><input type="checkbox" v-model="e.cocher" @click="saveOnePresence(index)" v-bind:disabled="e.disableInput"></td>
                         <td>{{ e.details.matiere.intitule }}</td>
                         <td>{{ e.details.professeur.prof_prenoms }} {{ e.details.professeur.prof_nom }}</td>
                     </tr>
@@ -20,7 +20,7 @@
         </div>
     </div>
     <div v-else>
-        Loading...
+        Chargement en cours..
     </div>
 </template>
 
@@ -54,7 +54,7 @@ export default {
           console.log("C'est parti !")
           let requestBody = {
             prof: concernedItem.details.professeur_id,
-            horaire: defaultHoraire,
+            horaire: concernedItem.horaire.id,
             date: this.getFormattedDate()
           };
           axios.post(Routes.presenceProfesseur.store, requestBody)

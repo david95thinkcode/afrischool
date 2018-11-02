@@ -33,16 +33,17 @@ export default {
       classesWithCorrespondingEnseigner: [],
       distinctEnseigner: [],
       enseignerObjectsDetails: [], // Contient les oject enseigner de distinctsEnseigner
-
+      alreadyCheckedInDB: [], // contient les presences deja enregistrés pour cette date dans la base de donnees
       fetched: false,
       today: '',
-      formattedToday: "",
     };
   },
   props: {},
+  computed: {},
   mounted() {
     this.today = new Date();
-    this.formattedToday = this.getFormattedDate();
+    // this.today = new Date('2018/11/1');
+    this.fetchExistingMarkedPresencesInDB();
     this.fetchTodaysCourses();
   },
   methods: {
@@ -75,11 +76,8 @@ export default {
      */
     async fetchTodaysCourses() {
       
-      // for test only
-      // this.formattedToday = '31-10-2018';
-
       let requestBody = {
-        day: this.formattedToday
+        day: this.getFormattedDate()
       };
 
       let post = await axios.post(Routes.emploiDuTemps.post.date, requestBody);
@@ -98,19 +96,52 @@ export default {
     },
 
     /**
+     * Récupère les presences déja marquées 
+     * dans la base de données afin de les pour des 
+     * traitements dans d'autre methoes
+     */
+    async fetchExistingMarkedPresencesInDB() {
+      let request = await axios.post(Routes.presenceProfesseur.existing, {
+        day: this.getFormattedDate()
+      });
+
+      this.alreadyCheckedInDB = request.data;
+
+      return new Promise(resolve => {
+        resolve();
+      });
+    },
+
+    /**
      * Recupere les details d'un model Enseigner
      * dont l'ID est recu en parametre
      * et l'ajoute au tableau enseignerObjectsDetails
      */
     async fetchEnseignerDetails(enseignerID) {
       let response = await axios.get(
-        Routes.enseigner.get.details.concat(enseignerID)
+        Routes.enseigner.get.details + enseignerID
       );
+
+      let concernedHoraire = this.horaires.find(function(element) {
+        return element.enseigner.id == enseignerID && element.enseigner.professeur_id;
+      });
+
+      // On verifie que pour tel element, si la presence
+      // d'un prof a auparavant été marquée dans la DB
+      // si c'est le cas, 
+      // la propriete disableInput se mettra a true
+      // la propriete cocher aussi sera a true
+
+      let control = this.alreadyCheckedInDB.find(function(element) {
+        return element.real_professeur_id == response.data.professeur_id && element.horaire_id == concernedHoraire.id;
+      });
 
       this.enseignerObjectsDetails.push({
         id: enseignerID,
+        horaire: concernedHoraire,
         details: response.data,
-        cocher: false // tres important
+        cocher: control === undefined ? false : true, // tres important
+        disableInput: control === undefined ? false : true, 
       });
 
       return new Promise(resolve => {
@@ -147,6 +178,5 @@ export default {
       }
     }
   },
-  computed: {}
 };
 </script>

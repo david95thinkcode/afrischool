@@ -19,6 +19,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::prefix('presence-prof/')->group(function () {
     Route::post('store', 'PresenceProfesseurController@store');
+    Route::post('existing', 'PresenceProfesseurController@getExistingByDate');
 });
 
 Route::get('classes/fetch', 'ClasseController@fetch');

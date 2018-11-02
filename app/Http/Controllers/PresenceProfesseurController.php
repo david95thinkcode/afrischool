@@ -10,6 +10,7 @@ use App\Models\Professeur;
 use App\Models\Horaire;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\SearchPresenceProfesseur;
+use App\Http\Requests\SearchEmploiDuTempsByDay;
 
 class PresenceProfesseurController extends Controller
 {
@@ -51,11 +52,17 @@ class PresenceProfesseurController extends Controller
         return response()->json($presence, 200);
     }
 
-
-    public function Exists(SearchPresenceProfesseur $req)
+    public function getExistingByDate(SearchEmploiDuTempsByDay $req)
     {
+        $date = (Carbon::parse($req->day))->toDateString();
 
+        $existing = PresenceProfesseur::where([
+            ['date', $date]
+        ])->get();
+
+        return response()->json($existing, 200);
     }
+    
     /**
      * Retourne true si une occurence de presence professeur
      * avec les parametre existe deja dans la base de données

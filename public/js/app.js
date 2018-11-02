@@ -1888,17 +1888,18 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       classesWithCorrespondingEnseigner: [],
       distinctEnseigner: [],
       enseignerObjectsDetails: [], // Contient les oject enseigner de distinctsEnseigner
-
+      alreadyCheckedInDB: [], // contient les presences deja enregistrés pour cette date dans la base de donnees
       fetched: false,
-      today: '',
-      formattedToday: ""
+      today: ''
     };
   },
 
   props: {},
+  computed: {},
   mounted: function mounted() {
     this.today = new Date();
-    this.formattedToday = this.getFormattedDate();
+    // this.today = new Date('2018/11/1');
+    this.fetchExistingMarkedPresencesInDB();
     this.fetchTodaysCourses();
   },
 
@@ -1939,12 +1940,8 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-
-                // for test only
-                // this.formattedToday = '31-10-2018';
-
                 requestBody = {
-                  day: this.formattedToday
+                  day: this.getFormattedDate()
                 };
                 _context.next = 3;
                 return axios.post(__WEBPACK_IMPORTED_MODULE_1__routes_js__["a" /* Routes */].emploiDuTemps.post.date, requestBody);
@@ -2038,29 +2035,27 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 
     /**
-     * Recupere les details d'un model Enseigner
-     * dont l'ID est recu en parametre
-     * et l'ajoute au tableau enseignerObjectsDetails
+     * Récupère les presences déja marquées 
+     * dans la base de données afin de les pour des 
+     * traitements dans d'autre methoes
      */
-    fetchEnseignerDetails: function () {
-      var _ref2 = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee2(enseignerID) {
-        var response;
+    fetchExistingMarkedPresencesInDB: function () {
+      var _ref2 = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee2() {
+        var request;
         return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
                 _context2.next = 2;
-                return axios.get(__WEBPACK_IMPORTED_MODULE_1__routes_js__["a" /* Routes */].enseigner.get.details.concat(enseignerID));
+                return axios.post(__WEBPACK_IMPORTED_MODULE_1__routes_js__["a" /* Routes */].presenceProfesseur.existing, {
+                  day: this.getFormattedDate()
+                });
 
               case 2:
-                response = _context2.sent;
+                request = _context2.sent;
 
 
-                this.enseignerObjectsDetails.push({
-                  id: enseignerID,
-                  details: response.data,
-                  cocher: false // tres important
-                });
+                this.alreadyCheckedInDB = request.data;
 
                 return _context2.abrupt("return", new Promise(function (resolve) {
                   resolve();
@@ -2074,8 +2069,68 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         }, _callee2, this);
       }));
 
-      function fetchEnseignerDetails(_x) {
+      function fetchExistingMarkedPresencesInDB() {
         return _ref2.apply(this, arguments);
+      }
+
+      return fetchExistingMarkedPresencesInDB;
+    }(),
+
+
+    /**
+     * Recupere les details d'un model Enseigner
+     * dont l'ID est recu en parametre
+     * et l'ajoute au tableau enseignerObjectsDetails
+     */
+    fetchEnseignerDetails: function () {
+      var _ref3 = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee3(enseignerID) {
+        var response, concernedHoraire, control;
+        return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _context3.next = 2;
+                return axios.get(__WEBPACK_IMPORTED_MODULE_1__routes_js__["a" /* Routes */].enseigner.get.details + enseignerID);
+
+              case 2:
+                response = _context3.sent;
+                concernedHoraire = this.horaires.find(function (element) {
+                  return element.enseigner.id == enseignerID && element.enseigner.professeur_id;
+                });
+
+                // On verifie que pour tel element, si la presence
+                // d'un prof a auparavant été marquée dans la DB
+                // si c'est le cas, 
+                // la propriete disableInput se mettra a true
+                // la propriete cocher aussi sera a true
+
+                control = this.alreadyCheckedInDB.find(function (element) {
+                  return element.real_professeur_id == response.data.professeur_id && element.horaire_id == concernedHoraire.id;
+                });
+
+
+                this.enseignerObjectsDetails.push({
+                  id: enseignerID,
+                  horaire: concernedHoraire,
+                  details: response.data,
+                  cocher: control === undefined ? false : true, // tres important
+                  disableInput: control === undefined ? false : true
+                });
+
+                return _context3.abrupt("return", new Promise(function (resolve) {
+                  resolve();
+                }));
+
+              case 7:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3, this);
+      }));
+
+      function fetchEnseignerDetails(_x) {
+        return _ref3.apply(this, arguments);
       }
 
       return fetchEnseignerDetails;
@@ -2108,8 +2163,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         // Getting classe details directly from enseignerDetails
       }
     }
-  },
-  computed: {}
+  }
 });
 
 /***/ }),
@@ -2681,7 +2735,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
           console.log("C'est parti !");
           var requestBody = {
             prof: concernedItem.details.professeur_id,
-            horaire: defaultHoraire,
+            horaire: concernedItem.horaire.id,
             date: this.getFormattedDate()
           };
           axios.post(__WEBPACK_IMPORTED_MODULE_1__routes_js__["a" /* Routes */].presenceProfesseur.store, requestBody).then(function (response) {
@@ -34900,7 +34954,7 @@ var render = function() {
                         expression: "e.cocher"
                       }
                     ],
-                    attrs: { type: "checkbox" },
+                    attrs: { type: "checkbox", disabled: e.disableInput },
                     domProps: {
                       checked: Array.isArray(e.cocher)
                         ? _vm._i(e.cocher, null) > -1
@@ -34951,7 +35005,7 @@ var render = function() {
         _vm._v(" "),
         _vm._m(0)
       ])
-    : _c("div", [_vm._v("\n    Loading...\n")])
+    : _c("div", [_vm._v("\n    Chargement en cours..\n")])
 }
 var staticRenderFns = [
   function() {
@@ -46932,7 +46986,8 @@ var rootURI = window.location.protocol + '//' + document.location.host + '/';
 
 var Routes = {
     presenceProfesseur: {
-        store: rootURI + 'api/presence-prof/store/'
+        store: rootURI + 'api/presence-prof/store/',
+        existing: rootURI + 'api/presence-prof/existing/'
     },
     emploiDuTemps: {
         get: {

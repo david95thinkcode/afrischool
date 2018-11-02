@@ -2701,10 +2701,6 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 //
 //
 //
-//
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2717,40 +2713,39 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
       formatedCourses: "",
       selected: [],
       saved: [],
-      issending: false
+      inProgress: false
     };
   },
 
   methods: {
     saveOnePresence: function saveOnePresence(indexInFormatedCourses) {
+      var _this = this;
+
       var concernedItem = this.formatedCourses.enseigner[indexInFormatedCourses];
       var msg = "Confirmez-vous que le professeur " + concernedItem.details.professeur.prof_nom + ' ' + concernedItem.details.professeur.prof_prenoms + " a effectué le cours < " + concernedItem.details.matiere.intitule + " > aujourd'hui ? Attention car cette action est irréversible.";
-
-      // console.log(concernedItem);
-      var defaultHoraire = 4; // TODO: change it with the real horaire 
 
       // Afficher l'alerte seulement si coché
       if (concernedItem.cocher == false) {
         if (confirm(msg)) {
-          console.log("C'est parti !");
+          this.inProgress = true;
           var requestBody = {
             prof: concernedItem.details.professeur_id,
             horaire: concernedItem.horaire.id,
             date: this.getFormattedDate()
           };
           axios.post(__WEBPACK_IMPORTED_MODULE_1__routes_js__["a" /* Routes */].presenceProfesseur.store, requestBody).then(function (response) {
-            console.log(response);
+            concernedItem.cocher = true;
+            concernedItem.disableInput = true;
           }).catch(function (error) {
+            console.log("Nous n'avons pas pu enregistrer cette présence :");
+            console.log(requestBody);
             console.log(error);
+          }).finally(function () {
+            _this.inProgress = false;
           });
-        } else {
-          // decocher le checkbox
-          // this.formatedCourses.enseigner[indexInFormatedCourses].cocher = false
-          console.log("Il vaudrait mieux pour vous ...");
         }
       }
     },
-    savePresences: function savePresences() {},
     cloneCourseProp: function () {
       var _ref = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee() {
         return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.wrap(function _callee$(_context) {
@@ -34936,93 +34931,85 @@ var render = function() {
   return _vm.isReady
     ? _c("div", { staticClass: "panel panel-default" }, [
         _c("div", { staticClass: "panel-heading" }, [
-          _c("h5", [_vm._v(_vm._s(_vm.courses.classe.cla_intitule))])
+          _c("h5", [_vm._v(_vm._s(_vm.courses.classe.cla_intitule))]),
+          _vm._v(" "),
+          _vm.inProgress
+            ? _c("div", [_vm._v("Traitement en cours...")])
+            : _vm._e()
         ]),
         _vm._v(" "),
         _c("table", { staticClass: "table table-striped" }, [
           _c(
             "tbody",
             _vm._l(_vm.courses.enseigner, function(e, index) {
-              return _c("tr", { key: e.created_at }, [
-                _c("td", [
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: e.cocher,
-                        expression: "e.cocher"
-                      }
-                    ],
-                    attrs: { type: "checkbox", disabled: e.disableInput },
-                    domProps: {
-                      checked: Array.isArray(e.cocher)
-                        ? _vm._i(e.cocher, null) > -1
-                        : e.cocher
-                    },
-                    on: {
-                      click: function($event) {
-                        _vm.saveOnePresence(index)
+              return _c(
+                "tr",
+                { key: e.created_at, class: e.disableInput ? "success" : "" },
+                [
+                  _c("td", [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: e.cocher,
+                          expression: "e.cocher"
+                        }
+                      ],
+                      attrs: { type: "checkbox", disabled: e.disableInput },
+                      domProps: {
+                        checked: Array.isArray(e.cocher)
+                          ? _vm._i(e.cocher, null) > -1
+                          : e.cocher
                       },
-                      change: function($event) {
-                        var $$a = e.cocher,
-                          $$el = $event.target,
-                          $$c = $$el.checked ? true : false
-                        if (Array.isArray($$a)) {
-                          var $$v = null,
-                            $$i = _vm._i($$a, $$v)
-                          if ($$el.checked) {
-                            $$i < 0 && _vm.$set(e, "cocher", $$a.concat([$$v]))
+                      on: {
+                        click: function($event) {
+                          _vm.saveOnePresence(index)
+                        },
+                        change: function($event) {
+                          var $$a = e.cocher,
+                            $$el = $event.target,
+                            $$c = $$el.checked ? true : false
+                          if (Array.isArray($$a)) {
+                            var $$v = null,
+                              $$i = _vm._i($$a, $$v)
+                            if ($$el.checked) {
+                              $$i < 0 &&
+                                _vm.$set(e, "cocher", $$a.concat([$$v]))
+                            } else {
+                              $$i > -1 &&
+                                _vm.$set(
+                                  e,
+                                  "cocher",
+                                  $$a.slice(0, $$i).concat($$a.slice($$i + 1))
+                                )
+                            }
                           } else {
-                            $$i > -1 &&
-                              _vm.$set(
-                                e,
-                                "cocher",
-                                $$a.slice(0, $$i).concat($$a.slice($$i + 1))
-                              )
+                            _vm.$set(e, "cocher", $$c)
                           }
-                        } else {
-                          _vm.$set(e, "cocher", $$c)
                         }
                       }
-                    }
-                  })
-                ]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(e.details.matiere.intitule))]),
-                _vm._v(" "),
-                _c("td", [
-                  _vm._v(
-                    _vm._s(e.details.professeur.prof_prenoms) +
-                      " " +
-                      _vm._s(e.details.professeur.prof_nom)
-                  )
-                ])
-              ])
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v(_vm._s(e.details.matiere.intitule))]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _vm._v(
+                      _vm._s(e.details.professeur.prof_prenoms) +
+                        " " +
+                        _vm._s(e.details.professeur.prof_nom)
+                    )
+                  ])
+                ]
+              )
             })
           )
-        ]),
-        _vm._v(" "),
-        _vm._m(0)
+        ])
       ])
     : _c("div", [_vm._v("\n    Chargement en cours..\n")])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "panel-footer" }, [
-      _c("button", { staticClass: "btn btn-sm btn-info" }, [
-        _vm._v("Tout cocher")
-      ]),
-      _vm._v(" "),
-      _c("button", { staticClass: "btn btn-sm btn-success" }, [
-        _vm._v("Enregistrer")
-      ])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -46509,6 +46496,7 @@ __webpack_require__("./resources/assets/js/custom.js");
 __webpack_require__("./resources/assets/js/textwriting.js");
 
 Vue.component('example', __webpack_require__("./resources/assets/js/components/Example.vue"));
+// Vue.component('base-loading', require('./components/BaseLoading.vue'));
 Vue.component('absence-create', __webpack_require__("./resources/assets/js/components/gestion-absence/AbsenceCreate.vue"));
 Vue.component('professeur-edt', __webpack_require__("./resources/assets/js/components/professeurs/ProfesseurEmploiDuTemps.vue"));
 Vue.component('eleves-inscrits-list', __webpack_require__("./resources/assets/js/components/ElevesInscritList.vue"));

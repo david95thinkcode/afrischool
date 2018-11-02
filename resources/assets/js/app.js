@@ -11,6 +11,7 @@ require('./custom');
 require('./textwriting');
 
 Vue.component('example', require('./components/Example.vue'));
+// Vue.component('base-loading', require('./components/BaseLoading.vue'));
 Vue.component('absence-create', require('./components/gestion-absence/AbsenceCreate.vue'));
 Vue.component('professeur-edt', require('./components/professeurs/ProfesseurEmploiDuTemps.vue'));
 Vue.component('eleves-inscrits-list', require('./components/ElevesInscritList.vue'));

@@ -55,9 +55,7 @@ class InscriptionController extends Controller
     public function store(StoreInscriptionRequest $req)
     {
         session()->forget('eleve');
-        session()->put('eleve',
-            $req->only(['nom', 'prenoms', 'date_naissance', 'sexe', 'ancien',
-                'ecole_provenance', 'classe', 'redoublant']));
+        session()->put('eleve', $req->except('_token'));
 
         return Redirect::route('eleve.parent.index');
     }
@@ -70,9 +68,7 @@ class InscriptionController extends Controller
     public function sessionParent(ParentRequest $req)
     {
         session()->forget('parent');
-        session()->put('parent',
-            $req->only(['person_a_contacter_nom', 'person_a_contacter_tel', 'person_a_contacter_lien',
-                'nom_parent', 'prenoms_parent', 'sexe_parent', 'tel_parent', 'mail_parent']));
+        session()->put('parent', $req->except('_token'));
 
         return Redirect::route('eleve.scolarite.index');
     }
@@ -90,18 +86,16 @@ class InscriptionController extends Controller
     {
         $mobileFiltrer = $this->deleteSpace(session('parent.tel_parent'));
         $tel_parent = $this->deleteIndicatif($mobileFiltrer);
+        $fullname_parent = session('parent.nom_parent').' '.session('parent.prenoms_parent');
         $parent = $this->storeParent(session('parent.nom_parent'), session('parent.prenoms_parent'),
             session('parent.sexe_parent'), $tel_parent,
             session('parent.mail_parent'));
-        // dd($parent);
         $eleve = $this->storeEleve($parent->id, session('eleve.nom'), session('eleve.prenoms'),
-            session('eleve.sexe'), session('eleve.date_naissance'), session('eleve.ancien'),
-            session('eleve.redoublant'), session('eleve.ecole_provenance'),
-            session('parent.person_a_contacter_nom'), session('parent.person_a_contacter_tel'),
-            session('parent.person_a_contacter_lien'));
-            
-        $mt_verser = (is_null($req->montant_verser)) ? 0 : $req->montant_verser;
-        
+            session('eleve.sexe'), session('eleve.date_naissance'), session('eleve.ecole_provenance'),
+            $fullname_parent, $tel_parent, session('parent.person_a_contacter_lien'));
+
+        $mt_verser = is_null($req->montant_verser) ? 0 : $req->montant_verser;
+
         $inscription = $this->storeScolarite($eleve->id, session('eleve.classe'), $req->annee_scolaire,
             $mt_verser, $req->montant_scolarite, $req->date_inscription);
         $anneedebut = \Carbon\Carbon::parse($inscription->anneescolaire->an_date_debut)->format('Y');
@@ -383,28 +377,19 @@ class InscriptionController extends Controller
         //
     }
 
-    public function storeEleve($parent_id, $nom, $prenom, $sexe, $date, $ancien, $redoublant, $ecole, $pac_nom, $pac_tel, $pac_lien) {
-
+    public function storeEleve($parent_id, $nom, $prenom, $sexe, $date, $ecole, $pac_nom, $pac_tel, $pac_lien) {
         $eleve = new Eleve();
 
-        if ($ancien == 1) {
-            $eleve->ancien = true;
-        } else {
-            $eleve->ancien == false;
-            $eleve->ecole_provenance = $ecole;
-        }
-
-        if ($redoublant == 1) {
-            $eleve->redoublant = true;
-        } else {
-            $eleve->redoublant = false;
-        }
+        $eleve->ecole_provenance = is_null($ecole)?'':$ecole;
 
         $eleve->nom = $nom;
         $eleve->prenoms = $prenom;
         $eleve->sexe = $sexe;
         $eleve->date_naissance = $date;
         $eleve->parent_id = $parent_id;
+        $eleve->person_a_contacter_lien = $pac_lien;
+        $eleve->person_a_contacter_tel = $pac_tel;
+        $eleve->person_a_contacter_nom = $pac_nom;
 
         $eleve->save();
 
@@ -432,16 +417,19 @@ class InscriptionController extends Controller
 
     public function storeScolarite($eleve, $classe, $anne_scolaire, $verser, $scolarite, $date_inscription)
     {
+        $montantScolarite = is_null($scolarite)?0:$scolarite;
+        $reste = $montantScolarite - $verser;
+
         $inscription = new Inscription();
         $inscription->eleve_id = $eleve;
         $inscription->classe_id = $classe;
         $inscription->annee_scolaire_id = $anne_scolaire;
-        $inscription->montant_scolarite = (is_null($scolarite))?0:$scolarite;
-        $inscription->montant_verse = 0;
-        $inscription->reste = 0;
+        $inscription->montant_scolarite = $montantScolarite;
+        $inscription->montant_verse = $verser;
+        $inscription->reste = $reste;
         $inscription->date_inscription = $date_inscription;
         $inscription->save();
-        
+
         // Store Paiement
         if (!is_null($verser)) {
             $paiement = new PaiementScolarite();

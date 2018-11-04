@@ -42,5 +42,5 @@
 </div>
 <br>
 <div class='form-group text-center'>
-    {{ Form::submit("Enregistrer", array('class' => 'btn btn-success ')) }}
+    {{ Form::submit("Modifier", array('class' => 'btn btn-warning ')) }}
 </div>

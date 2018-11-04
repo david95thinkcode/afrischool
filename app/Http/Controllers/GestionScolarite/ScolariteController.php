@@ -47,7 +47,6 @@ class ScolariteController extends Controller
 
     public function getScolariteState(GetScolariteStateRequest $req)
     {
-        // dd($req);
         $returnableResponse = null;
 
         switch ($req->type) {

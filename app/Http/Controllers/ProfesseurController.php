@@ -42,15 +42,7 @@ class ProfesseurController extends Controller
      */
     public function store(StoreProfesseurRequest $request)
     {
-        $prof = new Professeur();
-        $prof->prof_nom = $request->prof_nom;
-        $prof->prof_prenoms = $request->prof_prenoms;
-        $prof->prof_tel = $request->prof_tel;
-        $prof->prof_email = $request->prof_email;
-        $prof->prof_sexe = $request->prof_sexe;
-        $prof->prof_date_naissance = $request->prof_date_naissance;
-        $prof->prof_nationalite = $request->prof_nationalite;
-        $prof->save();
+        Professeur::create($request->except('_token'));
 
         return Redirect::route('professeurs.index')
                 ->with('status', 'Enregistré !');
@@ -179,15 +171,7 @@ class ProfesseurController extends Controller
      */
     public function update(StoreProfesseurRequest $request, $id)
     {
-        $prof = Professeur::findorFail($id);
-        $prof->prof_nom = $request->prof_nom;
-        $prof->prof_prenoms = $request->prof_prenoms;
-        $prof->prof_tel = $request->prof_tel;
-        $prof->prof_email = $request->prof_email;
-        $prof->prof_sexe = $request->prof_sexe;
-        $prof->prof_date_naissance = $request->prof_date_naissance;
-        $prof->prof_nationalite = $request->prof_nationalite;
-        $prof->save();
+        Professeur::findorFail($id)->update($request->except('_token'));
 
         return Redirect::route('professeurs.index')
                 ->with('status', 'Modifié avec succès !');

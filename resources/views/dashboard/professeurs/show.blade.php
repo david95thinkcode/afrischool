@@ -56,7 +56,7 @@
                                         </tr>
                                         <tr>
                                             <th>Age : </th>
-                                            <td>{!! $p->age !!} ans</td>
+                                            <td>{!! $p->age !!}</td>
                                         </tr>
                                         <tr>
                                             <th>Nationalité : </th>

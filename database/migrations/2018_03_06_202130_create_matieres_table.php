@@ -17,6 +17,7 @@ class CreateMatieresTable extends Migration
             $table->increments('id');
             $table->string('intitule', 50);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

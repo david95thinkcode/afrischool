@@ -6,9 +6,12 @@
 
 window.Vue = require('vue');
 
+window.VueFlashMessage = require('vue-flash-message');
+Vue.use(VueFlashMessage);
+
 require('./bootstrap');
 
-Vue.component('example', require('./components/Example.vue'));
+Vue.component('classe-envoie-message', require('./components/EnvoieNoteClasse.vue'));
 Vue.component('absence-create', require('./components/gestion-absence/AbsenceCreate.vue'));
 Vue.component('professeur-edt', require('./components/professeurs/ProfesseurEmploiDuTemps.vue'));
 Vue.component('eleves-inscrits-list', require('./components/ElevesInscritList.vue'));

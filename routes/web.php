@@ -155,7 +155,7 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['auth', 'auth.admin']], 
     //Notifications
     Route::prefix('notification')->group(function(){
         Route::get('parents-eleves', 'NotificationController@indexForm')->name('notifier.user');
-        Route::post('parents-eleves', 'NotificationController@sendNotification')->name('notifier.user.send');
+//        Route::post('parents-eleves', 'NotificationController@sendNotification')->name('notifier.user.send');
         Route::get('notes-eleves', 'NotificationController@indexNotes')->name('notifier.notes');
         Route::post('notes-eleves', 'NotificationController@sendNotes')->name('notifier.notes.send');
     });

@@ -1,9 +1,12 @@
-!.gitkeep
-# /data/
+# Laravel 5 & Lumen specific
+public/storage
+public/hot
+storage/*.key
+/.vagrant
 
 # Laravel, nodeJS, Bower, Gulp exclusions, Composer exclusions
 .htaccess
-/vendor
+/vendor/
 /node_modules
 /bower_components/
 /bootstrap/compiled.php
@@ -27,10 +30,6 @@ phpunit.phar
 .env.*.php
 .env.php
 .sass-cache
-/.git
-/.svn
-/.hg
-/CVS
 
 # IDE exclusions
 .DS_Store

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\Request;
-use App\Models\ParentEleve;
+use Illuminate\Support\Facades\Session;
 use App\Models\Eleve;
 use App\Models\Inscription;
 use App\Models\Classe;
@@ -17,30 +17,36 @@ class NotificationController extends Controller
     use TraitSms;
     public function indexForm()
     {
-        $classes = Classe::all();
-        return view('notifications.parents', compact('classes'));
+        return view('notifications.parents');
+    }
+
+    public function getClasse()
+    {
+        return response()->json(Classe::all(), 200);
+    }
+
+    public function getParent($classe_id)
+    {
+        $inscriptions = Inscription::with('eleve')->where('classe_id', $classe_id)
+            ->distinct('eleve_id')->get();
+        return response()->json($inscriptions, 200);
     }
 
     public function sendNotification(Request $req)
     {
-        $this->validate($req, [
-            'message' =>'required|string|min:5',
-            'classe' =>'required'
-        ]);
-
-        $inscrits = Inscription::where('classe_id', $req->classe)
-            ->distinct('eleve_id')->pluck('eleve_id');
-        $nbre = count($inscrits);
-        for($i=0; $i<$nbre; $i++)
+        $ids = $req->input('contact');
+        $msg = $req->messager;
+        $i = 0;
+        foreach($ids as $ctn)
         {
-            $eleve = Eleve::find($inscrits[$i]);
-            $message = $req->message;
-            $numero =  '229'.$eleve->parents->par_tel;
+            $eleve = Eleve::find($ctn);
+            $message = $msg;
+            $numero =  '229'.$eleve->person_a_contacter_tel;
             $ecole = env('SCHOOL_NAME', 'AfrikaSchool');
-            $this->senderParent($ecole, $numero, $message);
+//            $this->senderParent($ecole, $numero, $message);
         }
-
-        return Redirect::route('notifier.user')->with('status', 'Message envoyé avec succès !');
+        Session::flash('status', 'Message envoyé avec succès !');
+        return response()->json(200);
     }
 
     public function indexNotes()

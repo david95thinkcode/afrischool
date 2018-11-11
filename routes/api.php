@@ -5,6 +5,11 @@ Route::get('liste-classe', 'NotificationController@getClasse');
 Route::get('list-parent/{id}', 'NotificationController@getParent')->where('id', '[0-9]+');
 Route::post('send-message-parent', 'NotificationController@sendNotification');
 
+Route::prefix('presence-prof/')->group(function () {
+    Route::post('store', 'PresenceProfesseurController@store');
+    Route::post('existing', 'PresenceProfesseurController@getExistingByDate');
+});
+
 Route::get('classes/fetch', 'ClasseController@fetch');
 
 Route::prefix('emploi-du-temps')->group(function () {

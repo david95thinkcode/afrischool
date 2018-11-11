@@ -3,12 +3,17 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Matiere extends Model
 {
+    use SoftDeletes;
+
     protected $table = 'matieres';
 
     public $timestamps = true;
+
+    protected $dates = ['deleted_at'];
 
     /**
      * Une matière a plusieurs coefficient
@@ -26,7 +31,7 @@ class Matiere extends Model
         return $this->hasMany('App\Models\Enseigner');
     }
 
-     /**
+    /**
      * Une matière a beaucoup de notes
      */
     public function notes()

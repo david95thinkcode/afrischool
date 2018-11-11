@@ -1843,10 +1843,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator__ = __webpack_require__("./node_modules/babel-runtime/regenerator/index.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__routes_js__ = __webpack_require__("./resources/assets/js/routes.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__professeurs_ProfesseurPresenceCheck_vue__ = __webpack_require__("./resources/assets/js/components/professeurs/ProfesseurPresenceCheck.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__professeurs_ProfesseurPresenceCheck_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__professeurs_ProfesseurPresenceCheck_vue__);
 
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 //
 //
 //
@@ -1861,26 +1867,17 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    "prof-presence-check": __WEBPACK_IMPORTED_MODULE_2__professeurs_ProfesseurPresenceCheck_vue___default.a
+  },
   data: function data() {
     return {
       horaires: [],
-      readableCourses: [],
-
       distinctsClasses: [],
 
       /* Contient des classes sans doublon
@@ -1889,16 +1886,20 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
         * - les enseigner concernant la classe
        */
       classesWithCorrespondingEnseigner: [],
-
       distinctEnseigner: [],
       enseignerObjectsDetails: [], // Contient les oject enseigner de distinctsEnseigner
-
-      fetched: false
+      alreadyCheckedInDB: [], // contient les presences deja enregistrés pour cette date dans la base de donnees
+      fetched: false,
+      today: ''
     };
   },
 
   props: {},
+  computed: {},
   mounted: function mounted() {
+    this.today = new Date();
+    // this.today = new Date('2018/11/1');
+    this.fetchExistingMarkedPresencesInDB();
     this.fetchTodaysCourses();
   },
 
@@ -1907,23 +1908,23 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
       var _this = this;
 
       // On prends chaque item de $chassesdistintes
-      // puis on recherche dans $distinctEnseigner l'element
+      // puis on recherche dans $enseignerObjectsDetails les elements
       // correspondant a la classe en question
-      // Une fois trouvé, on peuple cree un object
+      // Une fois trouvé, on crée un object
       // dans lequel se trouve les details de la classe
-      // mais aussi un les enseigner correspondants
+      // mais aussi les enseigner correspondants
 
       this.distinctsClasses.forEach(function (classeID) {
-        _this.enseignerObjectsDetails.forEach(function (ens) {
-          if (ens.details.classe_id == classeID) {
-            var d = {
-              classe: ens.details.classe,
-              enseigner: []
-            };
-            d.enseigner.push(ens.details);
-            _this.classesWithCorrespondingEnseigner.push(d);
-          }
+        var enseignerForThisClasse = _this.enseignerObjectsDetails.filter(function (eodElement) {
+          return eodElement.details.classe.id === classeID;
         });
+        if (enseignerForThisClasse.length > 0) {
+          var d = {
+            classe: _extends({}, enseignerForThisClasse[0].details.classe),
+            enseigner: [].concat(_toConsumableArray(enseignerForThisClasse))
+          };
+          _this.classesWithCorrespondingEnseigner.push(d);
+        }
       });
     },
 
@@ -1933,21 +1934,19 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
      */
     fetchTodaysCourses: function () {
       var _ref = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee() {
-        var today, formattedToday, requestBody, post, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, h;
+        var requestBody, post, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, h;
 
         return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                today = new Date();
-                formattedToday = today.getDate().toString().concat("-", (today.getMonth() + 1).toString(), "-", today.getFullYear());
                 requestBody = {
-                  day: formattedToday
+                  day: this.getFormattedDate()
                 };
-                _context.next = 5;
+                _context.next = 3;
                 return axios.post(__WEBPACK_IMPORTED_MODULE_1__routes_js__["a" /* Routes */].emploiDuTemps.post.date, requestBody);
 
-              case 5:
+              case 3:
                 post = _context.sent;
 
 
@@ -1957,74 +1956,74 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
                 _iteratorNormalCompletion = true;
                 _didIteratorError = false;
                 _iteratorError = undefined;
-                _context.prev = 10;
+                _context.prev = 8;
                 _iterator = this.horaires[Symbol.iterator]();
 
-              case 12:
+              case 10:
                 if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
-                  _context.next = 21;
+                  _context.next = 19;
                   break;
                 }
 
                 h = _step.value;
 
                 this.pushToDistinctEnseigner(h.enseigner.id);
-                _context.next = 17;
+                _context.next = 15;
                 return this.fetchEnseignerDetails(h.enseigner.id);
 
-              case 17:
+              case 15:
                 this.pushToDistinctsClasses(h.enseigner.classe_id);
 
-              case 18:
+              case 16:
                 _iteratorNormalCompletion = true;
-                _context.next = 12;
+                _context.next = 10;
+                break;
+
+              case 19:
+                _context.next = 25;
                 break;
 
               case 21:
-                _context.next = 27;
-                break;
-
-              case 23:
-                _context.prev = 23;
-                _context.t0 = _context["catch"](10);
+                _context.prev = 21;
+                _context.t0 = _context["catch"](8);
                 _didIteratorError = true;
                 _iteratorError = _context.t0;
 
-              case 27:
-                _context.prev = 27;
-                _context.prev = 28;
+              case 25:
+                _context.prev = 25;
+                _context.prev = 26;
 
                 if (!_iteratorNormalCompletion && _iterator.return) {
                   _iterator.return();
                 }
 
-              case 30:
-                _context.prev = 30;
+              case 28:
+                _context.prev = 28;
 
                 if (!_didIteratorError) {
-                  _context.next = 33;
+                  _context.next = 31;
                   break;
                 }
 
                 throw _iteratorError;
 
+              case 31:
+                return _context.finish(28);
+
+              case 32:
+                return _context.finish(25);
+
               case 33:
-                return _context.finish(30);
-
-              case 34:
-                return _context.finish(27);
-
-              case 35:
                 this.fetched = true;
 
                 this.populateClassesWithEnseigner();
 
-              case 37:
+              case 35:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, this, [[10, 23, 27, 35], [28,, 30, 34]]);
+        }, _callee, this, [[8, 21, 25, 33], [26,, 28, 32]]);
       }));
 
       function fetchTodaysCourses() {
@@ -2036,27 +2035,27 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 
 
     /**
-     * Recupere les details d'un model Enseigner
-     * dont l'ID est recu en parametre
+     * Récupère les presences déja marquées 
+     * dans la base de données afin de les pour des 
+     * traitements dans d'autre methoes
      */
-    fetchEnseignerDetails: function () {
-      var _ref2 = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee2(enseignerID) {
-        var response;
+    fetchExistingMarkedPresencesInDB: function () {
+      var _ref2 = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee2() {
+        var request;
         return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
                 _context2.next = 2;
-                return axios.get(__WEBPACK_IMPORTED_MODULE_1__routes_js__["a" /* Routes */].enseigner.get.details.concat(enseignerID));
+                return axios.post(__WEBPACK_IMPORTED_MODULE_1__routes_js__["a" /* Routes */].presenceProfesseur.existing, {
+                  day: this.getFormattedDate()
+                });
 
               case 2:
-                response = _context2.sent;
+                request = _context2.sent;
 
 
-                this.enseignerObjectsDetails.push({
-                  id: enseignerID,
-                  details: response.data
-                });
+                this.alreadyCheckedInDB = request.data;
 
                 return _context2.abrupt("return", new Promise(function (resolve) {
                   resolve();
@@ -2070,12 +2069,76 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
         }, _callee2, this);
       }));
 
-      function fetchEnseignerDetails(_x) {
+      function fetchExistingMarkedPresencesInDB() {
         return _ref2.apply(this, arguments);
+      }
+
+      return fetchExistingMarkedPresencesInDB;
+    }(),
+
+
+    /**
+     * Recupere les details d'un model Enseigner
+     * dont l'ID est recu en parametre
+     * et l'ajoute au tableau enseignerObjectsDetails
+     */
+    fetchEnseignerDetails: function () {
+      var _ref3 = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee3(enseignerID) {
+        var response, concernedHoraire, control;
+        return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _context3.next = 2;
+                return axios.get(__WEBPACK_IMPORTED_MODULE_1__routes_js__["a" /* Routes */].enseigner.get.details + enseignerID);
+
+              case 2:
+                response = _context3.sent;
+                concernedHoraire = this.horaires.find(function (element) {
+                  return element.enseigner.id == enseignerID && element.enseigner.professeur_id;
+                });
+
+                // On verifie que pour tel element, si la presence
+                // d'un prof a auparavant été marquée dans la DB
+                // si c'est le cas, 
+                // la propriete disableInput se mettra a true
+                // la propriete cocher aussi sera a true
+
+                control = this.alreadyCheckedInDB.find(function (element) {
+                  return element.real_professeur_id == response.data.professeur_id && element.horaire_id == concernedHoraire.id;
+                });
+
+
+                this.enseignerObjectsDetails.push({
+                  id: enseignerID,
+                  horaire: concernedHoraire,
+                  details: response.data,
+                  cocher: control === undefined ? false : true, // tres important
+                  disableInput: control === undefined ? false : true
+                });
+
+                return _context3.abrupt("return", new Promise(function (resolve) {
+                  resolve();
+                }));
+
+              case 7:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3, this);
+      }));
+
+      function fetchEnseignerDetails(_x) {
+        return _ref3.apply(this, arguments);
       }
 
       return fetchEnseignerDetails;
     }(),
+    getFormattedDate: function getFormattedDate() {
+      var d = this.today.getDate() + "-" + (this.today.getMonth() + 1) + "-" + this.today.getFullYear();
+      return d;
+    },
 
 
     /**
@@ -2099,101 +2162,6 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
         this.distinctsClasses.push(classeID);
         // Getting classe details directly from enseignerDetails
       }
-    },
-    fetchMatieres: function fetchMatieres() {
-      var _this2 = this;
-
-      axios.post(__WEBPACK_IMPORTED_MODULE_1__routes_js__["a" /* Routes */].enseigner.post.classNdate, this.absence).then(function (response) {
-        _this2.matieres = response.data;
-      }).catch(function (error) {
-        _this2.errorActions(error, "Error on getting matieres");
-      });
-    },
-    fetchInscrits: function fetchInscrits() {
-      var _this3 = this;
-
-      axios.get(__WEBPACK_IMPORTED_MODULE_1__routes_js__["a" /* Routes */].inscription.forClasse.concat(this.absence.classe)).then(function (response) {
-        _this3.inscrits = response.data;
-      }).catch(function (error) {
-        _this3.errorActions(error, "Error on getting inscrits");
-      });
-    },
-    gotoMatStep: function gotoMatStep() {
-      this.resetInput();
-      this.fetchMatieres();
-      this.fetchInscrits();
-    },
-    toggleEleveCheckbox: function toggleEleveCheckbox(inscriptionID) {
-      if (this.choosedEleve.length == 0) {
-        this.choosedEleve.push(inscriptionID);
-      } else {
-        // Toggling code
-        var i = this.choosedEleve.indexOf(inscriptionID);
-        i == -1 ? this.choosedEleve.push(inscriptionID) : this.choosedEleve.splice(i, 1);
-      }
-    },
-
-
-    /**
-     * @param
-     */
-    removeInscritItem: function removeInscritItem(itemvalue) {},
-    store: function store() {
-      var _this4 = this;
-
-      this.isSaving = true;
-      axios.post(__WEBPACK_IMPORTED_MODULE_1__routes_js__["a" /* Routes */].absenses.post.store, {
-        eleves: this.choosedEleve,
-        enseigner: this.pickedMat,
-        date: this.absence.date
-      }).then(function (response) {
-        console.log(response.data);
-        _this4.successActions("Absences enregistré");
-      }).catch(function (error) {
-        _this4.errorActions(error, "Problème");
-      }).finally(function () {
-        _this4.isSaving = false;
-      });
-    },
-    resetInput: function resetInput() {
-      this.matieres = [];
-      this.inscrits = [];
-      this.choosedEleve = [];
-      this.pickedMat = "";
-    },
-    successActions: function successActions(successMessage) {
-      this.resetInput();
-      this.isSaved = true;
-      this.error = "";
-      // this.$emit('refresh');
-      console.log(successMessage);
-      alert(successMessage);
-    },
-    errorActions: function errorActions(error, message) {
-      console.log(message);
-      console.log(error);
-      this.error = error;
-      this.isSaved = false;
-    }
-  },
-  computed: {
-    // CLASSES_ARE_FILLED() {
-    //   return this.classes.length > 0 ? true : false;
-    // },
-    INSCRITS_ARE_FILLED: function INSCRITS_ARE_FILLED() {
-      return this.inscrits.length > 0 ? true : false;
-    },
-    MATIERES_ARE_FILLED: function MATIERES_ARE_FILLED() {
-      return this.matieres.length > 0 ? true : false;
-    },
-    READY_FOR_MATIERE_STEP: function READY_FOR_MATIERE_STEP() {
-      return this.absence.date != "" && this.absence.classe != "" ? true : false;
-    },
-    READY_FOR_SUBMIT: function READY_FOR_SUBMIT() {
-      return this.choosedEleve.length > 0 && this.pickedMat != "" ? true : false;
-    },
-    isErrored: function isErrored() {
-      return this.error === "" ? false : true;
     }
   }
 });
@@ -2803,6 +2771,163 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     FETCHED: function FETCHED() {
       return this.isFetching ? false : true;
     }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/professeurs/ProfesseurPresenceCheck.vue":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator__ = __webpack_require__("./node_modules/babel-runtime/regenerator/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__routes_js__ = __webpack_require__("./resources/assets/js/routes.js");
+
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: {
+    courses: "",
+    date: ""
+  },
+  data: function data() {
+    return {
+      formatedCourses: "",
+      selected: [],
+      saved: [],
+      issending: false
+    };
+  },
+
+  methods: {
+    saveOnePresence: function saveOnePresence(indexInFormatedCourses) {
+      var concernedItem = this.formatedCourses.enseigner[indexInFormatedCourses];
+      var msg = "Confirmez-vous que le professeur " + concernedItem.details.professeur.prof_nom + ' ' + concernedItem.details.professeur.prof_prenoms + " a effectué le cours < " + concernedItem.details.matiere.intitule + " > aujourd'hui ? Attention car cette action est irréversible.";
+
+      // console.log(concernedItem);
+      var defaultHoraire = 4; // TODO: change it with the real horaire 
+
+      // Afficher l'alerte seulement si coché
+      if (concernedItem.cocher == false) {
+        if (confirm(msg)) {
+          console.log("C'est parti !");
+          var requestBody = {
+            prof: concernedItem.details.professeur_id,
+            horaire: concernedItem.horaire.id,
+            date: this.getFormattedDate()
+          };
+          axios.post(__WEBPACK_IMPORTED_MODULE_1__routes_js__["a" /* Routes */].presenceProfesseur.store, requestBody).then(function (response) {
+            console.log(response);
+          }).catch(function (error) {
+            console.log(error);
+          });
+        } else {
+          // decocher le checkbox
+          // this.formatedCourses.enseigner[indexInFormatedCourses].cocher = false
+          console.log("Il vaudrait mieux pour vous ...");
+        }
+      }
+    },
+    savePresences: function savePresences() {},
+    cloneCourseProp: function () {
+      var _ref = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee() {
+        return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.next = 2;
+                return _extends({}, this.courses);
+
+              case 2:
+                this.formatedCourses = _context.sent;
+
+              case 3:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this);
+      }));
+
+      function cloneCourseProp() {
+        return _ref.apply(this, arguments);
+      }
+
+      return cloneCourseProp;
+    }(),
+    getFormattedDate: function getFormattedDate() {
+      var d = this.date.getDate() + "-" + (this.date.getMonth() + 1) + "-" + this.date.getFullYear();
+      return d;
+    },
+
+
+    /**
+     * Recupere tous les models representant des elements deja
+     * coches pour la date d'aujourd'hui
+     */
+    getAlreadySaved: function () {
+      var _ref2 = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee2() {
+        return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this);
+      }));
+
+      function getAlreadySaved() {
+        return _ref2.apply(this, arguments);
+      }
+
+      return getAlreadySaved;
+    }()
+  },
+  computed: {
+    isReady: function isReady() {
+      return _typeof(this.formatedCourses) == "object" ? true : false;
+    }
+  },
+  mounted: function mounted() {
+    this.cloneCourseProp();
+    this.getAlreadySaved();
   }
 });
 
@@ -5209,21 +5334,6 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 // module
 exports.push([module.i, "\n.btn-primary:active, \n.btn-primary.active,\n.btn-primary.active.focus,\n.open > .btn-primary.dropdown-toggle {\n    background-color: #1abb9c;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
-
-/***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4c9a2568\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/EmploiDuTempsToday.vue":
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/css-base.js")(false);
-// imports
-
-
-// module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* .btn-primary:active,\n.btn-primary.active,\n.btn-primary.active.focus,\n.open > .btn-primary.dropdown-toggle {\n  background-color: #1abb9c; */\n/* } */\n", ""]);
 
 // exports
 
@@ -34904,60 +35014,22 @@ var render = function() {
   return _c("div", { staticClass: "row" }, [
     _c("div", { staticClass: "col-sm-12" }, [
       _vm.fetched
-        ? _c("div", { staticClass: "row" }, [
-            _c(
-              "div",
-              { staticClass: "col-sm-4" },
-              _vm._l(_vm.classesWithCorrespondingEnseigner, function(
-                c,
-                cindex
-              ) {
-                return _c(
-                  "div",
-                  { key: cindex, staticClass: "panel panel-default" },
-                  [
-                    _c("div", { staticClass: "panel-heading" }, [
-                      _c("h5", [_vm._v(_vm._s(c.classe.cla_intitule))])
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "panel-body" }, [
-                      _c(
-                        "form",
-                        {
-                          attrs: { "accept-charset": "UTF-8" },
-                          on: {
-                            submit: function($event) {
-                              $event.preventDefault()
-                            }
-                          }
-                        },
-                        _vm._l(c.enseigner, function(e) {
-                          return _c(
-                            "div",
-                            { key: e.created_at, staticClass: "form-group" },
-                            [
-                              _c("input", {
-                                attrs: {
-                                  type: "checkbox",
-                                  id: "el".concat(e.created_at)
-                                }
-                              }),
-                              _vm._v(" "),
-                              _c(
-                                "label",
-                                { attrs: { for: "el".concat(e.created_at) } },
-                                [_vm._v(_vm._s(e.matiere.intitule))]
-                              )
-                            ]
-                          )
-                        })
-                      )
-                    ])
-                  ]
-                )
-              })
-            )
-          ])
+        ? _c(
+            "div",
+            { staticClass: "row" },
+            _vm._l(_vm.classesWithCorrespondingEnseigner, function(c, cindex) {
+              return _c(
+                "div",
+                { key: cindex, staticClass: "col-sm-4" },
+                [
+                  _c("prof-presence-check", {
+                    attrs: { courses: c, date: _vm.today }
+                  })
+                ],
+                1
+              )
+            })
+          )
         : _vm._e()
     ])
   ])
@@ -35355,33 +35427,6 @@ if(false) {
  if(!content.locals) {
    module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-3440ab88\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./AbsenceCreate.vue", function() {
      var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-3440ab88\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./AbsenceCreate.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-
-/***/ "./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4c9a2568\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/EmploiDuTempsToday.vue":
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__("./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4c9a2568\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/EmploiDuTempsToday.vue");
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__("./node_modules/vue-style-loader/lib/addStylesClient.js")("3707086b", content, false, {});
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4c9a2568\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./EmploiDuTempsToday.vue", function() {
-     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4c9a2568\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./EmploiDuTempsToday.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -46869,10 +46914,6 @@ module.exports = Component.exports
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__("./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4c9a2568\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/EmploiDuTempsToday.vue")
-}
 var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
 /* script */
 var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/EmploiDuTempsToday.vue")
@@ -46881,7 +46922,7 @@ var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/templa
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
-var __vue_styles__ = injectStyle
+var __vue_styles__ = null
 /* scopeId */
 var __vue_scopeId__ = null
 /* moduleIdentifier (server only) */
@@ -47113,6 +47154,64 @@ module.exports = Component.exports
 
 /***/ }),
 
+<<<<<<< HEAD
+=======
+/***/ "./resources/assets/js/components/professeurs/ProfesseurPresenceCheck.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/professeurs/ProfesseurPresenceCheck.vue")
+/* template */
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-64ea803e\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/professeurs/ProfesseurPresenceCheck.vue")
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/professeurs/ProfesseurPresenceCheck.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-64ea803e", Component.options)
+  } else {
+    hotAPI.reload("data-v-64ea803e", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/custom.js":
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+
+>>>>>>> 9f07f7e2e03085e0de201b227f3d4fc3bb4130c6
 /***/ "./resources/assets/js/routes.js":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -47122,6 +47221,10 @@ module.exports = Component.exports
 var rootURI = window.location.protocol + '//' + document.location.host + '/';
 
 var Routes = {
+    presenceProfesseur: {
+        store: rootURI + 'api/presence-prof/store/',
+        existing: rootURI + 'api/presence-prof/existing/'
+    },
     emploiDuTemps: {
         get: {
             prof: rootURI.concat('api/emploi-du-temps/p/'),

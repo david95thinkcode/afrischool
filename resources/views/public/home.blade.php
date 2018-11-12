@@ -80,7 +80,7 @@
                     <img class="card-img-top" src="{{asset('images/slide-bottom-03.png')}}" alt="Card image cap">
                 </div>
                 <div class="card-body bg-orange">
-                    <h4>Information en ligne</h4>
+                    <h4>Notes en ligne</h4>
                 </div>
             </div>
         </div>
@@ -90,7 +90,7 @@
 <div class="container">
     <div class="row">
         <div class="col-md-6">
-            <h1>Bienvenu à Les Champions De Demain</h1>
+            <h1>Bienvenu au Complexe Scolaire Le Faucon</h1>
             <p>
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium ex excepturi illo ipsum nisi.
                 Cumque harum ipsa libero temporibus ullam. Beatae consequatur corporis cupiditate dicta dolor eos est
@@ -105,7 +105,7 @@
 
 <footer class="footer pt-2 pb-1">
     <div class="container">
-        <p class="wrap"><i class="fa fa-graduation-cap"></i> Afrikaschool | © Copyright 2018</p>
+        <p class="wrap"><i class="fa fa-graduation-cap"></i> AfrikaSchool | © Copyright 2018</p>
     </div>
 </footer>
 

@@ -97,7 +97,7 @@ class EnseignerController extends Controller
     public function update(StoreEnseignerRequest $req, $id)
     {
         $e = Enseigner::findOrFail($id);
-        $exists = $this->exists($req->matiere, $req->classe);
+        $exists = $this->exists($req->matiere, $req->classe, $req->anneescolaire);
         if (!$exists) {
             $e->classe_id = $req->classe;
             $e->matiere_id = $req->matiere;

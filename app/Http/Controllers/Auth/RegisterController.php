@@ -71,7 +71,7 @@ class RegisterController extends Controller
                 'password' => bcrypt($req->password),
             ]);
 
-            $ur = UserRole::create([
+            UserRole::create([
                 'user_id' => $user->id,
                 'role_id' => Role::where('name', 'parent')->first()->id,
                 'is_active' => true

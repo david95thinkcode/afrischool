@@ -18,7 +18,7 @@ class FournitureController extends Controller
     public function index()
     {
         $fournitures = Fourniture::with('classe')->get();
-        if(!Auth::user()->hasRole('authenticated')){
+        if(!Auth::user()->hasRole('parent')){
             return view('fournitures.indextab', compact('fournitures'));
         }
         return view('fournitures.index', compact('fournitures'));

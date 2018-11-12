@@ -70,13 +70,8 @@
                         {!! Form::label('prof_matrimonial', "Situation matrimonial") !!} <i class="fa fa-star text-danger" aria-hidden="true"></i>
                         <select class="form-control" name="prof_matrimonial" id='prof_matrimonial'
                                 value="{{ old('prof_matrimonial') }}" required>
-                            @if ($prof->prof_matrimonial == 'celibataire')
-                                <option value="celibataire" selected>Célibataire</option>
-                                <option value="en couple">En couple</option>
-                            @else
-                                <option value="en couple" selected>En couple</option>
-                                <option value="celibataire">Célibataire</option>
-                            @endif
+                            <option value="celibataire">Célibataire</option>
+                            <option value="en couple">En couple</option>
                         </select>
                     </div>
                 </div>
@@ -86,17 +81,17 @@
                         {!! Form::label('prof_enfant', "Nombre d'enfant") !!} <i class="fa fa-star text-danger" aria-hidden="true"></i>
                         <select class="form-control" name="prof_enfant" id='prof_enfant'
                                 value="{{ old('prof_enfant') }}" required>
-                            <option value="0" @if($prof->prof_enfant == 0) selected @endif>0</option>
-                            <option value="1" @if($prof->prof_enfant == 1) selected @endif>1</option>
-                            <option value="2" @if($prof->prof_enfant == 2) selected @endif>2</option>
-                            <option value="3" @if($prof->prof_enfant == 3) selected @endif>3</option>
-                            <option value="4" @if($prof->prof_enfant == 4) selected @endif>4</option>
-                            <option value="5" @if($prof->prof_enfant == 5) selected @endif>5</option>
-                            <option value="6" @if($prof->prof_enfant == 6) selected @endif>6</option>
-                            <option value="7" @if($prof->prof_enfant == 7) selected @endif>7</option>
-                            <option value="8" @if($prof->prof_enfant == 8) selected @endif>8</option>
-                            <option value="9" @if($prof->prof_enfant == 9) selected @endif>9</option>
-                            <option value="10" @if($prof->prof_enfant == 10) selected @endif>10</option>
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
                         </select>
                     </div>
                 </div>
@@ -105,9 +100,9 @@
                     <div class="form-group">
                         {!! Form::label('prof_type', 'Statut du professeur') !!} <i class="fa fa-star text-danger" aria-hidden="true"></i>
                         <select class="form-control" name="prof_type" id='prof_type'
-                                value="{{ old('prof_type') }}" required>
-                            <option value="titulaire" @if($prof->prof_type == 'titulaire') selected @endif>Titulaire</option>
-                            <option value="vacataire" @if($prof->prof_type == 'vacataire') selected @endif>Vacataire</option>
+                                value="{{ old('prof_nationalite') }}" required>
+                            <option value="titulaire">Titulaire</option>
+                            <option value="vacataire">Vacataire</option>
                         </select>
                     </div>
                     <br>

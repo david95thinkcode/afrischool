@@ -23,7 +23,7 @@
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label for="prenom">Date</label>
-                                            <input class="form-control" v-model="absence.date" type="date">
+                                            <input class="form-control" id="prenom" v-model="absence.date" type="date">
                                         </div>
                                     </div>
                                 </div>

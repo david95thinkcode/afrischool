@@ -28,11 +28,8 @@ class StoreInscriptionRequest extends FormRequest
             'prenoms' => 'required|string',
             'date_naissance' => 'required|date|before:today',
             'sexe' => 'required',
-            
-            // 'ancien' => 'required',
             'ecole_provenance' => '',
-            'classe' => 'required',
-            'redoublant' => ''
+            'classe' => 'required'
         ];
     }
 
@@ -40,8 +37,6 @@ class StoreInscriptionRequest extends FormRequest
     {
         return [
             'date_naissance.required' => 'Précisez la date de naissance de l\'élève',
-            'ancien.required' => "Veuillez indiquez si l'élève est ancien ou pas",
-            'redoublant.required' => "Veuillez indiquez si l'élève est redoublant ou pas"
         ];
     }
 }

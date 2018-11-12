@@ -44,11 +44,11 @@
 
                         {{-- {{ dd($item['notes']) }} --}}
                         @foreach ($item['notes'] as $typeEvaluation => $notes)
-                            
+
                             {{-- Interrogations --}}
                             @if (($typeEvaluation == 'interrogation') && (count($notes) > 0))
                                 <td class="b-interro">
-                                @php 
+                                @php
                                     $increment = 0;
                                     $variable = 0;
                                 @endphp
@@ -64,22 +64,22 @@
                             @elseif(($typeEvaluation == 'interrogation') && (count($notes) == 0))
                                 <td class="b-interro">aucune note</td>
                             @endif
-                            
-                            {{-- Les devoirs --}}   
+
+                            {{-- Les devoirs --}}
                             @if (($typeEvaluation == 'devoir') && (count($notes) == 0))
                                 <td class="b-devoir">aucune note</td>
                                 <td class="b-devoir">aucune note</td>
                             @elseif (($typeEvaluation == 'devoir') && (count($notes) == 1))
                                 <td class="b-devoir">{!! $notes[0]->not_note !!}</td>
                                 <td class="b-devoir">aucune note</td>
-                            @elseif (($typeEvaluation == 'devoir') && (count($notes) == 2))                        
-                                @foreach ($notes as $note)                                
+                            @elseif (($typeEvaluation == 'devoir') && (count($notes) == 2))
+                                @foreach ($notes as $note)
                                     <td class="b-devoir">{!! $note->not_note !!}</td>
                                 @endforeach
                             @endif
 
                         @endforeach
-                        
+
                         <td class="b-coef">{!! $item['details']->coefficient !!}</td>
                         {{-- moyenne et mentions --}}
                         <td class="b-moy"></td>
@@ -92,7 +92,7 @@
         </div>
 
         <div>
-            <h5>Moyenne Générale : 
+            <h5>Moyenne Générale :
                 <span class='badge badge-primary' id="GAVG"></span>
             </h5>
         </div>
@@ -102,4 +102,37 @@
 
 @section('custom-js')
     {!! Html::script('js/bulletins/job-college.js') !!}
+    <script src="https://unpkg.com/jspdf@latest/dist/jspdf.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            //event click btn id='pdf'
+            $('#pdf').click(function(e) {
+                e.preventDefault();
+                var pdf = new jsPDF('p', 'pt', 'letter'),
+                    source = $('#vue-app'),
+                    name = {!! $eleve['eleve']->nom !!}{!! $eleve['eleve']->prenoms !!}'.pdf',                    specialElementHandlers = {
+                        '#table_stock': function(element, renderer) {
+                            return true
+                        }
+                    }
+                margins = {
+                    top: 60,
+                    bottom: 60,
+                    left: 40,
+                    width: 522
+                };
+                alert(name);
+                pdf.fromHTML(
+                    source, margins.left, margins.top, {
+                        'width': margins.width,
+                        'elementHandlers': specialElementHandlers
+                    },
+                    function(dispose) {
+                        pdf.save(name);
+                    },
+                    margins
+                )
+            });
+        });
+    </script>
 @endsection

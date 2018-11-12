@@ -39,7 +39,7 @@
             <div class="site-branding">
                 <h1 class="site-title">
                     <a href="{{route('home')}}" rel="home">
-                        Les Champions<span> De Demain</span>
+                        Complexe Scolaire<span> Le Faucon</span>
                     </a>
                 </h1>
             </div>

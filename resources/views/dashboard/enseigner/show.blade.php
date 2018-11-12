@@ -5,6 +5,9 @@
 @endsection
 @section('content')
 <div class='row'>
+    <div class="text-center">
+        <a href="{{ route('enseigner.create') }}" class="btn btn-danger">Ajouter matière et professeur</a>
+    </div>
     <div class="col-md-12">
         <div class="table-responsive">
             <table class="table table-bordered jambo_table" id="table_list">

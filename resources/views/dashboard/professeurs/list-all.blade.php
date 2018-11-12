@@ -79,10 +79,13 @@
                             <a href="{{ route('professeurs.edit', ['id' => $p->id] ) }}" class="btn btn-sm btn-primary">
                             Modifier
                             </a>
-                            <form action="{{ route('professeurs.destroy', $p->id) }}" method="POST" class='table-del-btn'>
+
+
+                            <form action="{{ route('professeurs.destroy', $p->id) }}" method="POST" class='table-del-btn'
+                                  onsubmit="return confirm('Etes vous sûr de vouloir supprimer ce professeur?');">
                                 <input type="hidden" name="_method" value="DELETE">
                                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                              {!! Form::submit('Supprimer', array('class' => 'btn btn-sm btn-danger')) !!}
+                                {!! Form::submit('Supprimer', array('class' => 'btn btn-sm btn-danger')) !!}
                             </form>
                         </td>
                     </tr>

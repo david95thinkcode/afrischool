@@ -32,30 +32,6 @@
 </div>
 
 <div class="row">
-    <div class="col-md-6 d-none">
-        <p>Ancien élève de l'école ? </p>
-        <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" id='ancien-oui' name="ancien" value="1">
-            <label class="form-check-label" for="ancien-oui">Oui</label>
-
-            <input class="form-check-input" type="radio" id="ancien-non" name="ancien" value="0" checked>
-            <label class="form-check-label" for="ancien-non">Non</label>
-        </div>
-    </div>
-
-    <div class="col-md-6">
-        <p>Redoublant ?</p>
-        <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" id='redoublant-oui' name="redoublant" value="1">
-            <label class="form-check-label" for="redoublant-oui">Oui</label>
-
-            <input class="form-check-input" type="radio" id="redoublant-non" name="redoublant" value="0" checked>
-            <label class="form-check-label" for="redoublant-non">Non</label>
-        </div>
-    </div>
-</div>
-
-<div class="row">
     <div class="col-md-6 col-xs-12">
         <div class="form-group">
             {!! Form::label('classe', "Classe souhaitée") !!}

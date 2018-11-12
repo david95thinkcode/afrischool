@@ -114,24 +114,7 @@ class NoteController extends Controller
         $value = $req->value;
         Note::where('id', $pk)->update(['not_note' => $value]);
 
-        $note = Note::find($pk);
-        $noter = Note::where(['eleve_id' => $note->eleve_id,
-            'types_evaluation_id' => session('types_evaluation_id'),
-            'trimestre_id' => session('trimestre'),
-            'classe_id' => session('classe'),
-            'matiere_id' => session('matiere'),
-            'annee_scolaire_id' => session('annee_scolaire')])
-            ->orderBy('id', 'desc')->first();
-        if($pk == $noter->id){
-
-            Note::create([
-                'types_evaluation_id' => $noter->types_evaluation_id,
-                'trimestre_id' => $noter->trimestre_id,
-                'matiere_id' => $noter->matiere_id,
-                'classe_id' => $noter->classe_id,
-                'annee_scolaire_id' => $noter->annee_scolaire_id,
-                'eleve_id' => $noter->eleve_id,
-            ]);
+        if(!is_null($req->value) && is_double($req->value)){
 
             return response()->json(['code' => 'new'], 200);
         }

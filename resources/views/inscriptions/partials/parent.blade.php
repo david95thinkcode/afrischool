@@ -25,11 +25,24 @@
             {!! Form::email('mail_parent', old('mail_parent'), ['class' => 'form-control']) !!}
         </div>
     </div>
-    <div class="col-md-6 col-xs-12">
+    <div class="col-md-6">
         <div class="form-group">
             {!! Form::label('sexe_parent', "Sexe") !!}
             <select name="sexe_parent" id="sexe_parent" class="form-control">
                 @include('partials.sexe-options')
+            </select>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            {!! Form::label('person_a_contacter_lien', 'Lien') !!}
+            <select name="person_a_contacter_lien" id="person_a_contacter_lien" class='form-control'>
+                <option value="père/mère">Père/Mère</option>
+                <option value="oncle/tante">Oncle/Tante</option>
+                <option value="cousin(e)">Cousin/Cousine</option>
+                <option value="tuteur/tutrice">Tuteur/Tutrice</option>
+                <option value="autres">Autres</option>
             </select>
         </div>
     </div>

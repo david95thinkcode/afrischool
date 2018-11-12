@@ -39,24 +39,6 @@
                 <form method="POST" action="{{ route('register.req') }}">
                     {{ csrf_field() }}
                     <h1>Inscription</h1>
-                    {{-- <div class="{{ $errors->has('username') ? ' has-error' : '' }}">
-                        <input type="text" name="username" class="form-control" value="{{ old('username') }}" placeholder="Username" required=""/>
-
-                        @if ($errors->has('username'))
-                            <span class="help-block">
-                                <strong>{{ $errors->first('username') }}</strong>
-                            </span>
-                        @endif
-                    </div> --}}
-                    {{-- <div class="{{ $errors->has('name') ? ' has-error' : '' }}">
-                        <input type="text" name="name" class="form-control" value="{{ old('name') }}" placeholder="Nom et Prénom(s)" required=""/>
-
-                        @if ($errors->has('name'))
-                            <span class="help-block">
-                                <strong>{{ $errors->first('name') }}</strong>
-                            </span>
-                        @endif
-                    </div> --}}
 
                     <div class="{{ $errors->has('secret_code') ? ' has-error' : '' }}">
                         {{ Form::text('secret_code', old('secret_code'), ['class' => 'form-control', 'placeholder' => 'Code secret', 'required' => '']) }}
@@ -76,15 +58,6 @@
                         @endif
                     </div>
 
-                    {{-- <div class="{{ $errors->has('email') ? ' has-error' : '' }}">
-                        <input type="email" name="email" class="form-control" value="{{ old('email') }}" placeholder="Email" required=""/>
-
-                        @if ($errors->has('email'))
-                            <span class="help-block">
-                                <strong>{{ $errors->first('email') }}</strong>
-                            </span>
-                        @endif
-                    </div> --}}
                     <div class="{{ $errors->has('password') ? ' has-error' : '' }}">
                         <input type="password" name="password" class="form-control" placeholder="Mot de passe" required=""/>
 
@@ -110,8 +83,8 @@
                         </p>
 
                         <div>
-                            <h1><i class="fa fa-graduation-cap"></i> AfriSchool!</h1>
-                            <p>©2018 All Rights Reserved. AfriSchool! Gestionnaire d'école. Privacy and Terms</p>
+                            <h1><i class="fa fa-graduation-cap"></i> AfrikaSchool!</h1>
+                            <p>©2018 All Rights Reserved. AfrikaSchool! Gestionnaire d'école. Privacy and Terms</p>
                         </div>
                     </div>
                 </form>

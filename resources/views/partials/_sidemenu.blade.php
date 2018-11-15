@@ -28,6 +28,17 @@
                                 <li><a href="{!! route('personnel.index') !!}">Liste complète</a></li>
                             </ul>
                         </li>
+                        {{-- Report dropdown --}}
+                        <li>
+                            <a>
+                                <i class="fa fa-list-ul"></i> Reports
+                                <span class="fa fa-chevron-down"></span>
+                            </a>
+                            <ul class="nav child_menu">
+                                <li><a href="{{ route('emploi-du-temps.today') }}">Cahier de présence professeur</a>
+                            </ul>
+                        </li>
+
                         <li><a><i class="fa fa-users"></i> Élèves
                                 <span class="fa fa-chevron-down"></span></a>
                             <ul class="nav child_menu">
@@ -58,6 +69,7 @@
 
                                 <li><a href="{{ route('professeurs.index') }}">Liste par classe</a></li>
                                 <li><a href="{{ route('professeurs.list') }}">Liste complète</a>
+                                
                             </ul>
                         </li>
 
@@ -115,7 +127,6 @@
                                 @endif
 
                                 <li><a href="{{ route('emploi-du-temps.search') }}">Consulter</a></li>
-                                <li><a href="{{ route('emploi-du-temps.today') }}">Aujourd'hui</a></li>
                             </ul>
                         </li>
                     @endif

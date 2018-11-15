@@ -1,7 +1,9 @@
 <template>
-    <div class="panel panel-default" v-if="isReady">
+    <div class="panel panel-primary" v-if="isReady">
         <div class="panel-heading">
-            <h5>{{ courses.classe.cla_intitule}}</h5>
+            <h4 class="panel-title">
+              {{ courses.classe.cla_intitule}} / date: {{ formattedDate }}
+            </h4>
             <div v-if="inProgress">Traitement en cours...</div>
         </div>
 
@@ -86,6 +88,9 @@ export default {
   computed: {
     isReady() {
       return typeof this.formatedCourses == "object" ? true : false;
+    },
+    formattedDate() {
+      return this.date.getDate() + "-" + (this.date.getMonth() + 1) + "-" + this.date.getFullYear();
     }
   },
   mounted() {

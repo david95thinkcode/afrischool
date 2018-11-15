@@ -1867,6 +1867,38 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -1877,6 +1909,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
   },
   data: function data() {
     return {
+      date: '',
       horaires: [],
       distinctsClasses: [],
 
@@ -1898,12 +1931,37 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
   computed: {},
   mounted: function mounted() {
     this.today = new Date();
-    // this.today = new Date('2018/11/1');
-    this.fetchExistingMarkedPresencesInDB();
-    this.fetchTodaysCourses();
+    this.start();
   },
 
   methods: {
+
+    /**
+     * Vidons les donnees prealables
+     */
+    resetData: function resetData() {
+      this.horaires = [];
+      this.distinctsClasses = [];
+      this.distinctEnseigner = [];
+      this.alreadyCheckedInDB = [];
+      this.enseignerObjectsDetails = [];
+      this.classesWithCorrespondingEnseigner = [];
+    },
+
+
+    /**
+     * Lance le code d'execution de la page
+     * Si la date est non vide,
+     * lancer le processus, sinon ne rien faire
+     */
+    start: function start() {
+      if (this.date != '') this.today = new Date(this.date);
+      this.resetData();
+      this.fetchExistingMarkedPresencesInDB();
+      this.fetchTodaysCourses();
+
+      console.log('Loading cahier de presence for date ' + this.date);
+    },
     populateClassesWithEnseigner: function populateClassesWithEnseigner() {
       var _this = this;
 
@@ -2701,6 +2759,8 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 //
 //
 //
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2805,6 +2865,9 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
   computed: {
     isReady: function isReady() {
       return _typeof(this.formatedCourses) == "object" ? true : false;
+    },
+    formattedDate: function formattedDate() {
+      return this.date.getDate() + "-" + (this.date.getMonth() + 1) + "-" + this.date.getFullYear();
     }
   },
   mounted: function mounted() {
@@ -34888,28 +34951,133 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "row" }, [
     _c("div", { staticClass: "col-sm-12" }, [
-      _vm.fetched
-        ? _c(
-            "div",
-            { staticClass: "row" },
-            _vm._l(_vm.classesWithCorrespondingEnseigner, function(c, cindex) {
-              return _c(
-                "div",
-                { key: cindex, staticClass: "col-sm-4" },
-                [
-                  _c("prof-presence-check", {
-                    attrs: { courses: c, date: _vm.today }
-                  })
-                ],
-                1
-              )
-            })
-          )
-        : _vm._e()
-    ])
+      _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col-sm-offset-3 col-sm-6" }, [
+          _c("div", { staticClass: "panel panel-default" }, [
+            _vm._m(0),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                staticClass: "panel-collapse collapse in",
+                attrs: {
+                  id: "collapseOne",
+                  role: "tabpanel",
+                  "aria-labelledby": "headingOne"
+                }
+              },
+              [
+                _c("div", { staticClass: "panel-body" }, [
+                  _c("div", { staticClass: "form-group" }, [
+                    _c("div", { staticClass: "row" }, [
+                      _c("div", { staticClass: "col-sm-6" }, [
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.date,
+                              expression: "date"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          attrs: { type: "date" },
+                          domProps: { value: _vm.date },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.date = $event.target.value
+                            }
+                          }
+                        })
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "col-sm-6" }, [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-success",
+                            attrs: { disabled: _vm.date == "" },
+                            on: {
+                              click: function($event) {
+                                _vm.start()
+                              }
+                            }
+                          },
+                          [_vm._v("Charger le cahier de présence")]
+                        )
+                      ])
+                    ])
+                  ])
+                ])
+              ]
+            )
+          ])
+        ])
+      ])
+    ]),
+    _vm._v(" "),
+    _vm.fetched
+      ? _c(
+          "div",
+          { staticClass: "row" },
+          _vm._l(_vm.classesWithCorrespondingEnseigner, function(c, cindex) {
+            return _c(
+              "div",
+              { key: cindex, staticClass: "col-sm-4" },
+              [
+                _c("prof-presence-check", {
+                  attrs: { courses: c, date: _vm.today }
+                })
+              ],
+              1
+            )
+          })
+        )
+      : _vm._e()
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      {
+        staticClass: "panel-heading",
+        attrs: { role: "tab", id: "headingOne" }
+      },
+      [
+        _c("h4", { staticClass: "panel-title text-center" }, [
+          _c(
+            "a",
+            {
+              attrs: {
+                role: "button",
+                "data-toggle": "collapse",
+                "data-parent": "#accordion",
+                href: "#collapseOne",
+                "aria-controls": "collapseOne"
+              }
+            },
+            [
+              _c("span", {
+                staticClass: "glyphicon glyphicon-search",
+                attrs: { "aria-hidden": "true" }
+              }),
+              _vm._v(
+                " \n                      Chercher pour une autre date\n                    "
+              )
+            ]
+          )
+        ])
+      ]
+    )
+  }
+]
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -34929,9 +35097,17 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _vm.isReady
-    ? _c("div", { staticClass: "panel panel-default" }, [
+    ? _c("div", { staticClass: "panel panel-primary" }, [
         _c("div", { staticClass: "panel-heading" }, [
-          _c("h5", [_vm._v(_vm._s(_vm.courses.classe.cla_intitule))]),
+          _c("h4", { staticClass: "panel-title" }, [
+            _vm._v(
+              "\n          " +
+                _vm._s(_vm.courses.classe.cla_intitule) +
+                " / date: " +
+                _vm._s(_vm.formattedDate) +
+                "\n        "
+            )
+          ]),
           _vm._v(" "),
           _vm.inProgress
             ? _c("div", [_vm._v("Traitement en cours...")])

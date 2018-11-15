@@ -1,6 +1,38 @@
 <template>
     <div class="row">
         <div class="col-sm-12">
+            <div class="row">
+
+              <div class="col-sm-offset-3 col-sm-6">
+                <!-- <h3>Date : {{ today }}</h3> -->
+                  <div class="panel panel-default">
+                    <div class="panel-heading" role="tab" id="headingOne">
+                      <h4 class="panel-title text-center">
+                        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne"  aria-controls="collapseOne">
+                          <span class="glyphicon glyphicon-search" aria-hidden="true"></span> 
+                          Chercher pour une autre date
+                        </a>
+                      </h4>
+                    </div>
+                    <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                      <div class="panel-body">
+                        <div class="form-group">
+                          <div class="row">
+                            <div class="col-sm-6">
+                              <input type="date" class='form-control' v-model="date">
+                            </div>
+                            <div class="col-sm-6">
+                              <button class="btn btn-success" @click="start()" v-bind:disabled="date == ''" >Charger le cahier de présence</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+                
+              </div>
+            </div>
             <div class="row" v-if="fetched">
                 <div class="col-sm-4" 
                   v-for="(c, cindex) in classesWithCorrespondingEnseigner"
@@ -22,6 +54,7 @@ export default {
   },
   data() {
     return {
+      date: '',
       horaires: [],
       distinctsClasses: [],
 
@@ -42,11 +75,36 @@ export default {
   computed: {},
   mounted() {
     this.today = new Date();
-    // this.today = new Date('2018/11/1');
-    this.fetchExistingMarkedPresencesInDB();
-    this.fetchTodaysCourses();
+    this.start();
   },
   methods: {
+    
+    /**
+     * Vidons les donnees prealables
+     */
+    resetData() {
+      this.horaires = [];
+      this.distinctsClasses = [];
+      this.distinctEnseigner = [];
+      this.alreadyCheckedInDB = [];
+      this.enseignerObjectsDetails = [];
+      this.classesWithCorrespondingEnseigner = [];
+    },
+
+    /**
+     * Lance le code d'execution de la page
+     * Si la date est non vide,
+     * lancer le processus, sinon ne rien faire
+     */
+    start() {
+      if (this.date != '') this.today = new Date(this.date);
+      this.resetData();
+      this.fetchExistingMarkedPresencesInDB();
+      this.fetchTodaysCourses();
+
+      console.log('Loading cahier de presence for date ' + this.date)
+    },
+
     populateClassesWithEnseigner() {
       // On prends chaque item de $chassesdistintes
       // puis on recherche dans $enseignerObjectsDetails les elements

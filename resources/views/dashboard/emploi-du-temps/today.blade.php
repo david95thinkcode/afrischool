@@ -2,7 +2,7 @@
 @section('title') Emploi du temps
 @endsection
  
-@section('section-title') Aujourdh'hui
+@section('section-title') Cahier de présence des professeurs
 @endsection
  
 @section('content')

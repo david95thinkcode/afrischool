@@ -18,6 +18,7 @@ Vue.component('eleves-inscrits-list', require('./components/ElevesInscritList.vu
 Vue.component('matieres-enseigner', require('./components/MatieresEnseigner.vue'));
 Vue.component('classe-edt', require('./components/ClasseEmploiDuTemps.vue'));
 Vue.component('edt-today', require('./components/EmploiDuTempsToday.vue'));
+Vue.component('salaire-parent', require('./components/salaire-ui/Parent.vue'));
 
 const app = new Vue({
     el: '#vue-app'

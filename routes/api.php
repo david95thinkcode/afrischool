@@ -22,6 +22,10 @@ Route::prefix('presence-prof/')->group(function () {
     Route::post('existing', 'PresenceProfesseurController@getExistingByDate');
 });
 
+Route::post('salaire/get', 'SalaireController@getSalaireDetails');
+
+Route::get('professeurs/fetch', 'ProfesseurController@fetch');
+
 Route::get('classes/fetch', 'ClasseController@fetch');
 
 Route::prefix('emploi-du-temps')->group(function () {

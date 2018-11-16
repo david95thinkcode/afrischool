@@ -204,4 +204,13 @@ class ProfesseurController extends Controller
 
         return Redirect::route('professeurs.index')->with('status', 'Supprimé avec succès !');
     }
+    
+    /**
+     * Returns all model as JSON resource
+     *
+     * @return void
+     */
+    public function fetch() {
+        return response()->json(Professeur::all(), 200);
+    }
 }

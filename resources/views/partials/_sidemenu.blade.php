@@ -159,6 +159,8 @@
 
                                 <li><a href="{{ route('finance.depense.show') }}">information dépenses</a></li>
                                 <li><a href="#">#</a></li>
+                                <li><a href="{{ route('salaire.index') }}">Payer un salaire</a></li>
+                                <li><a href="{{ route('salaire.dashboard') }}">Tableau de bord de salaires</a></li>
                             </ul>
                         </li>
                     @endif

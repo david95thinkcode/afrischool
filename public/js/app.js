@@ -1867,6 +1867,38 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -1877,6 +1909,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
   },
   data: function data() {
     return {
+      date: '',
       horaires: [],
       distinctsClasses: [],
 
@@ -1898,12 +1931,37 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
   computed: {},
   mounted: function mounted() {
     this.today = new Date();
-    // this.today = new Date('2018/11/1');
-    this.fetchExistingMarkedPresencesInDB();
-    this.fetchTodaysCourses();
+    this.start();
   },
 
   methods: {
+
+    /**
+     * Vidons les donnees prealables
+     */
+    resetData: function resetData() {
+      this.horaires = [];
+      this.distinctsClasses = [];
+      this.distinctEnseigner = [];
+      this.alreadyCheckedInDB = [];
+      this.enseignerObjectsDetails = [];
+      this.classesWithCorrespondingEnseigner = [];
+    },
+
+
+    /**
+     * Lance le code d'execution de la page
+     * Si la date est non vide,
+     * lancer le processus, sinon ne rien faire
+     */
+    start: function start() {
+      if (this.date != '') this.today = new Date(this.date);
+      this.resetData();
+      this.fetchExistingMarkedPresencesInDB();
+      this.fetchTodaysCourses();
+
+      console.log('Loading cahier de presence for date ' + this.date);
+    },
     populateClassesWithEnseigner: function populateClassesWithEnseigner() {
       var _this = this;
 
@@ -2659,72 +2717,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__routes_js__ = __webpack_require__("./resources/assets/js/routes.js");
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
@@ -2816,8 +2808,6 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 //
 //
 //
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2830,40 +2820,39 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
       formatedCourses: "",
       selected: [],
       saved: [],
-      issending: false
+      inProgress: false
     };
   },
 
   methods: {
     saveOnePresence: function saveOnePresence(indexInFormatedCourses) {
+      var _this = this;
+
       var concernedItem = this.formatedCourses.enseigner[indexInFormatedCourses];
       var msg = "Confirmez-vous que le professeur " + concernedItem.details.professeur.prof_nom + ' ' + concernedItem.details.professeur.prof_prenoms + " a effectué le cours < " + concernedItem.details.matiere.intitule + " > aujourd'hui ? Attention car cette action est irréversible.";
-
-      // console.log(concernedItem);
-      var defaultHoraire = 4; // TODO: change it with the real horaire 
 
       // Afficher l'alerte seulement si coché
       if (concernedItem.cocher == false) {
         if (confirm(msg)) {
-          console.log("C'est parti !");
+          this.inProgress = true;
           var requestBody = {
             prof: concernedItem.details.professeur_id,
             horaire: concernedItem.horaire.id,
             date: this.getFormattedDate()
           };
           axios.post(__WEBPACK_IMPORTED_MODULE_1__routes_js__["a" /* Routes */].presenceProfesseur.store, requestBody).then(function (response) {
-            console.log(response);
+            concernedItem.cocher = true;
+            concernedItem.disableInput = true;
           }).catch(function (error) {
+            console.log("Nous n'avons pas pu enregistrer cette présence :");
+            console.log(requestBody);
             console.log(error);
+          }).finally(function () {
+            _this.inProgress = false;
           });
-        } else {
-          // decocher le checkbox
-          // this.formatedCourses.enseigner[indexInFormatedCourses].cocher = false
-          console.log("Il vaudrait mieux pour vous ...");
         }
       }
     },
-    savePresences: function savePresences() {},
     cloneCourseProp: function () {
       var _ref = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee() {
         return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.wrap(function _callee$(_context) {
@@ -2923,11 +2912,198 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
   computed: {
     isReady: function isReady() {
       return _typeof(this.formatedCourses) == "object" ? true : false;
+    },
+    formattedDate: function formattedDate() {
+      return this.date.getDate() + "-" + (this.date.getMonth() + 1) + "-" + this.date.getFullYear();
     }
   },
   mounted: function mounted() {
     this.cloneCourseProp();
     this.getAlreadySaved();
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/salaire-ui/Parent.vue":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__routes_js__ = __webpack_require__("./resources/assets/js/routes.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  mounted: function mounted() {
+    // Preselect some data for the first time
+    // the component load
+    var today = new Date();
+    this.selectedMonth = today.getMonth() + 1;
+    this.selectedYear = today.getFullYear();
+
+    this.start();
+  },
+  data: function data() {
+    return {
+      years: [],
+      profs: [],
+      months: [],
+      classes: [],
+      enseignerByClasse: [],
+
+      selectedMonth: "",
+      selectedProf: "",
+      selectedYear: "",
+      salaireDetailsObj: "",
+      isLoadingDetails: false
+    };
+  },
+
+  computed: {
+    profFetched: function profFetched() {
+      return this.profs.length > 0 ? true : false;
+    },
+    activePeriodeButton: function activePeriodeButton() {
+      return this.selectedMonth != "" && this.selectedYear != "" ? true : false;
+    },
+    isSearchingSalaire: function isSearchingSalaire() {
+      return this.selectedProf != "" && this.isLoadingDetails == true ? true : false;
+    },
+    salaireDetailsIsReady: function salaireDetailsIsReady() {
+      return this.salaireDetailsObj != "" || this.salaireDetailsObj != null || this.salaireDetailsObj != undefined ? true : false;
+    }
+  },
+  methods: {
+    start: function start() {
+      this.getPrimitivesDatas();
+    },
+    getPrimitivesDatas: function getPrimitivesDatas() {
+      this.populateYears();
+      this.populateMonths();
+      this.fetchProfesseurs();
+    },
+    fetchSalaireDetails: function fetchSalaireDetails(professeurKey) {
+      var _this = this;
+
+      this.isLoadingDetails = true;
+      this.salaireDetailsObj = "";
+      this.selectedProf = professeurKey;
+
+      var req = {
+        year: this.selectedYear,
+        month: this.selectedMonth,
+        prof: this.selectedProf
+      };
+
+      axios.post(__WEBPACK_IMPORTED_MODULE_0__routes_js__["a" /* Routes */].salaire.post.fetchDetails, req).then(function (response) {
+        _this.salaireDetailsObj = response.data;
+        console.log(response.data);
+      }).catch(function (error) {
+        console.log(req);
+        console.log("Error failing salaire details..");
+      }).finally(function () {
+        _this.isLoadingDetails = false;
+      });
+    },
+    populateYears: function populateYears() {
+      this.years = [];
+      var actualYear = new Date().getFullYear();
+
+      for (var index = 2017; index <= actualYear; index++) {
+        console.log(index);
+        this.years.push(index);
+      }
+    },
+    populateMonths: function populateMonths() {
+      this.months = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", " Novembre", "Décembre"];
+    },
+    fetchProfesseurs: function fetchProfesseurs() {
+      var _this2 = this;
+
+      axios.get(__WEBPACK_IMPORTED_MODULE_0__routes_js__["a" /* Routes */].professeur.fetch).then(function (response) {
+        _this2.profs = response.data;
+      }).catch(function (error) {
+        _this2.errorActions(error, "Error on getting professeurs");
+      });
+    },
+    buildFullName: function buildFullName(professeur) {
+      if (professeur == null) return null;
+
+      return professeur.prof_nom + " " + professeur.prof_prenoms;
+    },
+    fetchClasses: function fetchClasses() {
+      var _this3 = this;
+
+      axios.get(__WEBPACK_IMPORTED_MODULE_0__routes_js__["a" /* Routes */].classes.get.fetch).then(function (response) {
+        _this3.classes = response.data;
+      }).catch(function (error) {
+        _this3.errorActions(error, "Error on getting classes");
+      });
+    }
   }
 });
 
@@ -35006,28 +35182,133 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "row" }, [
     _c("div", { staticClass: "col-sm-12" }, [
-      _vm.fetched
-        ? _c(
-            "div",
-            { staticClass: "row" },
-            _vm._l(_vm.classesWithCorrespondingEnseigner, function(c, cindex) {
-              return _c(
-                "div",
-                { key: cindex, staticClass: "col-sm-4" },
-                [
-                  _c("prof-presence-check", {
-                    attrs: { courses: c, date: _vm.today }
-                  })
-                ],
-                1
-              )
-            })
-          )
-        : _vm._e()
-    ])
+      _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col-sm-offset-3 col-sm-6" }, [
+          _c("div", { staticClass: "panel panel-default" }, [
+            _vm._m(0),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                staticClass: "panel-collapse collapse in",
+                attrs: {
+                  id: "collapseOne",
+                  role: "tabpanel",
+                  "aria-labelledby": "headingOne"
+                }
+              },
+              [
+                _c("div", { staticClass: "panel-body" }, [
+                  _c("div", { staticClass: "form-group" }, [
+                    _c("div", { staticClass: "row" }, [
+                      _c("div", { staticClass: "col-sm-6" }, [
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.date,
+                              expression: "date"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          attrs: { type: "date" },
+                          domProps: { value: _vm.date },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.date = $event.target.value
+                            }
+                          }
+                        })
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "col-sm-6" }, [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-success",
+                            attrs: { disabled: _vm.date == "" },
+                            on: {
+                              click: function($event) {
+                                _vm.start()
+                              }
+                            }
+                          },
+                          [_vm._v("Charger le cahier de présence")]
+                        )
+                      ])
+                    ])
+                  ])
+                ])
+              ]
+            )
+          ])
+        ])
+      ])
+    ]),
+    _vm._v(" "),
+    _vm.fetched
+      ? _c(
+          "div",
+          { staticClass: "row" },
+          _vm._l(_vm.classesWithCorrespondingEnseigner, function(c, cindex) {
+            return _c(
+              "div",
+              { key: cindex, staticClass: "col-sm-4" },
+              [
+                _c("prof-presence-check", {
+                  attrs: { courses: c, date: _vm.today }
+                })
+              ],
+              1
+            )
+          })
+        )
+      : _vm._e()
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      {
+        staticClass: "panel-heading",
+        attrs: { role: "tab", id: "headingOne" }
+      },
+      [
+        _c("h4", { staticClass: "panel-title text-center" }, [
+          _c(
+            "a",
+            {
+              attrs: {
+                role: "button",
+                "data-toggle": "collapse",
+                "data-parent": "#accordion",
+                href: "#collapseOne",
+                "aria-controls": "collapseOne"
+              }
+            },
+            [
+              _c("span", {
+                staticClass: "glyphicon glyphicon-search",
+                attrs: { "aria-hidden": "true" }
+              }),
+              _vm._v(
+                " \n                      Chercher pour une autre date\n                    "
+              )
+            ]
+          )
+        ])
+      ]
+    )
+  }
+]
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -35047,95 +35328,95 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _vm.isReady
-    ? _c("div", { staticClass: "panel panel-default" }, [
+    ? _c("div", { staticClass: "panel panel-primary" }, [
         _c("div", { staticClass: "panel-heading" }, [
-          _c("h5", [_vm._v(_vm._s(_vm.courses.classe.cla_intitule))])
+          _c("h4", { staticClass: "panel-title" }, [
+            _vm._v(
+              "\n          " +
+                _vm._s(_vm.courses.classe.cla_intitule) +
+                " / date: " +
+                _vm._s(_vm.formattedDate) +
+                "\n        "
+            )
+          ]),
+          _vm._v(" "),
+          _vm.inProgress
+            ? _c("div", [_vm._v("Traitement en cours...")])
+            : _vm._e()
         ]),
         _vm._v(" "),
         _c("table", { staticClass: "table table-striped" }, [
           _c(
             "tbody",
             _vm._l(_vm.courses.enseigner, function(e, index) {
-              return _c("tr", { key: e.created_at }, [
-                _c("td", [
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: e.cocher,
-                        expression: "e.cocher"
-                      }
-                    ],
-                    attrs: { type: "checkbox", disabled: e.disableInput },
-                    domProps: {
-                      checked: Array.isArray(e.cocher)
-                        ? _vm._i(e.cocher, null) > -1
-                        : e.cocher
-                    },
-                    on: {
-                      click: function($event) {
-                        _vm.saveOnePresence(index)
+              return _c(
+                "tr",
+                { key: e.created_at, class: e.disableInput ? "success" : "" },
+                [
+                  _c("td", [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: e.cocher,
+                          expression: "e.cocher"
+                        }
+                      ],
+                      attrs: { type: "checkbox", disabled: e.disableInput },
+                      domProps: {
+                        checked: Array.isArray(e.cocher)
+                          ? _vm._i(e.cocher, null) > -1
+                          : e.cocher
                       },
-                      change: function($event) {
-                        var $$a = e.cocher,
-                          $$el = $event.target,
-                          $$c = $$el.checked ? true : false
-                        if (Array.isArray($$a)) {
-                          var $$v = null,
-                            $$i = _vm._i($$a, $$v)
-                          if ($$el.checked) {
-                            $$i < 0 && _vm.$set(e, "cocher", $$a.concat([$$v]))
+                      on: {
+                        click: function($event) {
+                          _vm.saveOnePresence(index)
+                        },
+                        change: function($event) {
+                          var $$a = e.cocher,
+                            $$el = $event.target,
+                            $$c = $$el.checked ? true : false
+                          if (Array.isArray($$a)) {
+                            var $$v = null,
+                              $$i = _vm._i($$a, $$v)
+                            if ($$el.checked) {
+                              $$i < 0 &&
+                                _vm.$set(e, "cocher", $$a.concat([$$v]))
+                            } else {
+                              $$i > -1 &&
+                                _vm.$set(
+                                  e,
+                                  "cocher",
+                                  $$a.slice(0, $$i).concat($$a.slice($$i + 1))
+                                )
+                            }
                           } else {
-                            $$i > -1 &&
-                              _vm.$set(
-                                e,
-                                "cocher",
-                                $$a.slice(0, $$i).concat($$a.slice($$i + 1))
-                              )
+                            _vm.$set(e, "cocher", $$c)
                           }
-                        } else {
-                          _vm.$set(e, "cocher", $$c)
                         }
                       }
-                    }
-                  })
-                ]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(e.details.matiere.intitule))]),
-                _vm._v(" "),
-                _c("td", [
-                  _vm._v(
-                    _vm._s(e.details.professeur.prof_prenoms) +
-                      " " +
-                      _vm._s(e.details.professeur.prof_nom)
-                  )
-                ])
-              ])
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v(_vm._s(e.details.matiere.intitule))]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _vm._v(
+                      _vm._s(e.details.professeur.prof_prenoms) +
+                        " " +
+                        _vm._s(e.details.professeur.prof_nom)
+                    )
+                  ])
+                ]
+              )
             })
           )
-        ]),
-        _vm._v(" "),
-        _vm._m(0)
+        ])
       ])
     : _c("div", [_vm._v("\n    Chargement en cours..\n")])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "panel-footer" }, [
-      _c("button", { staticClass: "btn btn-sm btn-info" }, [
-        _vm._v("Tout cocher")
-      ]),
-      _vm._v(" "),
-      _c("button", { staticClass: "btn btn-sm btn-success" }, [
-        _vm._v("Enregistrer")
-      ])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -35405,6 +35686,213 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-95be7ed8", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-6c8a638a\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/salaire-ui/Parent.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "container" }, [
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-sm-3" }, [
+        _c("div", { staticClass: "panel panel-success" }, [
+          _vm._m(0),
+          _vm._v(" "),
+          _c("div", { staticClass: "panel-body" }, [
+            _c("div", { staticClass: "form-group" }, [
+              _c("label", [_vm._v("Mois")]),
+              _vm._v(" "),
+              _c(
+                "select",
+                {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.selectedMonth,
+                      expression: "selectedMonth"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  on: {
+                    change: function($event) {
+                      var $$selectedVal = Array.prototype.filter
+                        .call($event.target.options, function(o) {
+                          return o.selected
+                        })
+                        .map(function(o) {
+                          var val = "_value" in o ? o._value : o.value
+                          return val
+                        })
+                      _vm.selectedMonth = $event.target.multiple
+                        ? $$selectedVal
+                        : $$selectedVal[0]
+                    }
+                  }
+                },
+                _vm._l(_vm.months, function(m, key) {
+                  return _c(
+                    "option",
+                    { key: m, domProps: { value: key + 1 } },
+                    [_vm._v(_vm._s(m) + "\n                            ")]
+                  )
+                })
+              )
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-group" }, [
+              _c("label", [_vm._v("Annee")]),
+              _vm._v(" "),
+              _c(
+                "select",
+                {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.selectedYear,
+                      expression: "selectedYear"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  on: {
+                    change: function($event) {
+                      var $$selectedVal = Array.prototype.filter
+                        .call($event.target.options, function(o) {
+                          return o.selected
+                        })
+                        .map(function(o) {
+                          var val = "_value" in o ? o._value : o.value
+                          return val
+                        })
+                      _vm.selectedYear = $event.target.multiple
+                        ? $$selectedVal
+                        : $$selectedVal[0]
+                    }
+                  }
+                },
+                _vm._l(_vm.years, function(y) {
+                  return _c("option", { key: y, domProps: { value: y } }, [
+                    _vm._v(_vm._s(y) + "\n                            ")
+                  ])
+                })
+              )
+            ]),
+            _vm._v(" "),
+            _vm._m(1)
+          ])
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-sm-4" }, [
+        _c("div", { staticClass: "panel panel-info" }, [
+          _vm._m(2),
+          _vm._v(" "),
+          _vm.profFetched
+            ? _c(
+                "div",
+                { staticClass: "list-group" },
+                _vm._l(_vm.profs, function(p) {
+                  return _c(
+                    "a",
+                    {
+                      key: p.id,
+                      staticClass: "list-group-item",
+                      attrs: { href: "#", value: p.id },
+                      on: {
+                        click: function($event) {
+                          _vm.fetchSalaireDetails(p.id)
+                        }
+                      }
+                    },
+                    [
+                      _vm._v(
+                        "\n                        " +
+                          _vm._s(_vm.buildFullName(p)) +
+                          "\n                        "
+                      )
+                    ]
+                  )
+                })
+              )
+            : _vm._e()
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-sm-5" }, [
+        _c("div", { staticClass: "panel panel-primary" }, [
+          _vm._m(3),
+          _vm._v(" "),
+          _c("div", { staticClass: "panel-body" }, [
+            _vm.isSearchingSalaire
+              ? _c("div", [
+                  _c("h4", { staticClass: "text-center" }, [
+                    _vm._v("Chargement en cours...")
+                  ])
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.salaireDetailsIsReady
+              ? _c("div", [
+                  _vm._v(
+                    "\n                        " +
+                      _vm._s(_vm.salaireDetailsObj) +
+                      "\n                    "
+                  )
+                ])
+              : _vm._e()
+          ])
+        ])
+      ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "panel-heading" }, [
+      _c("h4", { staticClass: "panel-title" }, [_vm._v("1 - Période")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "form-group" }, [
+      _c("button", { staticClass: "btn btn-success" }, [_vm._v("Charger")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "panel-heading" }, [
+      _c("h4", { staticClass: "panel-title" }, [_vm._v("2 - Les professeurs")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "panel-heading" }, [
+      _c("h4", { staticClass: "panel-title" }, [_vm._v("3 - Paiement salaire")])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-6c8a638a", module.exports)
   }
 }
 
@@ -46841,13 +47329,19 @@ window.Vue = __webpack_require__("./node_modules/vue/dist/vue.common.js");
 
 __webpack_require__("./resources/assets/js/bootstrap.js");
 
+<<<<<<< HEAD
 Vue.component('classe-envoie-message', __webpack_require__("./resources/assets/js/components/EnvoieNoteClasse.vue"));
+=======
+Vue.component('example', __webpack_require__("./resources/assets/js/components/Example.vue"));
+// Vue.component('base-loading', require('./components/BaseLoading.vue'));
+>>>>>>> dav
 Vue.component('absence-create', __webpack_require__("./resources/assets/js/components/gestion-absence/AbsenceCreate.vue"));
 Vue.component('professeur-edt', __webpack_require__("./resources/assets/js/components/professeurs/ProfesseurEmploiDuTemps.vue"));
 Vue.component('eleves-inscrits-list', __webpack_require__("./resources/assets/js/components/ElevesInscritList.vue"));
 Vue.component('matieres-enseigner', __webpack_require__("./resources/assets/js/components/MatieresEnseigner.vue"));
 Vue.component('classe-edt', __webpack_require__("./resources/assets/js/components/ClasseEmploiDuTemps.vue"));
 Vue.component('edt-today', __webpack_require__("./resources/assets/js/components/EmploiDuTempsToday.vue"));
+Vue.component('salaire-parent', __webpack_require__("./resources/assets/js/components/salaire-ui/Parent.vue"));
 
 var app = new Vue({
   el: '#vue-app'
@@ -47302,6 +47796,61 @@ module.exports = Component.exports
 
 /***/ }),
 
+/***/ "./resources/assets/js/components/salaire-ui/Parent.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/salaire-ui/Parent.vue")
+/* template */
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-6c8a638a\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/salaire-ui/Parent.vue")
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/salaire-ui/Parent.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-6c8a638a", Component.options)
+  } else {
+    hotAPI.reload("data-v-6c8a638a", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/custom.js":
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+
 /***/ "./resources/assets/js/routes.js":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -47311,6 +47860,14 @@ module.exports = Component.exports
 var rootURI = window.location.protocol + '//' + document.location.host + '/';
 
 var Routes = {
+    professeur: {
+        fetch: rootURI + 'api/professeurs/fetch'
+    },
+    salaire: {
+        post: {
+            fetchDetails: rootURI + 'api/salaire/get'
+        }
+    },
     presenceProfesseur: {
         store: rootURI + 'api/presence-prof/store/',
         existing: rootURI + 'api/presence-prof/existing/'

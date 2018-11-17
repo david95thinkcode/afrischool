@@ -1,23 +1,21 @@
 <template>
-    <div class="panel panel-default" v-if="isReady">
+    <div class="panel panel-primary" v-if="isReady">
         <div class="panel-heading">
-            <h5>{{ courses.classe.cla_intitule}}</h5>
+            <h4 class="panel-title">
+              {{ courses.classe.cla_intitule}} / date: {{ formattedDate }}
+            </h4>
+            <div v-if="inProgress">Traitement en cours...</div>
         </div>
 
             <table class="table table-striped">
                 <tbody>
-                    <tr v-for="(e,index) in courses.enseigner" v-bind:key='e.created_at'>
-                        <!-- <td><button class="btn btn-sm btn-primary">Marquer</button></td> -->
+                    <tr v-for="(e,index) in courses.enseigner" v-bind:key='e.created_at' v-bind:class="e.disableInput ? 'success' : ''">
                         <td><input type="checkbox" v-model="e.cocher" @click="saveOnePresence(index)" v-bind:disabled="e.disableInput"></td>
                         <td>{{ e.details.matiere.intitule }}</td>
                         <td>{{ e.details.professeur.prof_prenoms }} {{ e.details.professeur.prof_nom }}</td>
                     </tr>
                 </tbody>
             </table>
-        <div class="panel-footer">
-            <button class="btn btn-sm btn-info">Tout cocher</button>
-            <button class="btn btn-sm btn-success">Enregistrer</button>
-        </div>
     </div>
     <div v-else>
         Chargement en cours..
@@ -36,7 +34,7 @@ export default {
       formatedCourses: "",
       selected: [],
       saved: [],
-      issending: false
+      inProgress: false
     };
   },
   methods: {
@@ -45,13 +43,10 @@ export default {
       let concernedItem = this.formatedCourses.enseigner[indexInFormatedCourses];
       let msg = "Confirmez-vous que le professeur " + concernedItem.details.professeur.prof_nom + ' ' + concernedItem.details.professeur.prof_prenoms + " a effectué le cours < " + concernedItem.details.matiere.intitule + " > aujourd'hui ? Attention car cette action est irréversible."
 
-      // console.log(concernedItem);
-      let defaultHoraire = 4; // TODO: change it with the real horaire 
-
       // Afficher l'alerte seulement si coché
       if (concernedItem.cocher == false) {
         if (confirm(msg)) {
-          console.log("C'est parti !")
+          this.inProgress = true;
           let requestBody = {
             prof: concernedItem.details.professeur_id,
             horaire: concernedItem.horaire.id,
@@ -59,21 +54,19 @@ export default {
           };
           axios.post(Routes.presenceProfesseur.store, requestBody)
           .then((response) => {
-            console.log(response);
+            concernedItem.cocher = true;
+            concernedItem.disableInput = true;
           })
           .catch((error) => {
+            console.log("Nous n'avons pas pu enregistrer cette présence :");
+            console.log(requestBody)
             console.log(error);
           })
-        } else {
-          // decocher le checkbox
-          // this.formatedCourses.enseigner[indexInFormatedCourses].cocher = false
-          console.log("Il vaudrait mieux pour vous ...")
+          .finally(() => {
+            this.inProgress = false;
+          })
         }
       }
-
-    },
-
-    savePresences() {
 
     },
 
@@ -95,6 +88,9 @@ export default {
   computed: {
     isReady() {
       return typeof this.formatedCourses == "object" ? true : false;
+    },
+    formattedDate() {
+      return this.date.getDate() + "-" + (this.date.getMonth() + 1) + "-" + this.date.getFullYear();
     }
   },
   mounted() {

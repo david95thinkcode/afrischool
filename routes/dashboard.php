@@ -167,6 +167,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::prefix('finance')->group(function(){
         Route::get('informations-generales', 'ComptabiliteController@index')->name('finance.index');
         Route::get('saisir-depenses', 'ComptabiliteController@indexDepenses')->name('finance.depense.index');
+        Route::get('salaires', 'SalaireController@index')->name('salaire.index');
+        Route::get('salaires/tableau-de-bord', 'SalaireController@dashboard')->name('salaire.dashboard');
+
         Route::post('save-depenses', 'ComptabiliteController@storeDepenses')->name('finance.depense.save');
         Route::get('information-dépenses', 'ComptabiliteController@showDepense')->name('finance.depense.show');
         Route::post('periode-depenses', 'ComptabiliteController@periodeDepense')->name('finance.depense.periode');

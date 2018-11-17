@@ -1,6 +1,14 @@
 export const rootURI = window.location.protocol + '//' + document.location.host + '/';
 
 export const Routes = {
+    professeur: {
+        fetch: rootURI + 'api/professeurs/fetch',
+    },
+    salaire: {
+        post: {
+            fetchDetails: rootURI + 'api/salaire/get',
+        }
+    },
     presenceProfesseur: {
         store: rootURI + 'api/presence-prof/store/',
         existing: rootURI + 'api/presence-prof/existing/',

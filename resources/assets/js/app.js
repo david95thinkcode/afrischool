@@ -6,8 +6,8 @@
 
 window.Vue = require('vue');
 
-window.VueFlashMessage = require('vue-flash-message');
-Vue.use(VueFlashMessage);
+// window.VueFlashMessage = require('vue-flash-message');
+// Vue.use(VueFlashMessage);
 
 require('./bootstrap');
 

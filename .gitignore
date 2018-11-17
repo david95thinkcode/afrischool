@@ -4,6 +4,10 @@ public/hot
 storage/*.key
 /.vagrant
 
+# Builds generated with js
+public/js/app.js
+public/mix-manifest.json
+
 # Laravel, nodeJS, Bower, Gulp exclusions, Composer exclusions
 .htaccess
 /vendor/
@@ -23,8 +27,6 @@ yarn-error.log
 composer.phar
 composer.lock
 phpunit.phar
-
-/public/mix-manifest.json
 
 .env
 .env.*.php

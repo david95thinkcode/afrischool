@@ -19,6 +19,9 @@ class CreateProfesseursTable extends Migration
             $table->string('prof_prenoms');
             $table->string('prof_sexe');
             $table->string('prof_tel');
+            $table->smallInteger('prof_enfant')->default(0)->comments("Represente le nombre d'enfants"); 
+            $table->boolean('prof_est_marie')->comments("false celibataire et true pour marié")->default(false);
+            $table->boolean('prof_est_permanent')->comments('false pour vacataire')->default(false);
             $table->string('prof_email')->nullable();
             $table->date('prof_date_naissance')->nullable();
             $table->string('prof_nationalite')->nullable();

@@ -67,11 +67,10 @@
 
                 <div class="col-md-6 col-xs-12">
                     <div class="form-group">
-                        {!! Form::label('prof_matrimonial', "Situation matrimonial") !!} <i class="fa fa-star text-danger" aria-hidden="true"></i>
-                        <select class="form-control" name="prof_matrimonial" id='prof_matrimonial'
-                                value="{{ old('prof_matrimonial') }}" required>
-                            <option value="celibataire">Célibataire</option>
-                            <option value="en couple">En couple</option>
+                        {!! Form::label('prof_est_marie', "Situation matrimonial") !!} <i class="fa fa-star text-danger" aria-hidden="true"></i>
+                        <select class="form-control" name="prof_est_marie" id='prof_est_marie' required>
+                            <option value='0'>Célibataire</option>
+                            <option value='1'>En couple</option>
                         </select>
                     </div>
                 </div>
@@ -98,11 +97,10 @@
 
                 <div class="col-md-6 col-xs-12">
                     <div class="form-group">
-                        {!! Form::label('prof_type', 'Statut du professeur') !!} <i class="fa fa-star text-danger" aria-hidden="true"></i>
-                        <select class="form-control" name="prof_type" id='prof_type'
-                                value="{{ old('prof_nationalite') }}" required>
-                            <option value="titulaire">Titulaire</option>
-                            <option value="vacataire">Vacataire</option>
+                        {!! Form::label('prof_est_permanent', 'Statut du professeur') !!} <i class="fa fa-star text-danger" aria-hidden="true"></i>
+                        <select class="form-control" name="prof_est_permanent" id='prof_est_permanent' required>
+                            <option value='1'>Permanent</option>
+                            <option value='0'>Vacataire</option>
                         </select>
                     </div>
                     <br>

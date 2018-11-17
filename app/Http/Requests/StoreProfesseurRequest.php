@@ -31,6 +31,9 @@ class StoreProfesseurRequest extends FormRequest
             'prof_sexe' => 'required',
             'prof_date_naissance' => '',
             'prof_nationalite' => '',
+            'prof_enfant' => '',
+            'prof_est_marie' => 'required',
+            'prof_est_permanent' => 'required',
         ];
     }
 }

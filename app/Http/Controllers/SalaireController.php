@@ -13,15 +13,22 @@ class SalaireController extends Controller
     }
 
     public function getSalaireDetails(GetSalaireDetailsRequest $req) {
-
+        
         $p = PresenceProfesseur::where('real_professeur_id', $req->prof)
             ->whereYear('date', $req->year)
             ->whereMonth('date', $req->month)
             ->get();
+        
+        
+
+
+        $returnable = new \StdClass();
+        $returnable->datas = $p;
 
         // todo: calcul salaire 
 
-        return response()->json($p, 200);
+
+        return response()->json($returnable, 200);
     }
 
     public function dashboard() {
